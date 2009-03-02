@@ -47,11 +47,23 @@ void Heightmap::Set_height(float ix, float iy, float height)
 
 float Heightmap::Get_height(float ix, float iy)
 {
-	int x = ix/tilesize+.5*tilesize;
+/*	int x = ix/tilesize+.5*tilesize;
 	int y = iy/tilesize+.5*tilesize;
 	if(x<0 || y<0 || x>=static_cast<int>(rows.size()) || y>=static_cast<int>(rows[0].size()))
 		return 0;
 	return rows[x][y].height;
+*/
+
+	int tx = ix/tilesize;
+	int tz = iy/tilesize;
+	if(tx<0 || tz<0 || tx+1>=static_cast<int>(rows.size()) || tz+1>=static_cast<int>(rows[0].size()))
+		return 0;
+
+	float xp = (ix-tx)/tilesize;
+	float zp = (iy-tz)/tilesize;
+	float hx1 = (rows[tx+1][tz].height-rows[tx][tz].height)*xp+rows[tx][tz].height;
+	float hx2 = (rows[tx+1][tz+1].height-rows[tx][tz+1].height)*xp+rows[tx][tz+1].height;
+	return (hx2-hx1)*zp+hx1;
 }
 
 Height_points Heightmap::Get_height_points_in_circle(float ix, float iy, float iradius) const
