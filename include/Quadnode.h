@@ -9,6 +9,7 @@
 class Quadnode: public Scenenode
 {
 public:
+	Quadnode();
 	void Set_corners(Vector3 p[4]);
 	void Set_texture(ALLEGRO_BITMAP* t);
 	virtual void Render();

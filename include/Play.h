@@ -1,5 +1,5 @@
-#ifndef Editor_h
-#define Editor_h
+#ifndef Play_h
+#define Play_h
 
 #include <Scenenode.h>
 #include <Heightmap.h>
@@ -10,13 +10,16 @@
 #include <allegro5/a5_font.h>
 #include <allegro5/a5_ttf.h>
 #include <allegro5/a5_opengl.h>
+#include "Billboardnode.h"
 #include "Gamestate.h"
+#include "Modelnode.h"
+#include "Transformnode.h"
 
-class Editor: public Gamestate
+class Play: public Gamestate
 {
 public:
-	Editor();
-	~Editor();
+	Play();
+	~Play();
 	void Init();
 	void Set_heightmap(Heightmap* h);
 	void Update(double dt);
@@ -40,6 +43,10 @@ private:
 	float far;
 	int width;
 	int height;
+
+	ALLEGRO_BITMAP* bomb_texture;
+	Billboardnode* billboard;
+	Transformnode* player;
 };
 
 #endif

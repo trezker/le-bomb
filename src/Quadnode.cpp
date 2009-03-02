@@ -1,5 +1,9 @@
 #include "Quadnode.h"
 
+Quadnode::Quadnode()
+:texture(NULL)
+{}
+
 void Quadnode::Set_corners(Vector3 p[4])
 {
 	for(int i=0; i<4; ++i)

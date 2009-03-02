@@ -6,6 +6,7 @@
 #include <allegro5/a5_font.h>
 #include <allegro5/a5_ttf.h>
 #include <allegro5/a5_opengl.h>
+#include "Gamestate.h"
 
 /* Class: Game
  * The hub of the whole system, handling, initialization, cleanup, main loop, events and services.
@@ -56,6 +57,7 @@ private: //Functions
 private: //Members
 	bool quit;
 	ALLEGRO_FONT* font;
+	Gamestate* gamestate;
 };
 
 

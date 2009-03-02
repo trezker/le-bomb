@@ -9,30 +9,18 @@
 #include <GL/glu.h>
 #include "Editor.h"
 #include "Functions.h"
-
-class Quad: public Scenenode
-{
-public:
-	virtual void Render()
-	{
-		glBegin(GL_QUADS);
-		glTexCoord2f(0, 0); glVertex3f(-1, -1, 0);
-		glTexCoord2f(1, 0); glVertex3f(+1, -1, 0);
-		glTexCoord2f(1, 1); glVertex3f(+1, +1, 0);
-		glTexCoord2f(0, 1); glVertex3f(-1, +1, 0);
-		glEnd();
-	}
-private:
-};
+#include "Play.h"
 
 int width = 640;
 int height = 480;
 
 Heightmap* heightmap = NULL;
 Editor editor;
+Play play;
 
 Game::Game()
 :quit(false)
+,gamestate(NULL)
 {
 }
 
@@ -101,22 +89,38 @@ void Game::Run()
 
 void Game::Init()
 {
-	editor.Init();
 	heightmap = new Heightmap();
+
+	editor.Init();
 	editor.Set_heightmap(heightmap);
+	
+	play.Init();
+	play.Set_heightmap(heightmap);
+	gamestate = &play;
 }
 
 void Game::Update(double dt)
 {
-	editor.Update(dt);
+	gamestate->Update(dt);
 }
 
 void Game::Render()
 {
-	editor.Render();
+	gamestate->Render();
 }
 
 void Game::Event(ALLEGRO_EVENT event)
 {
-	editor.Event(event);
+	if (ALLEGRO_EVENT_KEY_UP == event.type)
+	{
+		if (ALLEGRO_KEY_1 == event.keyboard.keycode)
+		{
+			gamestate = &editor;
+		}
+		if (ALLEGRO_KEY_2 == event.keyboard.keycode)
+		{
+			gamestate = &play;
+		}
+	}
+	gamestate->Event(event);
 }

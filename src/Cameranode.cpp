@@ -4,7 +4,62 @@
 #include <allegro5/a5_font.h>
 #include <allegro5/a5_ttf.h>
 #include <allegro5/a5_opengl.h>
+#include <GL/glu.h>
 
+Cameranode::Cameranode()
+:lookat(false)
+{}
+
+void Cameranode::Look_at(Vector3 p)
+{
+	lookat_target = p;
+/*	Vector3 front;
+	Vector3 right;
+	Vector3 up;
+*/	front	= p - position;
+	front.Normalize();
+	// right hand rule cross products
+	right	= Vector3(0, 1, 0).CrossProduct(front);
+	right.Normalize();
+	up		= front.CrossProduct(right);
+
+/*	right = -right;
+	up = -up;
+	front = -front;
+*/
+	lookat = true;
+	matrix[0] = right.x;
+	matrix[1] = right.y;
+	matrix[2] = right.z;
+	matrix[3] = 0;
+	matrix[4] = up.x;
+	matrix[5] = up.y;
+	matrix[6] = up.z;
+	matrix[7] = 0;
+	matrix[8] = front.x;
+	matrix[9] = front.y;
+	matrix[10] = front.z;
+	matrix[11] = 0;
+	matrix[12] = -position.x;
+	matrix[13] = -position.y;
+	matrix[14] = -position.z;
+	matrix[15] = 1;
+}
+
+Vector3 Cameranode::Get_up()
+{
+	return up;
+}
+
+Vector3 Cameranode::Get_front()
+{
+	return front;
+}
+
+Vector3 Cameranode::Get_right()
+{
+	return right;
+}
 
 void Cameranode::Set_position(Vector3 v)
 {
@@ -29,10 +84,20 @@ Vector3 Cameranode::Get_rotation()
 void Cameranode::Prerender()
 {
 	glPushMatrix();
-	glRotatef(rotation.x, 1, 0, 0);
-	glRotatef(rotation.y, 0, 1, 0);
-	glRotatef(rotation.z, 0, 0, 1);
-	glTranslatef(-position.x, -position.y, -position.z);
+	if(!lookat)
+	{
+		glRotatef(rotation.x, 1, 0, 0);
+		glRotatef(rotation.y, 0, 1, 0);
+		glRotatef(rotation.z, 0, 0, 1);
+		glTranslatef(-position.x, -position.y, -position.z);
+	}
+	else
+	{
+//		glMultMatrixf(matrix);
+		gluLookAt( position.x, position.y, position.z,
+				   lookat_target.x, lookat_target.y, lookat_target.z,
+				   up.x, up.y, up.z );
+	}
 }
 
 void Cameranode::Postrender()

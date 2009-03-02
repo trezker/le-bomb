@@ -1,4 +1,4 @@
-#include "Editor.h"
+#include "Play.h"
 #include "Functions.h"
 #include <cmath>
 #include <iostream>
@@ -6,13 +6,9 @@
 #include "Quadnode.h"
 #include "Modelnode.h"
 
-ALLEGRO_BITMAP* bomb_texture;
 
 
-Billboardnode* billboard = NULL;
-
-
-Editor::Editor()
+Play::Play()
 :camera(NULL)
 ,light(NULL)
 ,heightmap(NULL)
@@ -30,13 +26,13 @@ Editor::Editor()
 	height = 480;
 }
 
-Editor::~Editor()
+Play::~Play()
 {
 	delete camera;
 	delete light;
 }
 
-void Editor::Set_heightmap(Heightmap* h)
+void Play::Set_heightmap(Heightmap* h)
 {
 	if(heightmap)
 		light->Detach_node(heightmap);
@@ -47,7 +43,7 @@ void Editor::Set_heightmap(Heightmap* h)
 	camera->Set_position(Vector3(h->Get_width_x()/2, 1.5f, h->Get_width_z()/2));
 }
 
-void Editor::Init()
+void Play::Init()
 {
 	camera = new Cameranode();
 	camera->Set_position(Vector3(0, 1.5f, 0));
@@ -72,24 +68,34 @@ void Editor::Init()
 	quad->Set_corners(p);
 	billboard->Attach_node(quad);
 	
+	player = new Transformnode();
+	player->Set_position(Vector3(15, 0, 10));
+	light->Attach_node(player);
+	
 	ALLEGRO_BITMAP* darwinian_texture = al_iio_load("media/darwinian.png");
 	Modelnode* model = new Modelnode;
 	model->Loadmodel("media/darwinian.raw");
 	model->Set_texture(darwinian_texture);
-	light->Attach_node(model);
+	player->Attach_node(model);
 }
 
-void Editor::Update(double dt)
+void Play::Update(double dt)
 {
-	Vector3 direction(move_right-move_left, 0, move_backward-move_forward);
+	Vector3 direction(move_left-move_right, move_up-move_down, move_forward-move_backward);
 	direction.Normalize();
 	direction*=dt*10;
-	float angle = camera->Get_rotation().y*3.14159f/180.f;
+/*	float angle = camera->Get_rotation().y*3.14159f/180.f;
 	Vector3 speed(direction.x*cos(-angle) + direction.z*sin(-angle),
 					(move_up-move_down)*dt*10,
 					direction.x*sin(angle) + direction.z*cos(angle));
+*/
+	Vector3 speed;
+	speed += camera->Get_right()*direction.x;
+	speed += camera->Get_up()*direction.y;
+	speed += camera->Get_front()*direction.z;
 
 	camera->Set_position(camera->Get_position()+speed);
+	camera->Look_at(player->Get_position());
 	billboard->Update_vectors(camera->Get_position());
 
 	ALLEGRO_MOUSE_STATE ret_state;
@@ -125,7 +131,7 @@ void Editor::Update(double dt)
 	}
 }
 
-void Editor::Render()
+void Play::Render()
 {
 	Prerender_perspective_view(fov, width/height, near, far);
 
@@ -139,7 +145,7 @@ void Editor::Render()
 	Postrender_perspective_view();
 }
 
-void Editor::Event(ALLEGRO_EVENT event)
+void Play::Event(ALLEGRO_EVENT event)
 {
 	if(ALLEGRO_EVENT_KEY_DOWN == event.type)
 	{
