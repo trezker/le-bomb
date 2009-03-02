@@ -63,6 +63,12 @@ void Editor::Init()
 	bomb_texture = al_iio_load("media/bomb_sprite.png");
 	Quadnode* quad = new Quadnode();
 	quad->Set_texture(bomb_texture);
+	Vector3 p[4];
+	p[0].Set(-.5, 0, 0);
+	p[1].Set(+.5, 0, 0);
+	p[2].Set(+.5, 1, 0);
+	p[3].Set(-.5, 1, 0);
+	quad->Set_corners(p);
 	billboard->Attach_node(quad);
 }
 
