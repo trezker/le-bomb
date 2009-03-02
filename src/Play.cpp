@@ -40,7 +40,8 @@ void Play::Set_heightmap(Heightmap* h)
 	if(!h)
 		return;
 	light->Attach_node(h);
-	camera->Set_position(Vector3(h->Get_width_x()/2, 1.5f, h->Get_width_z()/2));
+//	camera->Set_position(Vector3(h->Get_width_x()/2, 1.5f, h->Get_width_z()/2));
+	camera->Set_position(Vector3(h->Get_width_x()/2, 10.f, 0));
 }
 
 void Play::Init()
@@ -81,22 +82,36 @@ void Play::Init()
 
 void Play::Update(double dt)
 {
-	Vector3 direction(move_left-move_right, move_up-move_down, move_forward-move_backward);
+/*	Vector3 direction(move_left-move_right, move_up-move_down, move_forward-move_backward);
 	direction.Normalize();
 	direction*=dt*10;
-/*	float angle = camera->Get_rotation().y*3.14159f/180.f;
-	Vector3 speed(direction.x*cos(-angle) + direction.z*sin(-angle),
-					(move_up-move_down)*dt*10,
-					direction.x*sin(angle) + direction.z*cos(angle));
-*/
+
 	Vector3 speed;
 	speed += camera->Get_right()*direction.x;
 	speed += camera->Get_up()*direction.y;
 	speed += camera->Get_front()*direction.z;
 
 	camera->Set_position(camera->Get_position()+speed);
+*/
+
+	Vector3 direction(move_left-move_right, move_up-move_down, move_forward-move_backward);
+	direction.Normalize();
+
+	Vector3 right = camera->Get_right();
+	right.y = 0;
+	right.Normalize();
+	Vector3 front = camera->Get_front();
+	front.y = 0;
+	front.Normalize();
+
+	Vector3 speed;
+	speed += right*direction.x;
+	speed += Vector3(0, 1, 0)*direction.y;
+	speed += front*direction.z;
+
+	player->Set_position(player->Get_position()+speed*10*dt);
+
 	camera->Look_at(player->Get_position());
-	billboard->Update_vectors(camera->Get_position());
 
 	ALLEGRO_MOUSE_STATE ret_state;
 	al_get_mouse_state(&ret_state);
