@@ -96,8 +96,10 @@ void Play::Update(double dt)
 	speed += right*direction.x;
 	speed += Vector3(0, 1, 0)*direction.y;
 	speed += front*direction.z;
-
-	player->Set_position(player->Get_position()+speed*10*dt);
+	
+	Vector3 newpos = player->Get_position()+speed*10*dt;
+	newpos.y = heightmap->Get_height(newpos.x, newpos.z);
+	player->Set_position(newpos);
 
 	camera->Look_at(player->Get_position());
 
