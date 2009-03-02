@@ -3,6 +3,8 @@
 #include <allegro5/a5_font.h>
 #include <allegro5/a5_ttf.h>
 #include <allegro5/a5_opengl.h>
+#include <cmath>
+#include <iostream>
 
 Heightmap::Heightmap()
 :tilesize(1)
@@ -52,7 +54,7 @@ float Heightmap::Get_height(float ix, float iy)
 	return rows[x][y].height;
 }
 
-Height_points Heightmap::Get_height_points_in_circle(float ix, float iy, float iradius)
+Height_points Heightmap::Get_height_points_in_circle(float ix, float iy, float iradius) const
 {
 	int radius = iradius/tilesize+1;
 	int cx = ix/tilesize+.5*tilesize;
@@ -83,6 +85,26 @@ Height_points Heightmap::Get_height_points_in_circle(float ix, float iy, float i
 		}
 	}
 	return height_points;
+}
+
+void Heightmap::Apply_brush(float x, float z, float brush_size, float brush_pressure, const float *brush, int brush_points)
+{
+	float brush_scale = brush_points/brush_size;
+	Height_points height_points = Get_height_points_in_circle(x, z, brush_size);
+	for(Height_points::iterator height_point=height_points.begin(); height_point!=height_points.end(); ++height_point)
+	{
+		float dx = height_point->x-x;
+		float dy = height_point->y-z;
+		float r = sqrt(dx*dx + dy*dy)*brush_scale;
+		int low = r;
+		float p = r-low;
+		if(low+1<brush_points )
+		{
+			float h = height_point->height+brush_pressure*((brush[low+1]-brush[low])*p+brush[low]);
+			Set_height(height_point->x, height_point->y, h);
+		}
+	}
+	Recalc_normals();
 }
 
 void Heightmap::Recalc_normals()

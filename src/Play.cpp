@@ -82,18 +82,6 @@ void Play::Init()
 
 void Play::Update(double dt)
 {
-/*	Vector3 direction(move_left-move_right, move_up-move_down, move_forward-move_backward);
-	direction.Normalize();
-	direction*=dt*10;
-
-	Vector3 speed;
-	speed += camera->Get_right()*direction.x;
-	speed += camera->Get_up()*direction.y;
-	speed += camera->Get_front()*direction.z;
-
-	camera->Set_position(camera->Get_position()+speed);
-*/
-
 	Vector3 direction(move_left-move_right, move_up-move_down, move_forward-move_backward);
 	direction.Normalize();
 
@@ -113,36 +101,22 @@ void Play::Update(double dt)
 
 	camera->Look_at(player->Get_position());
 
-	ALLEGRO_MOUSE_STATE ret_state;
-	al_get_mouse_state(&ret_state);
-	if((ret_state.buttons&1))
+	for(Bombs::iterator i = bombs.begin(); i != bombs.end(); )
 	{
-		Prerender_perspective_view(fov, width/height, near, far);
-		Vector3 oglpoint = GetOGLPos(ret_state.x, ret_state.y, camera);
-		Postrender_perspective_view();
-		//Single point
-/*		float h = heightmap->Get_height(oglpoint.x, oglpoint.z);
-		heightmap->Set_height(oglpoint.x, oglpoint.z, h-.1*dt);
-*/
-		//Full circle
-/*		Height_points height_points = heightmap->Get_height_points_in_circle(oglpoint.x, oglpoint.z, 10);
-		for(Height_points::iterator i=height_points.begin(); i!=height_points.end(); ++i)
-			heightmap->Set_height(i->x, i->y, i->height-.1*dt);
-*/
-		//Profile circle
-		float curve[5] = {-1, -.7, 0, .3, 0};
-		Height_points height_points = heightmap->Get_height_points_in_circle(oglpoint.x, oglpoint.z, 5);
-		for(Height_points::iterator i=height_points.begin(); i!=height_points.end(); ++i)
+		(*i)->Update(dt, camera->Get_position());
+		if((*i)->Exploded())
 		{
-			float dx = i->x-oglpoint.x;
-			float dy = i->y-oglpoint.z;
-			float r = sqrt(dx*dx + dy*dy);
-			int low = r;
-			float p = r-low;
-			float h = i->height+dt*((curve[low+1]-curve[low])*p+curve[low]);
-			heightmap->Set_height(i->x, i->y, h);
+			Vector3 point = (*i)->Get_position();
+			float curve[5] = {-1, -.7, 0, .3, 0};
+			heightmap->Apply_brush(point.x, point.z, 10, 3, curve, 5);
+			light->Detach_node(*i);
+			delete *i;
+			i=bombs.erase(i);
 		}
-		heightmap->Recalc_normals();
+		else
+		{
+			++i;
+		}
 	}
 }
 
@@ -187,6 +161,15 @@ void Play::Event(ALLEGRO_EVENT event)
 		if(ALLEGRO_KEY_Z == event.keyboard.keycode)
 		{
 			move_down = true;
+		}
+		if(ALLEGRO_KEY_SPACE == event.keyboard.keycode)
+		{
+			Bomb* bomb = new Bomb;
+			bomb->Set_position(Vector3(player->Get_position()));
+			bomb->Set_texture(bomb_texture);
+			bomb->Set_timeout(2);
+			bombs.push_back(bomb);
+			light->Attach_node(bomb);
 		}
 	}
 	if(ALLEGRO_EVENT_KEY_UP == event.type)

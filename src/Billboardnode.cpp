@@ -7,6 +7,11 @@ void Billboardnode::Set_position(Vector3 p)
 	position = p;
 }
 
+Vector3 Billboardnode::Get_position()
+{
+	return position;
+}
+
 void Billboardnode::Update_vectors(Vector3 camera_position)
 {
 	Vector3 front;
