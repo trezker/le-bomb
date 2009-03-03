@@ -5,6 +5,7 @@
 #include "Scenenode.h"
 #include "Billboardnode.h"
 #include "Quadnode.h"
+#include <zoidcom/zoidcom.h>
 
 class Bomb: public Scenenode
 {
@@ -17,10 +18,19 @@ public:
 	void Set_texture(ALLEGRO_BITMAP* t);
 	void Update(double dt, Vector3 cam);
 	bool Exploded();
+
+	void Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
+//	static ZCom_ClassID Get_net_class_id(bool server=false);
 private:
 	Billboardnode* billboard;
 	Quadnode* quad;
 	float timeout;
+
+	ZCom_Node* net_node;
+
+/*	static ZCom_ClassID server_id;
+	static ZCom_ClassID client_id;
+*/
 };
 
 #endif

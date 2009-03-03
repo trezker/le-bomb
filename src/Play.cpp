@@ -19,6 +19,7 @@ Play::Play()
 ,move_up(false)
 ,move_down(false)
 ,server(NULL)
+,client(NULL)
 {
 	fov = 45.f;
 	near = 1.f;
@@ -32,6 +33,7 @@ Play::~Play()
 	delete camera;
 	delete light;
 	delete server;
+	delete client;
 }
 
 void Play::Set_heightmap(Heightmap* h)
@@ -84,6 +86,18 @@ void Play::Init()
 
 void Play::Update(double dt)
 {
+	if ( server )
+	{
+		server->ZCom_processInput();
+		server->ZCom_processOutput();
+	}
+	if(client)
+	{
+		client->ZCom_processInput();
+		client->ZCom_processOutput();
+	}
+  
+
 	Vector3 direction(move_left-move_right, move_up-move_down, move_forward-move_backward);
 	direction.Normalize();
 
@@ -185,9 +199,50 @@ void Play::Event(ALLEGRO_EVENT event)
 				if (!result)
 				{
 					delete server;
-					printf("Server failed to init sockets\n");
+					server = NULL;
+					printf("Server failed initializing\n");
 				}
 			}
+		}
+		if(ALLEGRO_KEY_F8 == event.keyboard.keycode)
+		{
+			if(!client)
+			{
+				client = new Client();
+				client->ZCom_setDebugName("Client");
+				// this creates and initializes the network sockets
+				// true = use udp socket, 0 = let OS choose UDP port, 0 = no internal socket
+				bool result = client->ZCom_initSockets(true, 0, 0);
+				// if result is false, Zoidcom had problems while initializing
+				if (!result)
+				{
+					delete client;
+					client = NULL;
+					printf("Client failed initializing\n");
+				}
+				// put this into a codeblock so that server_addr gets out of scope before 
+				// 'delete zcom;' get called (everything needs to be gone before the 
+				// ZoidCom object gets deleted)
+				else
+				{
+					// prepare the destination adress
+					ZCom_Address server_addr;
+					server_addr.setAddress( eZCom_AddressUDP, 0, "localhost:10000");
+					// and connect
+					ZCom_ConnID connection_id = client->ZCom_Connect(server_addr, NULL);
+
+					// unable to connect
+					// this happens if the connection process can't even be started
+					// for some reason
+					if (connection_id == ZCom_Invalid_ID)
+					{
+						delete client;
+						client = NULL;
+						printf("Client failed connection\n");
+					}
+				}
+			}
+
 		}
 	}
 	if(ALLEGRO_EVENT_KEY_UP == event.type)

@@ -17,6 +17,7 @@
 #include <vector>
 #include "Bomb.h"
 #include "Server.h"
+#include "Client.h"
 
 class Play: public Gamestate
 {
@@ -54,6 +55,7 @@ private:
 	Bombs bombs;
 	
 	Server* server;
+	Client *client;
 };
 
 #endif
