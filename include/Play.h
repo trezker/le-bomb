@@ -16,6 +16,7 @@
 #include "Transformnode.h"
 #include <vector>
 #include "Bomb.h"
+#include "Server.h"
 
 class Play: public Gamestate
 {
@@ -51,6 +52,8 @@ private:
 	Transformnode* player;
 	typedef std::vector<Bomb*> Bombs;
 	Bombs bombs;
+	
+	Server* server;
 };
 
 #endif

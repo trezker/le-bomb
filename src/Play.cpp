@@ -18,6 +18,7 @@ Play::Play()
 ,move_right(false)
 ,move_up(false)
 ,move_down(false)
+,server(NULL)
 {
 	fov = 45.f;
 	near = 1.f;
@@ -30,6 +31,7 @@ Play::~Play()
 {
 	delete camera;
 	delete light;
+	delete server;
 }
 
 void Play::Set_heightmap(Heightmap* h)
@@ -172,6 +174,20 @@ void Play::Event(ALLEGRO_EVENT event)
 			bomb->Set_timeout(2);
 			bombs.push_back(bomb);
 			light->Attach_node(bomb);
+		}
+		if(ALLEGRO_KEY_F5 == event.keyboard.keycode)
+		{
+			if(!server)
+			{
+				server = new Server();
+				server->ZCom_setDebugName("Server");
+				bool result = server->ZCom_initSockets(true, 10000, 0);
+				if (!result)
+				{
+					delete server;
+					printf("Server failed to init sockets\n");
+				}
+			}
 		}
 	}
 	if(ALLEGRO_EVENT_KEY_UP == event.type)

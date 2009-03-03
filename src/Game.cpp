@@ -7,16 +7,12 @@
 #include <Cameranode.h>
 #include <Lightnode.h>
 #include <GL/glu.h>
-#include "Editor.h"
 #include "Functions.h"
-#include "Play.h"
 
 int width = 640;
 int height = 480;
 
 Heightmap* heightmap = NULL;
-Editor editor;
-Play play;
 
 Game::Game()
 :quit(false)
@@ -27,6 +23,7 @@ Game::Game()
 
 Game::~Game()
 {
+	delete zcom;
 }
 
 void Game::Run()
@@ -46,7 +43,8 @@ void Game::Run()
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)al_get_keyboard());
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)al_get_mouse());
 
-	Init();
+	if(!Init())
+		return;
 
 	double last_time = al_current_time();
 
@@ -87,16 +85,26 @@ void Game::Run()
 	al_destroy_display(display);
 }
 
-void Game::Init()
+bool Game::Init()
 {
+	zcom = new ZoidCom();
+	if (!zcom || !zcom->Init())
+	{
+		printf("Zoidcom init failed");
+		return false;
+	}
+
 	heightmap = new Heightmap();
 
-	editor.Init();
-	editor.Set_heightmap(heightmap);
+	editor = new Editor;
+	editor->Init();
+	editor->Set_heightmap(heightmap);
 	
-	play.Init();
-	play.Set_heightmap(heightmap);
-	gamestate = &play;
+	play = new Play;
+	play->Init();
+	play->Set_heightmap(heightmap);
+	gamestate = play;
+	return true;
 }
 
 void Game::Update(double dt)
@@ -115,11 +123,11 @@ void Game::Event(ALLEGRO_EVENT event)
 	{
 		if (ALLEGRO_KEY_1 == event.keyboard.keycode)
 		{
-			gamestate = &editor;
+			gamestate = editor;
 		}
 		if (ALLEGRO_KEY_2 == event.keyboard.keycode)
 		{
-			gamestate = &play;
+			gamestate = play;
 		}
 	}
 	gamestate->Event(event);

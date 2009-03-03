@@ -7,6 +7,9 @@
 #include <allegro5/a5_ttf.h>
 #include <allegro5/a5_opengl.h>
 #include "Gamestate.h"
+#include <zoidcom/zoidcom.h>
+#include "Play.h"
+#include "Editor.h"
 
 /* Class: Game
  * The hub of the whole system, handling, initialization, cleanup, main loop, events and services.
@@ -37,7 +40,7 @@ private: //Functions
 	/* Function: Init
 	 * Initialize game
 	 */
-	void Init();
+	bool Init();
 
 	/* Function: Update
 	 * Updates everything
@@ -58,6 +61,9 @@ private: //Members
 	bool quit;
 	ALLEGRO_FONT* font;
 	Gamestate* gamestate;
+	ZoidCom *zcom;
+	Editor* editor;
+	Play* play;
 };
 
 
