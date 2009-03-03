@@ -5,9 +5,14 @@
 
 class Client : public ZCom_Control {
 public:
+	Client();
 	void Register_classes();
 	void Send_data(ZCom_BitStream *message);
+	bool Ready();
+	bool Disconnected();
 private:
+	bool ready;
+	bool disconnected;
 	ZCom_ConnID server_id;
 	ZCom_ClassID bomb_id;
 

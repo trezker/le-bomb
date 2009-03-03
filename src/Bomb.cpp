@@ -1,6 +1,7 @@
 #include "Bomb.h"
 
 Bomb::Bomb()
+:net_node(NULL)
 {
 	billboard = new Billboardnode;
 	Attach_node(billboard);

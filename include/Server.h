@@ -2,9 +2,16 @@
 #define Server_h
 
 #include <zoidcom/zoidcom.h>
+#include "Bomb.h"
 
 class Server : public ZCom_Control {
+public:
 	void Register_classes();
+	void Update(double dt);
+private:
+	ZCom_ClassID bomb_id;
+	typedef std::vector<Bomb*> Bombs;
+	Bombs bombs;
 
 	void ZCom_cbConnectResult( ZCom_ConnID _id, eZCom_ConnectResult _result, ZCom_BitStream &_reply ) {}
 	bool ZCom_cbConnectionRequest( ZCom_ConnID  _id, ZCom_BitStream &_request, ZCom_BitStream &_reply );
@@ -16,12 +23,10 @@ class Server : public ZCom_Control {
 								   eZCom_NodeRole _role, ZCom_NodeID _net_id ) {}
 	void ZCom_cbNodeRequest_Tag( ZCom_ConnID _id, ZCom_ClassID _requested_class, ZCom_BitStream *_announcedata, 
 							   eZCom_NodeRole _role, zU32 _tag ) {}
-	void ZCom_cbDataReceived( ZCom_ConnID _id, ZCom_BitStream &_data ) {}
+	void ZCom_cbDataReceived( ZCom_ConnID _id, ZCom_BitStream &_data );
 	bool ZCom_cbDiscoverRequest( const ZCom_Address &_addr, 
 							   ZCom_BitStream &_request, ZCom_BitStream &_reply ) {return false;}
 	void ZCom_cbDiscovered( const ZCom_Address & _addr, ZCom_BitStream &_reply )  {}
-
-	ZCom_ClassID bomb_id;
 };
 
 #endif

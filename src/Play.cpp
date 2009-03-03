@@ -5,8 +5,7 @@
 #include "Billboardnode.h"
 #include "Quadnode.h"
 #include "Modelnode.h"
-
-
+#include "Net.h"
 
 Play::Play()
 :camera(NULL)
@@ -88,6 +87,7 @@ void Play::Update(double dt)
 {
 	if ( server )
 	{
+		server->Update(dt);
 		server->ZCom_processInput();
 		server->ZCom_processOutput();
 	}
@@ -95,6 +95,11 @@ void Play::Update(double dt)
 	{
 		client->ZCom_processInput();
 		client->ZCom_processOutput();
+		if(client->Disconnected())
+		{
+			delete client;
+			client=NULL;
+		}
 	}
   
 
@@ -188,6 +193,13 @@ void Play::Event(ALLEGRO_EVENT event)
 			bomb->Set_timeout(2);
 			bombs.push_back(bomb);
 			light->Attach_node(bomb);
+			
+			if(client)
+			{
+				ZCom_BitStream *packet = new ZCom_BitStream();
+				packet->addInt(CREATE_BOMB, PACKET_TYPE_SIZE);
+				client->Send_data(packet);
+			}
 		}
 		if(ALLEGRO_KEY_F5 == event.keyboard.keycode)
 		{
@@ -195,6 +207,7 @@ void Play::Event(ALLEGRO_EVENT event)
 			{
 				server = new Server();
 				server->ZCom_setDebugName("Server");
+				server->Register_classes();
 				bool result = server->ZCom_initSockets(true, 10000, 0);
 				if (!result)
 				{
@@ -210,6 +223,7 @@ void Play::Event(ALLEGRO_EVENT event)
 			{
 				client = new Client();
 				client->ZCom_setDebugName("Client");
+				client->Register_classes();
 				// this creates and initializes the network sockets
 				// true = use udp socket, 0 = let OS choose UDP port, 0 = no internal socket
 				bool result = client->ZCom_initSockets(true, 0, 0);

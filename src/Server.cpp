@@ -1,9 +1,60 @@
 #include "Server.h"
 #include <iostream>
+#include "Net.h"
 
 void Server::Register_classes()
 {
 	bomb_id = ZCom_registerClass("Bomb");
+}
+
+void Server::Update(double dt)
+{
+	for(Bombs::iterator i = bombs.begin(); i != bombs.end(); )
+	{
+		(*i)->Update(dt, Vector3());
+		if((*i)->Exploded())
+		{
+/*			Vector3 point = (*i)->Get_position();
+			float curve[5] = {-1, -.7, 0, .3, 0};
+			heightmap->Apply_brush(point.x, point.z, 10, 3, curve, 5);
+*/			delete *i;
+			i=bombs.erase(i);
+			printf("Server: Bomb erased\n");
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
+void Server::ZCom_cbDataReceived(ZCom_ConnID  _id, ZCom_BitStream &_data) {
+	// read 4 bit integer
+	int packet_type = _data.getInt(PACKET_TYPE_SIZE);
+	switch(packet_type)
+	{
+		case CREATE_BOMB:
+			printf("The client requested bomb creation.\n");
+			Bomb* bomb = new Bomb;
+			bomb->Register_net_node(this, bomb_id);
+			bomb->Set_timeout(2);
+			bombs.push_back(bomb);
+			break;
+	}
+/*	
+
+	// create a bitstream for the message
+	ZCom_BitStream *message = new ZCom_BitStream();
+	message->addString("Hello from Server");
+
+	// send it as often as requested
+	while (number--)
+		ZCom_sendData(_id, message->Duplicate());
+
+	// we made a copy for every send, so the original bitstream is unused
+	// and can be deleted
+	delete message;
+*/
 }
 
 bool Server::ZCom_cbConnectionRequest(ZCom_ConnID  _id, ZCom_BitStream &_request, ZCom_BitStream &_reply )
