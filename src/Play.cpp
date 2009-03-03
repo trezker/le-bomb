@@ -127,7 +127,8 @@ void Play::Update(double dt)
 	for(Bombs::iterator i = bombs.begin(); i != bombs.end(); )
 	{
 		(*i)->Update(dt, camera->Get_position());
-		if((*i)->Exploded())
+//		if((*i)->Exploded())
+		if((*i)->Deleteme())
 		{
 			Vector3 point = (*i)->Get_position();
 			float curve[5] = {-1, -.7, 0, .3, 0};
@@ -187,17 +188,21 @@ void Play::Event(ALLEGRO_EVENT event)
 		}
 		if(ALLEGRO_KEY_SPACE == event.keyboard.keycode)
 		{
-			Bomb* bomb = new Bomb;
+/*			Bomb* bomb = new Bomb;
 			bomb->Set_position(Vector3(player->Get_position()));
 			bomb->Set_texture(bomb_texture);
 			bomb->Set_timeout(2);
 			bombs.push_back(bomb);
 			light->Attach_node(bomb);
-			
+*/			
 			if(client)
 			{
 				ZCom_BitStream *packet = new ZCom_BitStream();
 				packet->addInt(CREATE_BOMB, PACKET_TYPE_SIZE);
+				Vector3 ppos = player->Get_position();
+				packet->addFloat(ppos.x, POSITION_MANTISSA);
+				packet->addFloat(ppos.y, POSITION_MANTISSA);
+				packet->addFloat(ppos.z, POSITION_MANTISSA);
 				client->Send_data(packet);
 			}
 		}
@@ -224,6 +229,7 @@ void Play::Event(ALLEGRO_EVENT event)
 				client = new Client();
 				client->ZCom_setDebugName("Client");
 				client->Register_classes();
+				client->Set_play(this);
 				// this creates and initializes the network sockets
 				// true = use udp socket, 0 = let OS choose UDP port, 0 = no internal socket
 				bool result = client->ZCom_initSockets(true, 0, 0);
@@ -298,4 +304,11 @@ void Play::Event(ALLEGRO_EVENT event)
 			al_set_mouse_xy(width/2, height/2);
 		}
 	}
+}
+
+void Play::Add_bomb(Bomb* bomb)
+{
+	bomb->Set_texture(bomb_texture);
+	light->Attach_node(bomb);
+	bombs.push_back(bomb);
 }

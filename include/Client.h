@@ -2,10 +2,12 @@
 #define Client_h
 
 #include <zoidcom/zoidcom.h>
+class Play;
 
 class Client : public ZCom_Control {
 public:
 	Client();
+	void Set_play(Play* play);
 	void Register_classes();
 	void Send_data(ZCom_BitStream *message);
 	bool Ready();
@@ -13,6 +15,7 @@ public:
 private:
 	bool ready;
 	bool disconnected;
+	Play* play;
 	ZCom_ConnID server_id;
 	ZCom_ClassID bomb_id;
 

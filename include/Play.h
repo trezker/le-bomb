@@ -29,6 +29,8 @@ public:
 	void Update(double dt);
 	void Render();
 	void Event(ALLEGRO_EVENT event);
+	
+	void Add_bomb(Bomb* bomb);
 private:
 	Scenenode root;
 	Cameranode* camera;

@@ -2,15 +2,22 @@
 #include <iostream>
 #include "Bomb.h"
 #include "Net.h"
+#include "Play.h"
 
 Client::Client()
 :ready(false)
 ,disconnected(false)
+,play(NULL)
 {}
+
+void Client::Set_play(Play* p)
+{
+	play = p;
+}
 
 void Client::Register_classes()
 {
-	bomb_id = ZCom_registerClass("Bomb");
+	bomb_id = ZCom_registerClass("Bomb", ZCOM_CLASSFLAG_ANNOUNCEDATA);
 }
 
 void Client::Send_data(ZCom_BitStream *message)
@@ -70,8 +77,13 @@ void Client::ZCom_cbNodeRequest_Dynamic( ZCom_ConnID _id, ZCom_ClassID _requeste
 {
 	if (_requested_class == bomb_id) 
 	{
+		printf("Client: Bomb requested\n");
+		float x = _announcedata->getFloat(POSITION_MANTISSA);
+		float y = _announcedata->getFloat(POSITION_MANTISSA);
+		float z = _announcedata->getFloat(POSITION_MANTISSA);
 		Bomb* bomb = new Bomb;
 		bomb->Register_net_node(this, bomb_id);
-		printf("Client: Bomb requested\n");
+		bomb->Set_position(Vector3(x, y, z));
+		play->Add_bomb(bomb);
 	}
 }

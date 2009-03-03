@@ -4,7 +4,7 @@
 
 void Server::Register_classes()
 {
-	bomb_id = ZCom_registerClass("Bomb");
+	bomb_id = ZCom_registerClass("Bomb", ZCOM_CLASSFLAG_ANNOUNCEDATA);
 }
 
 void Server::Update(double dt)
@@ -35,9 +35,14 @@ void Server::ZCom_cbDataReceived(ZCom_ConnID  _id, ZCom_BitStream &_data) {
 	{
 		case CREATE_BOMB:
 			printf("The client requested bomb creation.\n");
+			float x = _data.getFloat(POSITION_MANTISSA);
+			float y = _data.getFloat(POSITION_MANTISSA);
+			float z = _data.getFloat(POSITION_MANTISSA);
+
 			Bomb* bomb = new Bomb;
-			bomb->Register_net_node(this, bomb_id);
 			bomb->Set_timeout(2);
+			bomb->Set_position(Vector3(x, y, z));
+			bomb->Register_net_node(this, bomb_id);
 			bombs.push_back(bomb);
 			break;
 	}
