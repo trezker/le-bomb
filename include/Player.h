@@ -4,6 +4,7 @@
 #include "Transformnode.h"
 #include "Modelnode.h"
 #include "Scenenode.h"
+#include "Heightmap.h"
 #include <allegro5/allegro5.h>
 
 class Player: public Scenenode
@@ -14,7 +15,8 @@ public:
 	void Set_position(Vector3 p);
 	Vector3 Get_position();
 	void Set_texture(ALLEGRO_BITMAP* t);
-//	void Update(double dt, Vector3 cam);
+	void Update(double dt, Vector3 camera_right, Vector3 camera_front, Heightmap* heightmap);
+	void Event(ALLEGRO_EVENT event);
 
 /*	bool Deleteme();
 	void Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
@@ -23,6 +25,13 @@ public:
 private:
 	Transformnode* transform;
 	Modelnode* model;
+
+	bool move_forward;
+	bool move_backward;
+	bool move_left;
+	bool move_right;
+	bool move_up;
+	bool move_down;
 };
 
 #endif

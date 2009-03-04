@@ -38,13 +38,6 @@ private:
 	Lightnode* light;
 	Heightmap* heightmap;
 
-	bool move_forward;
-	bool move_backward;
-	bool move_left;
-	bool move_right;
-	bool move_up;
-	bool move_down;
-
 	float fov;
 	float near;
 	float far;
