@@ -79,16 +79,13 @@ void Play::Init()
 	p[3].Set(-.5, 1, 0);
 	quad->Set_corners(p);
 	billboard->Attach_node(quad);
-	
-	player = new Transformnode();
-	player->Set_position(Vector3(15, 0, 10));
-	light->Attach_node(player);
-	
+
 	ALLEGRO_BITMAP* darwinian_texture = al_iio_load("media/darwinian.png");
-	Modelnode* model = new Modelnode;
-	model->Loadmodel("media/darwinian.raw");
-	model->Set_texture(darwinian_texture);
-	player->Attach_node(model);
+
+	player = new Player();	
+	player->Set_position(Vector3(15, 0, 10));
+	player->Set_texture(darwinian_texture);
+	light->Attach_node(player);
 }
 
 void Play::Update(double dt)

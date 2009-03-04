@@ -22,7 +22,6 @@ public:
 	bool Deleteme();
 	void Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
 	void Process_net_events();
-//	static ZCom_ClassID Get_net_class_id(bool server=false);
 private:
 	Billboardnode* billboard;
 	Quadnode* quad;
@@ -30,9 +29,6 @@ private:
 
 	ZCom_Node* net_node;
 	bool deleteme;
-/*	static ZCom_ClassID server_id;
-	static ZCom_ClassID client_id;
-*/
 };
 
 #endif

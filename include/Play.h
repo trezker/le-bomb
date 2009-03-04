@@ -18,6 +18,7 @@
 #include "Bomb.h"
 #include "Server.h"
 #include "Client.h"
+#include "Player.h"
 
 class Play: public Gamestate
 {
@@ -52,7 +53,7 @@ private:
 
 	ALLEGRO_BITMAP* bomb_texture;
 	Billboardnode* billboard;
-	Transformnode* player;
+	Player* player;
 	typedef std::vector<Bomb*> Bombs;
 	Bombs bombs;
 	

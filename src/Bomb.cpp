@@ -56,17 +56,7 @@ bool Bomb::Exploded()
 {
 	return timeout<=0;
 }
-/*
-ZCom_ClassID Bomb::server_id = 0;
-ZCom_ClassID Bomb::client_id = 0;
-ZCom_ClassID Bomb::Get_net_class_id(bool server)
-{
-	if(server)
-		return server_id;
-	else
-		return client_id;
-}
-*/
+
 void Bomb::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
 {
 	net_node = new ZCom_Node;
