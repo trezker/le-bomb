@@ -19,6 +19,7 @@ Play::Play()
 ,move_down(false)
 ,server(NULL)
 ,client(NULL)
+,netconf(NULL)
 {
 	fov = 45.f;
 	near = 1.f;
@@ -33,6 +34,7 @@ Play::~Play()
 	delete light;
 	delete server;
 	delete client;
+	al_config_destroy(netconf);
 }
 
 void Play::Set_heightmap(Heightmap* h)
@@ -49,6 +51,12 @@ void Play::Set_heightmap(Heightmap* h)
 
 void Play::Init()
 {
+	netconf = al_config_read("net.cfg");
+	if(!netconf)
+	{
+		netconf = al_config_create();
+	}
+
 	camera = new Cameranode();
 	camera->Set_position(Vector3(0, 1.5f, 0));
 	camera->Set_rotation(Vector3(0, 0, 0));
@@ -245,12 +253,6 @@ void Play::Event(ALLEGRO_EVENT event)
 				// ZoidCom object gets deleted)
 				else
 				{
-					ALLEGRO_CONFIG *netconf = al_config_read("net.cfg");
-					if(!netconf)
-					{
-						netconf = al_config_create();
-						al_config_set_value(netconf, "", "server", "localhost:10000");
-					}
 					const char *server_str = al_config_get_value(netconf, NULL, "server");
 					if(!server_str)
 					{

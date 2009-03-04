@@ -58,6 +58,7 @@ private:
 	
 	Server* server;
 	Client *client;
+	ALLEGRO_CONFIG* netconf;
 };
 
 #endif
