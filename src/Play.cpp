@@ -245,9 +245,24 @@ void Play::Event(ALLEGRO_EVENT event)
 				// ZoidCom object gets deleted)
 				else
 				{
+					ALLEGRO_CONFIG *netconf = al_config_read("net.cfg");
+					if(!netconf)
+					{
+						netconf = al_config_create();
+						al_config_set_value(netconf, "", "server", "localhost:10000");
+					}
+					const char *server_str = al_config_get_value(netconf, NULL, "server");
+					if(!server_str)
+					{
+						al_config_set_value(netconf, "", "server", "localhost:10000");
+						server_str = "localhost:10000";
+					}
+					al_config_write(netconf, "net.cfg");
+
 					// prepare the destination adress
 					ZCom_Address server_addr;
-					server_addr.setAddress( eZCom_AddressUDP, 0, "localhost:10000");
+//					server_addr.setAddress( eZCom_AddressUDP, 0, "localhost:10000");
+					server_addr.setAddress( eZCom_AddressUDP, 0, server_str);
 					// and connect
 					ZCom_ConnID connection_id = client->ZCom_Connect(server_addr, NULL);
 

@@ -9,10 +9,10 @@
 Heightmap::Heightmap()
 :tilesize(1)
 {
-	rows.resize(100);
+	rows.resize(50);
 	for(Rows::iterator i = rows.begin(); i!=rows.end(); ++i)
 	{
-		i->resize(100);
+		i->resize(50);
 	}
 	for(unsigned int ix = 0; ix<rows.size()-1; ++ix)
 	{
