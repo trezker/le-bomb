@@ -27,12 +27,13 @@ Player::~Player()
 
 void Player::Set_position(Vector3 p)
 {
-	transform->Set_position(p);
+	position = p;
+	transform->Set_position(position);
 }
 
 Vector3 Player::Get_position()
 {
-	return transform->Get_position();
+	return position;
 }
 
 void Player::Set_texture(ALLEGRO_BITMAP* t)
@@ -123,7 +124,6 @@ void Player::Event(ALLEGRO_EVENT event)
 ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
 {
 	net_node = new ZCom_Node;
-	net_node->registerNodeDynamic(class_id, control);
 
 	ZCom_BitStream *adata = new ZCom_BitStream();
 	Vector3 pos = Get_position();
@@ -131,6 +131,18 @@ ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_i
 	adata->addFloat(pos.y, POSITION_MANTISSA);
 	adata->addFloat(pos.z, POSITION_MANTISSA);
 	net_node->setAnnounceData(adata);
+
+	net_node->beginReplicationSetup(3);
+/*	net_node->addInterpolationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1);
+	net_node->addInterpolationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1);
+	net_node->addInterpolationFloat(&position.z, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1);
+*/
+	net_node->addReplicationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH);
+	net_node->addReplicationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH);
+	net_node->addReplicationFloat(&position.z, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH);
+	net_node->endReplicationSetup();
+
+	net_node->registerNodeDynamic(class_id, control);
 	return net_node;
 }
 

@@ -23,6 +23,7 @@ public:
 	ZCom_Node* Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
 	void Process_net_events();
 private:
+	Vector3 position;
 	Transformnode* transform;
 	Modelnode* model;
 
