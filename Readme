@@ -1,3 +1,4 @@
+Running:
 WASD to move
 Space to place a bomb (only works when connected to server)
 
@@ -5,3 +6,10 @@ F5 to start server
 F8 to start client, connects to server
 
 Edit net.cfg to connect to different computer
+
+Building:
+Depends on Allegro 4.9 SVN and Zoidcom
+You need the scons build tool.
+Release build: scons
+Debug build: scons debug=1
+Clean: scons -c
