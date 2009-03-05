@@ -5,6 +5,7 @@
 void Server::Register_classes()
 {
 	bomb_id = ZCom_registerClass("Bomb", ZCOM_CLASSFLAG_ANNOUNCEDATA);
+	player_id = ZCom_registerClass("Player", ZCOM_CLASSFLAG_ANNOUNCEDATA);
 }
 
 void Server::Update(double dt)
@@ -46,20 +47,6 @@ void Server::ZCom_cbDataReceived(ZCom_ConnID  _id, ZCom_BitStream &_data) {
 			bombs.push_back(bomb);
 			break;
 	}
-/*	
-
-	// create a bitstream for the message
-	ZCom_BitStream *message = new ZCom_BitStream();
-	message->addString("Hello from Server");
-
-	// send it as often as requested
-	while (number--)
-		ZCom_sendData(_id, message->Duplicate());
-
-	// we made a copy for every send, so the original bitstream is unused
-	// and can be deleted
-	delete message;
-*/
 }
 
 bool Server::ZCom_cbConnectionRequest(ZCom_ConnID  _id, ZCom_BitStream &_request, ZCom_BitStream &_reply )
@@ -84,7 +71,14 @@ bool Server::ZCom_cbZoidRequest( ZCom_ConnID _id, zU8 _requested_level, ZCom_Bit
 {
 	// return true to grant the request, or false to deny it
 	if (_requested_level == 1)
+	{
+		Player* player = new Player;
+//		bomb->Set_position(Vector3(x, y, z));
+		ZCom_Node* node = player->Register_net_node(this, player_id);
+		node->setOwner(_id, true);
+		players.push_back(player);
 		return true;
+	}
 	else
 		return false;
 }

@@ -3,6 +3,7 @@
 
 #include <zoidcom/zoidcom.h>
 #include "Bomb.h"
+#include "Player.h"
 
 class Server : public ZCom_Control {
 public:
@@ -10,8 +11,11 @@ public:
 	void Update(double dt);
 private:
 	ZCom_ClassID bomb_id;
+	ZCom_ClassID player_id;
 	typedef std::vector<Bomb*> Bombs;
 	Bombs bombs;
+	typedef std::vector<Player*> Players;
+	Players players;
 
 	void ZCom_cbConnectResult( ZCom_ConnID _id, eZCom_ConnectResult _result, ZCom_BitStream &_reply ) {}
 	bool ZCom_cbConnectionRequest( ZCom_ConnID  _id, ZCom_BitStream &_request, ZCom_BitStream &_reply );

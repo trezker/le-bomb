@@ -51,6 +51,8 @@ private:
 	Player* player;
 	typedef std::vector<Bomb*> Bombs;
 	Bombs bombs;
+	typedef std::vector<Player*> Players;
+	Players players;
 	
 	Server* server;
 	Client *client;

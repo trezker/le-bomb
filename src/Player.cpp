@@ -120,7 +120,7 @@ void Player::Event(ALLEGRO_EVENT event)
 	}
 }
 
-void Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
+ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
 {
 	net_node = new ZCom_Node;
 	net_node->registerNodeDynamic(class_id, control);
@@ -131,6 +131,7 @@ void Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
 	adata->addFloat(pos.y, POSITION_MANTISSA);
 	adata->addFloat(pos.z, POSITION_MANTISSA);
 	net_node->setAnnounceData(adata);
+	return net_node;
 }
 
 void Player::Process_net_events()

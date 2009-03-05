@@ -91,6 +91,20 @@ void Play::Update(double dt)
 	if(player)
 		player->Update(dt, camera->Get_right(), camera->Get_front(), heightmap);
 
+	for(Players::iterator i = players.begin(); i != players.end(); )
+	{
+		(*i)->Update(dt, camera->Get_right(), camera->Get_front(), heightmap);
+		if((*i)->Deleteme())
+		{
+			light->Detach_node(*i);
+			delete *i;
+			i=players.erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
 
 	camera->Look_at(player->Get_position());
 
@@ -254,7 +268,11 @@ void Play::Add_player(Player* p, bool owner)
 			delete player;
 		}
 		player = p;
-		player->Set_texture(darwinian_texture);
-		light->Attach_node(player);		
 	}
+	else
+	{
+		players.push_back(p);
+	}
+	p->Set_texture(darwinian_texture);
+	light->Attach_node(p);
 }
