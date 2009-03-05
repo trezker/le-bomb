@@ -1,11 +1,12 @@
 #ifndef Player_h
 #define Player_h
 
-#include "Transformnode.h"
-#include "Modelnode.h"
-#include "Scenenode.h"
+#include "scenegraph/Transformnode.h"
+#include "scenegraph/Modelnode.h"
+#include "scenegraph/Scenenode.h"
 #include "Heightmap.h"
 #include <allegro5/allegro5.h>
+#include <zoidcom/zoidcom.h>
 
 class Player: public Scenenode
 {
@@ -18,10 +19,9 @@ public:
 	void Update(double dt, Vector3 camera_right, Vector3 camera_front, Heightmap* heightmap);
 	void Event(ALLEGRO_EVENT event);
 
-/*	bool Deleteme();
+	bool Deleteme();
 	void Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
 	void Process_net_events();
-*/
 private:
 	Transformnode* transform;
 	Modelnode* model;
@@ -32,6 +32,9 @@ private:
 	bool move_right;
 	bool move_up;
 	bool move_down;
+
+	ZCom_Node* net_node;
+	bool deleteme;
 };
 
 #endif

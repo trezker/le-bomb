@@ -2,15 +2,16 @@
 #include "Functions.h"
 #include <cmath>
 #include <iostream>
-#include "Billboardnode.h"
-#include "Quadnode.h"
-#include "Modelnode.h"
+#include "scenegraph/Billboardnode.h"
+#include "scenegraph/Quadnode.h"
+#include "scenegraph/Modelnode.h"
 #include "Net.h"
 
 Play::Play()
 :camera(NULL)
 ,light(NULL)
 ,heightmap(NULL)
+,player(NULL)
 ,server(NULL)
 ,client(NULL)
 ,netconf(NULL)
@@ -58,23 +59,9 @@ void Play::Init()
 
 	light = new Lightnode;
 	camera->Attach_node(light);
-	
-	billboard = new Billboardnode();
-	billboard->Set_position(Vector3(5, 0, 5));
-	light->Attach_node(billboard);
 
 	bomb_texture = al_iio_load("media/bomb_sprite.png");
-	Quadnode* quad = new Quadnode();
-	quad->Set_texture(bomb_texture);
-	Vector3 p[4];
-	p[0].Set(-.5, 0, 0);
-	p[1].Set(+.5, 0, 0);
-	p[2].Set(+.5, 1, 0);
-	p[3].Set(-.5, 1, 0);
-	quad->Set_corners(p);
-	billboard->Attach_node(quad);
-
-	ALLEGRO_BITMAP* darwinian_texture = al_iio_load("media/darwinian.png");
+	darwinian_texture = al_iio_load("media/darwinian.png");
 
 	player = new Player();	
 	player->Set_position(Vector3(15, 0, 10));
@@ -101,7 +88,8 @@ void Play::Update(double dt)
 		}
 	}
 
-	player->Update(dt, camera->Get_right(), camera->Get_front(), heightmap);
+	if(player)
+		player->Update(dt, camera->Get_right(), camera->Get_front(), heightmap);
 
 
 	camera->Look_at(player->Get_position());
@@ -114,7 +102,7 @@ void Play::Update(double dt)
 		{
 			Vector3 point = (*i)->Get_position();
 			float curve[5] = {-1, -.7, 0, .3, 0};
-			heightmap->Apply_brush(point.x, point.z, 10, 3, curve, 5);
+			heightmap->Apply_brush(point.x, point.z, 10, 1, curve, 5);
 			light->Detach_node(*i);
 			delete *i;
 			i=bombs.erase(i);
@@ -142,7 +130,9 @@ void Play::Render()
 
 void Play::Event(ALLEGRO_EVENT event)
 {
-	player->Event(event);
+	if(player)
+		player->Event(event);
+
 	if(ALLEGRO_EVENT_KEY_DOWN == event.type)
 	{
 		if(ALLEGRO_KEY_SPACE == event.keyboard.keycode)
@@ -154,7 +144,7 @@ void Play::Event(ALLEGRO_EVENT event)
 			bombs.push_back(bomb);
 			light->Attach_node(bomb);
 */			
-			if(client)
+			if(client && client->Ready() && player)
 			{
 				ZCom_BitStream *packet = new ZCom_BitStream();
 				packet->addInt(CREATE_BOMB, PACKET_TYPE_SIZE);
@@ -252,4 +242,19 @@ void Play::Add_bomb(Bomb* bomb)
 	bomb->Set_texture(bomb_texture);
 	light->Attach_node(bomb);
 	bombs.push_back(bomb);
+}
+
+void Play::Add_player(Player* p, bool owner)
+{
+	if(owner)
+	{
+		if(player)
+		{
+			light->Detach_node(player);
+			delete player;
+		}
+		player = p;
+		player->Set_texture(darwinian_texture);
+		light->Attach_node(player);		
+	}
 }

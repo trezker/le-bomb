@@ -1,10 +1,10 @@
 #ifndef Editor_h
 #define Editor_h
 
-#include <Scenenode.h>
+#include <scenegraph/Scenenode.h>
 #include <Heightmap.h>
-#include <Cameranode.h>
-#include <Lightnode.h>
+#include <scenegraph/Cameranode.h>
+#include <scenegraph/Lightnode.h>
 #include <allegro5/allegro5.h>
 #include <allegro5/a5_iio.h>
 #include <allegro5/a5_font.h>

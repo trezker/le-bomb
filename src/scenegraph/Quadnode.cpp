@@ -1,4 +1,4 @@
-#include "Quadnode.h"
+#include "scenegraph/Quadnode.h"
 
 Quadnode::Quadnode()
 :texture(NULL)

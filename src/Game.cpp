@@ -1,11 +1,11 @@
 #include "Game.h"
 #include <iostream>
 #include <cmath>
-#include <Scenenode.h>
-#include <Transformnode.h>
-#include <Heightmap.h>
-#include <Cameranode.h>
-#include <Lightnode.h>
+#include "Heightmap.h"
+#include "scenegraph/Scenenode.h"
+#include "scenegraph/Transformnode.h"
+#include "scenegraph/Cameranode.h"
+#include "scenegraph/Lightnode.h"
 #include <GL/glu.h>
 #include "Functions.h"
 
@@ -17,6 +17,7 @@ Heightmap* heightmap = NULL;
 Game::Game()
 :quit(false)
 ,gamestate(NULL)
+,zcom(NULL)
 {
 }
 
@@ -36,7 +37,13 @@ void Game::Run()
 
 	ALLEGRO_DISPLAY *display;
 	al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
-	display = al_create_display(width, height);
+	al_set_new_display_option(ALLEGRO_DEPTH_SIZE, 24, ALLEGRO_REQUIRE);
+ 	display = al_create_display(width, height);
+ 	if(!display)
+ 	{
+ 		printf("Failed to create display\n");
+ 		return;
+	}
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);

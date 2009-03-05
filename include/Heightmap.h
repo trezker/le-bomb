@@ -2,7 +2,7 @@
 #define Heightmap_h
 
 #include <vector>
-#include "Scenenode.h"
+#include "scenegraph/Scenenode.h"
 #include "Vector3.h"
 #include <allegro5/allegro5.h>
 #include <allegro5/a5_iio.h>

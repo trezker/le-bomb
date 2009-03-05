@@ -2,9 +2,9 @@
 #define Bomb_h
 
 #include <allegro5/allegro5.h>
-#include "Scenenode.h"
-#include "Billboardnode.h"
-#include "Quadnode.h"
+#include "scenegraph/Scenenode.h"
+#include "scenegraph/Billboardnode.h"
+#include "scenegraph/Quadnode.h"
 #include <zoidcom/zoidcom.h>
 
 class Bomb: public Scenenode

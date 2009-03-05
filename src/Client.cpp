@@ -18,6 +18,7 @@ void Client::Set_play(Play* p)
 void Client::Register_classes()
 {
 	bomb_id = ZCom_registerClass("Bomb", ZCOM_CLASSFLAG_ANNOUNCEDATA);
+	player_id = ZCom_registerClass("Player", ZCOM_CLASSFLAG_ANNOUNCEDATA);
 }
 
 void Client::Send_data(ZCom_BitStream *message)
@@ -85,5 +86,16 @@ void Client::ZCom_cbNodeRequest_Dynamic( ZCom_ConnID _id, ZCom_ClassID _requeste
 		bomb->Register_net_node(this, bomb_id);
 		bomb->Set_position(Vector3(x, y, z));
 		play->Add_bomb(bomb);
+	}
+	if (_requested_class == player_id) 
+	{
+		printf("Client: Player requested\n");
+		float x = _announcedata->getFloat(POSITION_MANTISSA);
+		float y = _announcedata->getFloat(POSITION_MANTISSA);
+		float z = _announcedata->getFloat(POSITION_MANTISSA);
+		Player* player = new Player;
+		player->Register_net_node(this, player_id);
+		player->Set_position(Vector3(x, y, z));
+		play->Add_player(player);
 	}
 }

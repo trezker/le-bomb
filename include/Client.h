@@ -18,6 +18,7 @@ private:
 	Play* play;
 	ZCom_ConnID server_id;
 	ZCom_ClassID bomb_id;
+	ZCom_ClassID player_id;
 
 	void ZCom_cbConnectResult( ZCom_ConnID _id, eZCom_ConnectResult _result, ZCom_BitStream &_reply );
 	bool ZCom_cbConnectionRequest( ZCom_ConnID  _id, ZCom_BitStream &_request, ZCom_BitStream &_reply ){return false;}

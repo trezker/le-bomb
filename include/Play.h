@@ -1,19 +1,19 @@
 #ifndef Play_h
 #define Play_h
 
-#include <Scenenode.h>
-#include <Heightmap.h>
-#include <Cameranode.h>
-#include <Lightnode.h>
+#include "Heightmap.h"
+#include "scenegraph/Scenenode.h"
+#include "scenegraph/Cameranode.h"
+#include "scenegraph/Lightnode.h"
+#include "scenegraph/Billboardnode.h"
+#include "scenegraph/Modelnode.h"
+#include "scenegraph/Transformnode.h"
 #include <allegro5/allegro5.h>
 #include <allegro5/a5_iio.h>
 #include <allegro5/a5_font.h>
 #include <allegro5/a5_ttf.h>
 #include <allegro5/a5_opengl.h>
-#include "Billboardnode.h"
 #include "Gamestate.h"
-#include "Modelnode.h"
-#include "Transformnode.h"
 #include <vector>
 #include "Bomb.h"
 #include "Server.h"
@@ -32,6 +32,7 @@ public:
 	void Event(ALLEGRO_EVENT event);
 	
 	void Add_bomb(Bomb* bomb);
+	void Add_player(Player* player, bool owner = false);
 private:
 	Scenenode root;
 	Cameranode* camera;
@@ -45,7 +46,8 @@ private:
 	int height;
 
 	ALLEGRO_BITMAP* bomb_texture;
-	Billboardnode* billboard;
+	ALLEGRO_BITMAP* darwinian_texture;
+//	Billboardnode* billboard;
 	Player* player;
 	typedef std::vector<Bomb*> Bombs;
 	Bombs bombs;

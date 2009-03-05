@@ -2,9 +2,9 @@
 #include "Functions.h"
 #include <cmath>
 #include <iostream>
-#include "Billboardnode.h"
-#include "Quadnode.h"
-#include "Modelnode.h"
+#include "scenegraph/Billboardnode.h"
+#include "scenegraph/Quadnode.h"
+#include "scenegraph/Modelnode.h"
 
 ALLEGRO_BITMAP* bomb_texture;
 
