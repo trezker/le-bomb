@@ -8,6 +8,8 @@
 
 Heightmap::Heightmap()
 :tilesize(1)
+,net_node(NULL)
+,deleteme(false)
 {
 	rows.resize(50);
 	for(Rows::iterator i = rows.begin(); i!=rows.end(); ++i)
@@ -22,6 +24,11 @@ Heightmap::Heightmap()
 		}
 	}
 	texture = al_iio_load("media/floortilebig1b.jpg");
+}
+
+Heightmap::~Heightmap()
+{
+	delete net_node;
 }
 
 float Heightmap::Get_width_x()
@@ -203,4 +210,35 @@ void Heightmap::Render()
 	}
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);	
+}
+
+void Heightmap::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
+{
+	net_node = new ZCom_Node;
+	net_node->registerNodeDynamic(class_id, control);
+}
+
+void Heightmap::Process_net_events()
+{
+	if(!net_node)
+		return;
+	// checkEventWaiting() returns true whenever there is a waiting event in the node
+	while (net_node->checkEventWaiting()) 
+	{
+		eZCom_Event       type;            // event type
+		eZCom_NodeRole    remote_role;     // role of remote sender
+		ZCom_ConnID       conn_id;         // connection id of sender
+
+		// get next waiting event
+		ZCom_BitStream *data = net_node->getNextEvent(&type, &remote_role, &conn_id);
+
+		// the server object has been deleted on the server, we should delete it here, too
+		if (remote_role == eZCom_RoleAuthority && type == eZCom_EventRemoved)
+			deleteme = true;
+	}
+}
+
+bool Heightmap::Deleteme()
+{
+	return deleteme;
 }

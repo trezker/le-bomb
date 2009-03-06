@@ -6,6 +6,7 @@
 #include "Vector3.h"
 #include <allegro5/allegro5.h>
 #include <allegro5/a5_iio.h>
+#include <zoidcom/zoidcom.h>
 
 struct Height_point
 {
@@ -28,6 +29,7 @@ class Heightmap: public Scenenode
 {
 public:
 	Heightmap();
+	~Heightmap();
 	float Get_width_x();
 	float Get_width_z();
 	/* Function: Set_height
@@ -45,6 +47,10 @@ public:
 	void Recalc_normals();
 	
 	virtual void Render();
+
+	bool Deleteme();
+	void Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
+	void Process_net_events();
 private:
 	Vector3 Calc_normals_helper(Vector3 p, int x2, int y2, int x3, int y3);
 	void Calc_normals_around(int x, int y);
@@ -54,6 +60,9 @@ private:
 	Rows rows;
 	float tilesize;
 	ALLEGRO_BITMAP* texture;
+
+	ZCom_Node* net_node;
+	bool deleteme;
 };
 
 #endif
