@@ -39,7 +39,8 @@ public:
 	/* Function: Get_height
 	 * Gets the height of the point nearest given coordinates.
 	 * */
-	float Get_height(float x, float y);
+	float Get_height(float x, float z);
+	Vector3 Get_normal(float x, float z);
 	Height_points Get_height_points_in_circle(float x, float y, float radius) const;
 	
 	void Apply_brush(float x, float z, float brush_size, float brush_pressure, const float *brush, int brush_points);

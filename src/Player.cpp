@@ -55,12 +55,18 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 	front.y = 0;
 	front.Normalize();
 
+	float speed_factor = 10*dt;
 	Vector3 speed;
 	speed += right*direction.x;
 	speed += Vector3(0, 1, 0)*direction.y;
 	speed += front*direction.z;
 	
-	Vector3 newpos = Get_position()+speed*10*dt;
+	Vector3 map_normal = heightmap->Get_normal(Get_position().x, Get_position().z);
+	map_normal.y = 0;
+	if(speed != Vector3::ZERO)
+		speed += map_normal*1.1;
+	
+	Vector3 newpos = Get_position()+speed*speed_factor;
 	newpos.y = heightmap->Get_height(newpos.x, newpos.z);
 	Set_position(newpos);
 }
@@ -139,9 +145,9 @@ ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_i
 	net_node->addInterpolationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.y);
 	net_node->addInterpolationFloat(&position.z, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.z);
 */
-	net_node->addReplicationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH);
-	net_node->addReplicationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH);
-	net_node->addReplicationFloat(&position.z, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH);
+	net_node->addReplicationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_PROXY|ZCOM_REPRULE_OWNER_2_AUTH);
+	net_node->addReplicationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_PROXY|ZCOM_REPRULE_OWNER_2_AUTH);
+	net_node->addReplicationFloat(&position.z, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_PROXY|ZCOM_REPRULE_OWNER_2_AUTH);
 	net_node->endReplicationSetup();
 
 	net_node->registerNodeDynamic(class_id, control);

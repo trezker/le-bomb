@@ -73,6 +73,15 @@ float Heightmap::Get_height(float ix, float iy)
 	return (hx2-hx1)*zp+hx1;
 }
 
+Vector3 Heightmap::Get_normal(float x, float z)
+{
+	int tx = x/tilesize;
+	int tz = z/tilesize;
+	if(tx<0 || tz<0 || tx+1>=static_cast<int>(rows.size()) || tz+1>=static_cast<int>(rows[0].size()))
+		return Vector3(0, 1, 0);
+	return rows[tx][tz].normal;
+}
+
 Height_points Heightmap::Get_height_points_in_circle(float ix, float iy, float iradius) const
 {
 	int radius = iradius/tilesize+1;
