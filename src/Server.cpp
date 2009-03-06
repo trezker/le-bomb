@@ -47,7 +47,14 @@ void Server::Update(double dt)
 /*			Vector3 point = (*i)->Get_position();
 			float curve[5] = {-1, -.7, 0, .3, 0};
 			heightmap->Apply_brush(point.x, point.z, 10, 3, curve, 5);
-*/			delete *i;
+*/
+			for(Players::iterator p = players.begin(); p!=players.end(); ++p)
+			{
+				Player* player = p->second;
+				float damage = (*i)->Damage_at(player->Get_position());
+				player->Damage(damage);
+			}
+			delete *i;
 			i=bombs.erase(i);
 			printf("Server: Bomb erased\n");
 		}

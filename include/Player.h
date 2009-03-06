@@ -18,6 +18,7 @@ public:
 	void Set_texture(ALLEGRO_BITMAP* t);
 	void Update(double dt, Vector3 camera_right, Vector3 camera_front, Heightmap* heightmap);
 	void Event(ALLEGRO_EVENT event);
+	void Damage(float d);
 
 	bool Deleteme();
 	ZCom_Node* Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
@@ -35,6 +36,8 @@ private:
 	bool move_right;
 	bool move_up;
 	bool move_down;
+	
+	float health;
 
 	ZCom_Node* net_node;
 	bool deleteme;

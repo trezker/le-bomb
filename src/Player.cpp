@@ -8,6 +8,7 @@ Player::Player()
 ,move_right(false)
 ,move_up(false)
 ,move_down(false)
+,health(100)
 ,net_node(NULL)
 ,deleteme(false)
 {
@@ -127,6 +128,11 @@ void Player::Event(ALLEGRO_EVENT event)
 			move_down = false;
 		}
 	}
+}
+
+void Player::Damage(float d)
+{
+	health-=d;
 }
 
 ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)

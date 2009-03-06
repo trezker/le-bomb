@@ -57,6 +57,16 @@ bool Bomb::Exploded()
 	return timeout<=0;
 }
 
+float Bomb::Damage_at(Vector3 p)
+{
+	float range = 5;
+	float damage = 10;
+	float r = (p-Get_position()).Length();
+	if(r>range)
+		return 0;
+	return (range-r)/range*damage;
+}
+
 void Bomb::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
 {
 	net_node = new ZCom_Node;

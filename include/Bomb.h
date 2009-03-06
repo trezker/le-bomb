@@ -18,6 +18,7 @@ public:
 	void Set_texture(ALLEGRO_BITMAP* t);
 	void Update(double dt, Vector3 cam);
 	bool Exploded();
+	float Damage_at(Vector3 p);
 
 	bool Deleteme();
 	void Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
