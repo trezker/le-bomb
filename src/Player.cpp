@@ -135,6 +135,11 @@ void Player::Damage(float d)
 	health-=d;
 }
 
+void Player::Set_health(float h)
+{
+	health = h;
+}
+
 float Player::Get_health()
 {
 	return health;
@@ -167,6 +172,11 @@ ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_i
 	return net_node;
 }
 
+ZCom_Node* Player::Get_net_node()
+{
+	return net_node;
+}
+
 void Player::Process_net_events()
 {
 	if(!net_node)
@@ -184,6 +194,22 @@ void Player::Process_net_events()
 		// the server object has been deleted on the server, we should delete it here, too
 		if (remote_role == eZCom_RoleAuthority && type == eZCom_EventRemoved)
 			deleteme = true;
+
+		if (remote_role == eZCom_RoleAuthority && type == eZCom_EventUser)
+		{
+			int packet_type = data->getInt(PACKET_TYPE_SIZE);
+			switch(packet_type)
+			{
+				case PLAYER_KILLED:
+				{
+					float x = data->getFloat(POSITION_MANTISSA);
+					float y = data->getFloat(POSITION_MANTISSA);
+					float z = data->getFloat(POSITION_MANTISSA);
+					Set_position(Vector3(x, y, z));
+					break;
+				}
+			}
+		}
 	}
 }
 

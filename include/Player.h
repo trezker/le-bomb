@@ -19,10 +19,12 @@ public:
 	void Update(double dt, Vector3 camera_right, Vector3 camera_front, Heightmap* heightmap);
 	void Event(ALLEGRO_EVENT event);
 	void Damage(float d);
+	void Set_health(float h);
 	float Get_health();
 
 	bool Deleteme();
 	ZCom_Node* Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
+	ZCom_Node* Get_net_node();
 	void Process_net_events();
 private:
 	Vector3 position;

@@ -53,6 +53,18 @@ void Server::Update(double dt)
 				Player* player = p->second;
 				float damage = (*i)->Damage_at(player->Get_position());
 				player->Damage(damage);
+				if(player->Get_health()<=0)
+				{
+					player->Set_position(Vector3(0, 0, 0));
+					player->Set_health(100);
+					ZCom_BitStream *adata = new ZCom_BitStream();
+					adata->addInt(PLAYER_KILLED, PACKET_TYPE_SIZE);
+					Vector3 pos = player->Get_position();
+					adata->addFloat(pos.x, POSITION_MANTISSA);
+					adata->addFloat(pos.y, POSITION_MANTISSA);
+					adata->addFloat(pos.z, POSITION_MANTISSA);
+					player->Get_net_node()->sendEventDirect(eZCom_ReliableOrdered, adata, p->first);
+				}
 			}
 			delete *i;
 			i=bombs.erase(i);
