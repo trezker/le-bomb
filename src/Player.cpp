@@ -43,6 +43,8 @@ void Player::Set_texture(ALLEGRO_BITMAP* t)
 
 void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heightmap* heightmap)
 {
+	Process_net_events();
+
 	Vector3 direction(move_left-move_right, move_up-move_down, move_forward-move_backward);
 	direction.Normalize();
 
@@ -133,14 +135,14 @@ ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_i
 	net_node->setAnnounceData(adata);
 
 	net_node->beginReplicationSetup(3);
-/*	net_node->addInterpolationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1);
-	net_node->addInterpolationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1);
-	net_node->addInterpolationFloat(&position.z, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1);
-*/
+	net_node->addInterpolationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.x);
+	net_node->addInterpolationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.y);
+	net_node->addInterpolationFloat(&position.z, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.z);
+/*
 	net_node->addReplicationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH);
 	net_node->addReplicationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH);
 	net_node->addReplicationFloat(&position.z, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH);
-	net_node->endReplicationSetup();
+*/	net_node->endReplicationSetup();
 
 	net_node->registerNodeDynamic(class_id, control);
 	return net_node;
