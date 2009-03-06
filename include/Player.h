@@ -24,6 +24,8 @@ public:
 	void Process_net_events();
 private:
 	Vector3 position;
+	Vector3 interpos;
+
 	Transformnode* transform;
 	Modelnode* model;
 
