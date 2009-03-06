@@ -183,6 +183,7 @@ void Play::Event(ALLEGRO_EVENT event)
 					server = NULL;
 					printf("Server failed initializing\n");
 				}
+				server->Init();
 			}
 		}
 		if(ALLEGRO_KEY_F8 == event.keyboard.keycode)
@@ -249,6 +250,17 @@ void Play::Event(ALLEGRO_EVENT event)
 			al_set_mouse_xy(width/2, height/2);
 		}
 	}
+}
+
+void Play::Add_heightmap(Heightmap* h)
+{
+	if(heightmap)
+	{
+		light->Detach_node(heightmap);
+		delete heightmap;
+	}
+	heightmap = h;
+	light->Attach_node(heightmap);
 }
 
 void Play::Add_bomb(Bomb* bomb)

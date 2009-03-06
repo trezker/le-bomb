@@ -17,6 +17,7 @@ private:
 	bool disconnected;
 	Play* play;
 	ZCom_ConnID server_id;
+	ZCom_ClassID heightmap_id;
 	ZCom_ClassID bomb_id;
 	ZCom_ClassID player_id;
 

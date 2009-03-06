@@ -4,14 +4,21 @@
 #include <zoidcom/zoidcom.h>
 #include "Bomb.h"
 #include "Player.h"
+#include "Heightmap.h"
 
 class Server : public ZCom_Control {
 public:
+	Server();
+	~Server();
+	void Init();
 	void Register_classes();
 	void Update(double dt);
 private:
 	ZCom_ClassID bomb_id;
 	ZCom_ClassID player_id;
+	ZCom_ClassID heightmap_id;
+	
+	Heightmap* heightmap;
 	typedef std::vector<Bomb*> Bombs;
 	Bombs bombs;
 	typedef std::vector<Player*> Players;

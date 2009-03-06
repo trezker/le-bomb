@@ -2,8 +2,25 @@
 #include <iostream>
 #include "Net.h"
 
+Server::Server()
+:heightmap(NULL)
+{
+}
+
+Server::~Server()
+{
+	delete heightmap;
+}
+
+void Server::Init()
+{
+	heightmap = new Heightmap;
+	heightmap->Register_net_node(this, heightmap_id);
+}
+
 void Server::Register_classes()
 {
+	heightmap_id = ZCom_registerClass("Heightmap");
 	bomb_id = ZCom_registerClass("Bomb", ZCOM_CLASSFLAG_ANNOUNCEDATA);
 	player_id = ZCom_registerClass("Player", ZCOM_CLASSFLAG_ANNOUNCEDATA);
 }

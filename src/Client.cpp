@@ -3,6 +3,7 @@
 #include "Bomb.h"
 #include "Net.h"
 #include "Play.h"
+#include "Heightmap.h"
 
 Client::Client()
 :ready(false)
@@ -17,6 +18,7 @@ void Client::Set_play(Play* p)
 
 void Client::Register_classes()
 {
+	heightmap_id = ZCom_registerClass("Heightmap");
 	bomb_id = ZCom_registerClass("Bomb", ZCOM_CLASSFLAG_ANNOUNCEDATA);
 	player_id = ZCom_registerClass("Player", ZCOM_CLASSFLAG_ANNOUNCEDATA);
 }
@@ -97,5 +99,12 @@ void Client::ZCom_cbNodeRequest_Dynamic( ZCom_ConnID _id, ZCom_ClassID _requeste
 		player->Register_net_node(this, player_id);
 		player->Set_position(Vector3(x, y, z));
 		play->Add_player(player, _role==eZCom_RoleOwner);
+	}
+	if (_requested_class == heightmap_id) 
+	{
+		printf("Client: Heightmap requested\n");
+		Heightmap* heightmap = new Heightmap;
+		heightmap->Register_net_node(this, heightmap_id);
+		play->Add_heightmap(heightmap);
 	}
 }

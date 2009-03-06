@@ -31,6 +31,7 @@ public:
 	void Render();
 	void Event(ALLEGRO_EVENT event);
 	
+	void Add_heightmap(Heightmap* h);
 	void Add_bomb(Bomb* bomb);
 	void Add_player(Player* player, bool owner = false);
 private:
