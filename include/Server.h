@@ -5,6 +5,7 @@
 #include "Bomb.h"
 #include "Player.h"
 #include "Heightmap.h"
+#include <map>
 
 class Server : public ZCom_Control {
 public:
@@ -21,7 +22,7 @@ private:
 	Heightmap* heightmap;
 	typedef std::vector<Bomb*> Bombs;
 	Bombs bombs;
-	typedef std::vector<Player*> Players;
+	typedef std::map<ZCom_ConnID, Player*> Players;
 	Players players;
 
 	void ZCom_cbConnectResult( ZCom_ConnID _id, eZCom_ConnectResult _result, ZCom_BitStream &_reply ) {}

@@ -94,6 +94,8 @@ void Server::ZCom_cbConnectionSpawned( ZCom_ConnID _id )
 void Server::ZCom_cbConnectionClosed( ZCom_ConnID _id, eZCom_CloseReason _reason, ZCom_BitStream &_reasondata )
 {
 	printf("Connection with id [%d] closed\n", _id);
+	delete players[_id];
+	players.erase(_id);	
 }
 
 bool Server::ZCom_cbZoidRequest( ZCom_ConnID _id, zU8 _requested_level, ZCom_BitStream &_reason )
@@ -105,7 +107,7 @@ bool Server::ZCom_cbZoidRequest( ZCom_ConnID _id, zU8 _requested_level, ZCom_Bit
 //		bomb->Set_position(Vector3(x, y, z));
 		ZCom_Node* node = player->Register_net_node(this, player_id);
 		node->setOwner(_id, true);
-		players.push_back(player);
+		players[_id] = player;
 		return true;
 	}
 	else
