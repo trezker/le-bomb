@@ -59,24 +59,24 @@ void Game::Run()
 
 	while(1)
 	{
-		if (quit)
-			break;
 		ALLEGRO_EVENT event;
-		if (al_get_next_event(event_queue, &event))
+		while (al_get_next_event(event_queue, &event))
 		{
 		  	if (ALLEGRO_EVENT_KEY_DOWN == event.type)
 			{
 				if (ALLEGRO_KEY_ESCAPE == event.keyboard.keycode)
 				{
-					break;
+					quit = true;
 				}
 			}
 			if (ALLEGRO_EVENT_DISPLAY_CLOSE == event.type)
 			{
-				break;
+				quit = true;
 			}
 			Event(event);
 		}
+		if (quit)
+			break;
 
 		double current_time = al_current_time();
 		double dt = current_time - last_time;
