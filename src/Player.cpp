@@ -135,6 +135,11 @@ void Player::Damage(float d)
 	health-=d;
 }
 
+float Player::Get_health()
+{
+	return health;
+}
+
 ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
 {
 	net_node = new ZCom_Node;
@@ -146,7 +151,9 @@ ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_i
 	adata->addFloat(pos.z, POSITION_MANTISSA);
 	net_node->setAnnounceData(adata);
 
-	net_node->beginReplicationSetup(3);
+	net_node->beginReplicationSetup(4);
+	net_node->addReplicationFloat(&health, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL);
+
 /*	net_node->addInterpolationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.x);
 	net_node->addInterpolationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.y);
 	net_node->addInterpolationFloat(&position.z, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.z);

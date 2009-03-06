@@ -26,18 +26,19 @@ void Quadnode::Render()
 		glAlphaFunc(GL_GREATER,0.1f);
 		glEnable(GL_ALPHA_TEST);
 	}
-	
+
 	glBegin(GL_QUADS);
 	glNormal3f(0, 0, -1);
 	glTexCoord2f(0, 0); glVertex3f(v[0].x, v[0].y, v[0].z);
 	glTexCoord2f(1, 0); glVertex3f(v[1].x, v[1].y, v[1].z);
 	glTexCoord2f(1, 1); glVertex3f(v[2].x, v[2].y, v[2].z);
 	glTexCoord2f(0, 1); glVertex3f(v[3].x, v[3].y, v[3].z);
-/*	glTexCoord2f(0, 0); glVertex3f(-.5, 0, 0);
-	glTexCoord2f(1, 0); glVertex3f(+.5, 0, 0);
-	glTexCoord2f(1, 1); glVertex3f(+.5, +1, 0);
-	glTexCoord2f(0, 1); glVertex3f(-.5, +1, 0);
-*/	glEnd();
+	glEnd();
 
-	glDisable(GL_ALPHA_TEST);
+	if(texture)
+	{
+		glDisable(GL_ALPHA_TEST);
+		glDisable(GL_TEXTURE_2D);
+		glShadeModel(GL_FLAT);
+	}
 }

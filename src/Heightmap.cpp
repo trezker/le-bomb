@@ -218,7 +218,9 @@ void Heightmap::Render()
 		x += tilesize;
 	}
 	glEnd();
-	glDisable(GL_COLOR_MATERIAL);	
+
+	glDisable(GL_TEXTURE_2D);
+	glShadeModel(GL_FLAT);
 }
 
 void Heightmap::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)

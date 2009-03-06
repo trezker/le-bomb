@@ -45,5 +45,8 @@ void Modelnode::Postrender()
 	if(texture)
 	{
 		glDisable(GL_ALPHA_TEST);
+		glDisable(GL_TEXTURE_2D);
+		glShadeModel(GL_FLAT);
+		glDisable(GL_ALPHA_TEST);
 	}
 }

@@ -6,6 +6,7 @@
 #include "scenegraph/Quadnode.h"
 #include "scenegraph/Modelnode.h"
 #include "Net.h"
+#include <allegro5/a5_primitives.h>
 
 Play::Play()
 :camera(NULL)
@@ -140,7 +141,13 @@ void Play::Render()
 	root.Apply();
 
 	glDisable(GL_LIGHTING);		// Disable Lighting
+	glDisable(GL_DEPTH_TEST);
 	Postrender_perspective_view();
+
+	if(player)
+	{
+		al_draw_filled_rectangle(10, 10, 10+player->Get_health(), 30, al_map_rgb(255, 0, 0));
+	}
 }
 
 void Play::Event(ALLEGRO_EVENT event)
