@@ -29,6 +29,7 @@ Play::~Play()
 	delete light;
 	delete client;
 	delete server;
+	al_config_write(netconf, "net.cfg");
 	al_config_destroy(netconf);
 }
 
@@ -176,7 +177,18 @@ void Play::Event(ALLEGRO_EVENT event)
 				server = new Server();
 				server->ZCom_setDebugName("Server");
 				server->Register_classes();
-				bool result = server->ZCom_initSockets(true, 10000, 0);
+				const char *port_str = al_config_get_value(netconf, "server", "port");
+				int port=0;
+				if(port_str)
+				{
+					port=atoi(port_str);
+				}
+				if(port==0)
+				{
+					al_config_set_value(netconf, "server", "port", "10000");
+					port = 10000;
+				}
+				bool result = server->ZCom_initSockets(true, port, 0);
 				if (!result)
 				{
 					delete server;
@@ -209,13 +221,12 @@ void Play::Event(ALLEGRO_EVENT event)
 				// ZoidCom object gets deleted)
 				else
 				{
-					const char *server_str = al_config_get_value(netconf, NULL, "server");
+					const char *server_str = al_config_get_value(netconf, "client", "server");
 					if(!server_str)
 					{
-						al_config_set_value(netconf, "", "server", "localhost:10000");
+						al_config_set_value(netconf, "client", "server", "localhost:10000");
 						server_str = "localhost:10000";
 					}
-					al_config_write(netconf, "net.cfg");
 
 					// prepare the destination adress
 					ZCom_Address server_addr;
