@@ -24,6 +24,8 @@ Game::Game()
 
 Game::~Game()
 {
+	delete editor;
+	delete play;
 	delete zcom;
 }
 

@@ -7,6 +7,7 @@ class Play;
 class Client : public ZCom_Control {
 public:
 	Client();
+	~Client();
 	void Set_play(Play* play);
 	void Register_classes();
 	void Send_data(ZCom_BitStream *message);

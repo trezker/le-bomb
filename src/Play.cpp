@@ -27,8 +27,8 @@ Play::~Play()
 {
 	delete camera;
 	delete light;
-	delete server;
 	delete client;
+	delete server;
 	al_config_destroy(netconf);
 }
 

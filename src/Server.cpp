@@ -10,6 +10,18 @@ Server::Server()
 Server::~Server()
 {
 	delete heightmap;
+	for(Bombs::iterator i = bombs.begin(); i != bombs.end(); )
+	{
+		delete *i;
+	}
+	ZCom_disconnectAll(NULL);
+	printf("Disconnecting server\n");
+	double start_time = al_current_time();
+	while(al_current_time()-start_time < 1)
+	{
+		ZCom_processInput();
+		ZCom_processOutput();
+	}
 }
 
 void Server::Init()

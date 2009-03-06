@@ -11,6 +11,18 @@ Client::Client()
 ,play(NULL)
 {}
 
+Client::~Client()
+{
+	ZCom_disconnectAll(NULL);
+	printf("Disconnecting Client\n");
+	double start_time = al_current_time();
+	while(al_current_time()-start_time < 1)
+	{
+		ZCom_processInput();
+		ZCom_processOutput();
+	}
+}
+
 void Client::Set_play(Play* p)
 {
 	play = p;
