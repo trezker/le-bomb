@@ -111,7 +111,6 @@ bool Game::Init()
 	
 	play = new Play;
 	play->Init();
-	play->Set_heightmap(heightmap);
 	gamestate = play;
 	return true;
 }

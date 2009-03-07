@@ -26,7 +26,6 @@ public:
 	Play();
 	~Play();
 	void Init();
-	void Set_heightmap(Heightmap* h);
 	void Update(double dt);
 	void Render();
 	void Event(ALLEGRO_EVENT event);
@@ -47,6 +46,7 @@ private:
 	int height;
 
 	ALLEGRO_FONT* font;
+	ALLEGRO_BITMAP* heightmap_texture;
 	ALLEGRO_BITMAP* bomb_texture;
 	ALLEGRO_BITMAP* darwinian_texture;
 //	Billboardnode* billboard;

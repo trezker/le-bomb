@@ -36,18 +36,6 @@ Play::~Play()
 	al_config_destroy(netconf);
 }
 
-void Play::Set_heightmap(Heightmap* h)
-{
-	if(heightmap)
-		light->Detach_node(heightmap);
-	heightmap = h;
-	if(!h)
-		return;
-	light->Attach_node(h);
-//	camera->Set_position(Vector3(h->Get_width_x()/2, 1.5f, h->Get_width_z()/2));
-	camera->Set_position(Vector3(h->Get_width_x()/2, 10.f, 0));
-}
-
 void Play::Init()
 {
 	netconf = al_config_read("net.cfg");
@@ -68,6 +56,9 @@ void Play::Init()
 
 	bomb_texture = al_iio_load("media/bomb_sprite.png");
 	darwinian_texture = al_iio_load("media/darwinian.png");
+	heightmap_texture = al_iio_load("media/grass.png");
+
+	Add_heightmap(new Heightmap);
 
 	player = new Player();	
 	player->Set_position(Vector3(15, 0, 10));
@@ -279,6 +270,8 @@ void Play::Add_heightmap(Heightmap* h)
 		delete heightmap;
 	}
 	heightmap = h;
+	camera->Set_position(Vector3(h->Get_width_x()/2, 10.f, 0));
+	heightmap->Set_texture(heightmap_texture);
 	light->Attach_node(heightmap);
 }
 

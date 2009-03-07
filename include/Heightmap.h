@@ -30,6 +30,7 @@ class Heightmap: public Scenenode
 public:
 	Heightmap();
 	~Heightmap();
+	void Set_texture(ALLEGRO_BITMAP* t);
 	float Get_width_x();
 	float Get_width_z();
 	/* Function: Set_height

@@ -8,6 +8,7 @@
 
 Heightmap::Heightmap()
 :tilesize(1)
+,texture(NULL)
 ,net_node(NULL)
 ,deleteme(false)
 {
@@ -23,12 +24,16 @@ Heightmap::Heightmap()
 			rows[ix][iz].normal = Vector3(0, 1, 0);
 		}
 	}
-	texture = al_iio_load("media/floortilebig1b.jpg");
 }
 
 Heightmap::~Heightmap()
 {
 	delete net_node;
+}
+
+void Heightmap::Set_texture(ALLEGRO_BITMAP* t)
+{
+	texture = t;
 }
 
 float Heightmap::Get_width_x()
@@ -184,9 +189,12 @@ void Heightmap::Calc_normals_around(int x, int y)
 
 void Heightmap::Render()
 {
- 	glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(texture));
-	glEnable(GL_TEXTURE_2D);
-	glShadeModel(GL_SMOOTH);
+	if(texture)
+	{
+		glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(texture));
+		glEnable(GL_TEXTURE_2D);
+		glShadeModel(GL_SMOOTH);
+	}
 
 	glBegin(GL_QUADS);
 	float x = 0;
@@ -219,8 +227,11 @@ void Heightmap::Render()
 	}
 	glEnd();
 
-	glDisable(GL_TEXTURE_2D);
-	glShadeModel(GL_FLAT);
+	if(texture)
+	{
+		glDisable(GL_TEXTURE_2D);
+		glShadeModel(GL_FLAT);
+	}
 }
 
 void Heightmap::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
