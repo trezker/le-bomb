@@ -15,6 +15,7 @@ public:
 	virtual void Render();
 private:
 	Vector3 v[4];
+	Vector3 normal;
 	ALLEGRO_BITMAP* texture;
 };
 

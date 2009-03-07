@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Net.h"
+#include <cmath>
 
 Player::Player()
 :move_forward(false)
@@ -47,7 +48,7 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 {
 	Process_net_events();
 
-	Vector3 direction(move_left-move_right, move_up-move_down, move_forward-move_backward);
+	Vector3 direction(move_left-move_right, 0/*move_up-move_down*/, move_forward-move_backward);
 	direction.Normalize();
 
 	Vector3 right = camera_right;
@@ -60,13 +61,17 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 	float speed_factor = 10*dt;
 	Vector3 speed;
 	speed += right*direction.x;
-	speed += Vector3(0, 1, 0)*direction.y;
+//	speed += Vector3(0, 1, 0)*direction.y;
 	speed += front*direction.z;
-	
-	Vector3 map_normal = heightmap->Get_normal(Get_position().x, Get_position().z);
-	map_normal.y = 0;
+
 	if(speed != Vector3::ZERO)
+	{
+		float angle = atan2(speed.x, speed.z)*180/M_PI;
+		transform->Set_rotation(Vector3(0, angle, 0));
+		Vector3 map_normal = heightmap->Get_normal(Get_position().x, Get_position().z);
+		map_normal.y = 0;
 		speed += map_normal*1.1;
+	}
 	
 	Vector3 newpos = Get_position()+speed*speed_factor;
 	newpos.y = heightmap->Get_height(newpos.x, newpos.z);
