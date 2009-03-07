@@ -60,7 +60,7 @@ bool Bomb::Exploded()
 float Bomb::Damage_at(Vector3 p)
 {
 	float range = 5;
-	float damage = 10;
+	float damage = 50;
 	float r = (p-Get_position()).Length();
 	if(r>range)
 		return 0;

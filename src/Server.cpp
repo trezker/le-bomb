@@ -84,13 +84,10 @@ void Server::ZCom_cbDataReceived(ZCom_ConnID  _id, ZCom_BitStream &_data) {
 	{
 		case CREATE_BOMB:
 			printf("The client requested bomb creation.\n");
-			float x = _data.getFloat(POSITION_MANTISSA);
-			float y = _data.getFloat(POSITION_MANTISSA);
-			float z = _data.getFloat(POSITION_MANTISSA);
-
+			Vector3 pos = players[_id]->Get_position();
 			Bomb* bomb = new Bomb;
 			bomb->Set_timeout(2);
-			bomb->Set_position(Vector3(x, y, z));
+			bomb->Set_position(pos);
 			bomb->Register_net_node(this, bomb_id);
 			bombs.push_back(bomb);
 			break;

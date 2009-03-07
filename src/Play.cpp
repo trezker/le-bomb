@@ -170,10 +170,6 @@ void Play::Event(ALLEGRO_EVENT event)
 			{
 				ZCom_BitStream *packet = new ZCom_BitStream();
 				packet->addInt(CREATE_BOMB, PACKET_TYPE_SIZE);
-				Vector3 ppos = player->Get_position();
-				packet->addFloat(ppos.x, POSITION_MANTISSA);
-				packet->addFloat(ppos.y, POSITION_MANTISSA);
-				packet->addFloat(ppos.z, POSITION_MANTISSA);
 				client->Send_data(packet);
 			}
 		}
