@@ -9,6 +9,7 @@ Player::Player()
 ,move_up(false)
 ,move_down(false)
 ,health(100)
+,score(0)
 ,net_node(NULL)
 ,deleteme(false)
 {
@@ -145,6 +146,16 @@ float Player::Get_health()
 	return health;
 }
 
+void Player::Add_score(int s)
+{
+	score += s;
+}
+
+int Player::Get_score()
+{
+	return score;
+}
+
 ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
 {
 	net_node = new ZCom_Node;
@@ -156,8 +167,9 @@ ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_i
 	adata->addFloat(pos.z, POSITION_MANTISSA);
 	net_node->setAnnounceData(adata);
 
-	net_node->beginReplicationSetup(4);
+	net_node->beginReplicationSetup(5);
 	net_node->addReplicationFloat(&health, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL);
+	net_node->addReplicationInt(&score, 10, false, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL);
 /*
 	net_node->addInterpolationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_PROXY|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.x);
 	net_node->addInterpolationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_PROXY|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.y);

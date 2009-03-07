@@ -21,6 +21,8 @@ public:
 	void Damage(float d);
 	void Set_health(float h);
 	float Get_health();
+	void Add_score(int s);
+	int Get_score();
 
 	bool Deleteme();
 	ZCom_Node* Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
@@ -41,6 +43,7 @@ private:
 	bool move_down;
 	
 	float health;
+	int score;
 
 	ZCom_Node* net_node;
 	bool deleteme;

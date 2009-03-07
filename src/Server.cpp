@@ -50,11 +50,16 @@ void Server::Update(double dt)
 */
 			for(Players::iterator p = players.begin(); p!=players.end(); ++p)
 			{
+				Player* bomb_player = (*i)->Get_player();
 				Player* player = p->second;
 				float damage = (*i)->Damage_at(player->Get_position());
 				player->Damage(damage);
 				if(player->Get_health()<=0)
 				{
+					if(bomb_player != player)
+					{
+						bomb_player->Add_score(10);
+					}
 					player->Set_position(Vector3(0, 0, 0));
 					player->Set_health(100);
 					ZCom_BitStream *adata = new ZCom_BitStream();
@@ -64,6 +69,10 @@ void Server::Update(double dt)
 					adata->addFloat(pos.y, POSITION_MANTISSA);
 					adata->addFloat(pos.z, POSITION_MANTISSA);
 					player->Get_net_node()->sendEventDirect(eZCom_ReliableOrdered, adata, p->first);
+				}
+				else if(damage>0 && bomb_player != player)
+				{
+					bomb_player->Add_score(1);
 				}
 			}
 			delete *i;
@@ -86,6 +95,7 @@ void Server::ZCom_cbDataReceived(ZCom_ConnID  _id, ZCom_BitStream &_data) {
 			printf("The client requested bomb creation.\n");
 			Vector3 pos = players[_id]->Get_position();
 			Bomb* bomb = new Bomb;
+			bomb->Set_player(players[_id]);
 			bomb->Set_timeout(2);
 			bomb->Set_position(pos);
 			bomb->Register_net_node(this, bomb_id);

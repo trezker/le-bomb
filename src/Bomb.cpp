@@ -2,7 +2,8 @@
 #include "Net.h"
 
 Bomb::Bomb()
-:net_node(NULL)
+:player(NULL)
+,net_node(NULL)
 ,deleteme(false)
 {
 	billboard = new Billboardnode;
@@ -65,6 +66,16 @@ float Bomb::Damage_at(Vector3 p)
 	if(r>range)
 		return 0;
 	return (range-r)/range*damage;
+}
+
+Player* Bomb::Get_player()
+{
+	return player;
+}
+
+void Bomb::Set_player(Player* p)
+{
+	player = p;
 }
 
 void Bomb::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)

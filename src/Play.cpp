@@ -12,10 +12,12 @@ Play::Play()
 :camera(NULL)
 ,light(NULL)
 ,heightmap(NULL)
+,font(NULL)
 ,player(NULL)
 ,server(NULL)
 ,client(NULL)
 ,netconf(NULL)
+
 {
 	fov = 45.f;
 	near = 1.f;
@@ -53,6 +55,8 @@ void Play::Init()
 	{
 		netconf = al_config_create();
 	}
+	
+	font = al_ttf_load_font("media/DejaVuSans.ttf", 20, 0);
 
 	camera = new Cameranode();
 	camera->Set_position(Vector3(0, 1.5f, 0));
@@ -147,6 +151,7 @@ void Play::Render()
 	if(player)
 	{
 		al_draw_filled_rectangle(10, 10, 10+player->Get_health(), 30, al_map_rgb(255, 0, 0));
+		al_font_textprintf(font, 10, 40, "Score: %d", player->Get_score());
 	}
 }
 

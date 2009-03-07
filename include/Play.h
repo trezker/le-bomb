@@ -46,6 +46,7 @@ private:
 	int width;
 	int height;
 
+	ALLEGRO_FONT* font;
 	ALLEGRO_BITMAP* bomb_texture;
 	ALLEGRO_BITMAP* darwinian_texture;
 //	Billboardnode* billboard;

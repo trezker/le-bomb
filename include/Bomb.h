@@ -6,6 +6,7 @@
 #include "scenegraph/Billboardnode.h"
 #include "scenegraph/Quadnode.h"
 #include <zoidcom/zoidcom.h>
+#include "Player.h"
 
 class Bomb: public Scenenode
 {
@@ -19,6 +20,8 @@ public:
 	void Update(double dt, Vector3 cam);
 	bool Exploded();
 	float Damage_at(Vector3 p);
+	Player* Get_player();
+	void Set_player(Player* p);
 
 	bool Deleteme();
 	void Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
@@ -27,6 +30,7 @@ private:
 	Billboardnode* billboard;
 	Quadnode* quad;
 	float timeout;
+	Player* player;
 
 	ZCom_Node* net_node;
 	bool deleteme;
