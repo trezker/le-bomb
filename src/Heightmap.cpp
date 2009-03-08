@@ -46,10 +46,19 @@ float Heightmap::Get_width_z()
 	return rows[0].size()*tilesize;
 }
 
+bool Heightmap::Contains(float x, float z)
+{
+	int tx = x/tilesize;
+	int tz = z/tilesize;
+	if(x<0 || z<0 || tx+1>=static_cast<int>(rows.size()) || tz+1>=static_cast<int>(rows[0].size()))
+		return false;
+	return true;
+}
+
 void Heightmap::Set_height(float ix, float iy, float height)
 {
-	int x = ix/tilesize+.5*tilesize;
-	int y = iy/tilesize+.5*tilesize;
+	int x = ix/tilesize+.5;
+	int y = iy/tilesize+.5;
 	if(x<0 || y<0 || x>=static_cast<int>(rows.size()) || y>=static_cast<int>(rows[0].size()))
 		return;
 	rows[x][y].height = height;
@@ -59,13 +68,6 @@ void Heightmap::Set_height(float ix, float iy, float height)
 
 float Heightmap::Get_height(float ix, float iy)
 {
-/*	int x = ix/tilesize+.5*tilesize;
-	int y = iy/tilesize+.5*tilesize;
-	if(x<0 || y<0 || x>=static_cast<int>(rows.size()) || y>=static_cast<int>(rows[0].size()))
-		return 0;
-	return rows[x][y].height;
-*/
-
 	int tx = ix/tilesize;
 	int tz = iy/tilesize;
 	if(tx<0 || tz<0 || tx+1>=static_cast<int>(rows.size()) || tz+1>=static_cast<int>(rows[0].size()))
@@ -90,8 +92,8 @@ Vector3 Heightmap::Get_normal(float x, float z)
 Height_points Heightmap::Get_height_points_in_circle(float ix, float iy, float iradius) const
 {
 	int radius = iradius/tilesize+1;
-	int cx = ix/tilesize+.5*tilesize;
-	int cy = iy/tilesize+.5*tilesize;
+	int cx = ix/tilesize+.5;
+	int cy = iy/tilesize+.5;
 	int sx = (cx-radius)<0?0:cx-radius;
 	int sy = (cy-radius)<0?0:cy-radius;
 	int ex = (cx+radius)>=static_cast<int>(rows.size())?static_cast<int>(rows.size()):cx+radius+1;

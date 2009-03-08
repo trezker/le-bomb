@@ -78,18 +78,21 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 	}
 	
 	Vector3 newpos = Get_position()+speed*speed_factor;
-	float mapheight = heightmap->Get_height(newpos.x, newpos.z);
-	if(newpos.y>mapheight)
+	if(heightmap->Contains(newpos.x, newpos.z))
 	{
-		fallspeed -= 20*dt;
-		newpos.y += fallspeed*dt;
+		float mapheight = heightmap->Get_height(newpos.x, newpos.z);
+		if(newpos.y>mapheight)
+		{
+			fallspeed -= 20*dt;
+			newpos.y += fallspeed*dt;
+		}
+		if(newpos.y<mapheight)
+		{
+			fallspeed = 0;
+			newpos.y = mapheight;
+		}
+		Set_position(newpos);
 	}
-	if(newpos.y<mapheight)
-	{
-		fallspeed = 0;
-		newpos.y = mapheight;
-	}
-	Set_position(newpos);
 }
 
 void Player::Event(ALLEGRO_EVENT event)

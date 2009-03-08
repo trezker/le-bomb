@@ -33,6 +33,7 @@ public:
 	void Set_texture(ALLEGRO_BITMAP* t);
 	float Get_width_x();
 	float Get_width_z();
+	bool Contains(float x, float z);
 	/* Function: Set_height
 	 * Sets the height of the point nearest given coordinates.
 	 * */
