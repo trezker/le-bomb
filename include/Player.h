@@ -31,6 +31,7 @@ public:
 private:
 	Vector3 position;
 	Vector3 interpos;
+	float fallspeed;
 
 	Transformnode* transform;
 	Modelnode* model;

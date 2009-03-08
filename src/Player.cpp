@@ -3,7 +3,8 @@
 #include <cmath>
 
 Player::Player()
-:move_forward(false)
+:fallspeed(0)
+,move_forward(false)
 ,move_backward(false)
 ,move_left(false)
 ,move_right(false)
@@ -70,11 +71,24 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 		transform->Set_rotation(Vector3(0, angle, 0));
 		Vector3 map_normal = heightmap->Get_normal(Get_position().x, Get_position().z);
 		map_normal.y = 0;
-		speed += map_normal*1.1;
+		if(Get_position().y<=heightmap->Get_height(Get_position().x, Get_position().z))
+		{
+			speed += map_normal*1.1;
+		}
 	}
 	
 	Vector3 newpos = Get_position()+speed*speed_factor;
-	newpos.y = heightmap->Get_height(newpos.x, newpos.z);
+	float mapheight = heightmap->Get_height(newpos.x, newpos.z);
+	if(newpos.y>mapheight)
+	{
+		fallspeed -= 20*dt;
+		newpos.y += fallspeed*dt;
+	}
+	if(newpos.y<mapheight)
+	{
+		fallspeed = 0;
+		newpos.y = mapheight;
+	}
 	Set_position(newpos);
 }
 
