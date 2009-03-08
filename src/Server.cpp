@@ -60,7 +60,7 @@ void Server::Update(double dt)
 					{
 						bomb_player->Add_score(10);
 					}
-					player->Set_position(Vector3(0, 0, 0));
+					player->Set_position(Vector3(heightmap->Get_width_x()/2, 100.f, heightmap->Get_width_z()/2));
 					player->Set_health(100);
 					ZCom_BitStream *adata = new ZCom_BitStream();
 					adata->addInt(PLAYER_KILLED, PACKET_TYPE_SIZE);
@@ -130,7 +130,7 @@ bool Server::ZCom_cbZoidRequest( ZCom_ConnID _id, zU8 _requested_level, ZCom_Bit
 	if (_requested_level == 1)
 	{
 		Player* player = new Player;
-//		bomb->Set_position(Vector3(x, y, z));
+		player->Set_position(Vector3(heightmap->Get_width_x()/2, 100.f, heightmap->Get_width_z()/2));
 		ZCom_Node* node = player->Register_net_node(this, player_id);
 		node->setOwner(_id, true);
 		players[_id] = player;
