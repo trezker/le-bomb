@@ -26,6 +26,7 @@ Play::Play()
 	height = 480;
 
 	camera_distance = 20;
+	camera_elevation = 5;
 }
 
 Play::~Play()
@@ -109,7 +110,8 @@ void Play::Update(double dt)
 	camera->Look_at(player->Get_position()+Vector3(0, 2, 0));
 	Vector3 camera_position = camera->Get_position();
 	Vector3 player_position = player->Get_position();
-//	float camera_height = camera_position.y;
+	float height_adjust = heightmap->Get_height(camera_position.x, camera_position.z)-camera_position.y;
+	height_adjust+=camera_elevation;
 //	float player_height = player_position.y;
 	camera_position.y = 0;
 	player_position.y = 0;
@@ -124,6 +126,7 @@ void Play::Update(double dt)
 		adjust = -camera->Get_front();
 		adjust.y = 0;
 	}
+	adjust.y=height_adjust;
 	camera->Set_position(camera->Get_position()+adjust*dt*20);
 
 	for(Bombs::iterator i = bombs.begin(); i != bombs.end(); )
@@ -277,10 +280,17 @@ void Play::Event(ALLEGRO_EVENT event)
 
 		if((ret_state.buttons&2))// && ((event.mouse.x != width/2) || (event.mouse.y != height/2)))
 		{
-			camera->Set_rotation(camera->Get_rotation()+Vector3(event.mouse.dy, event.mouse.dx, 0));
+//			camera->Set_rotation(camera->Get_rotation()+Vector3(event.mouse.dy, event.mouse.dx, 0));
+			camera_elevation += event.mouse.dy/10.f;
+			if(camera_elevation<2)
+				camera_elevation = 2;
+			camera->Set_position(camera->Get_position()+camera->Get_right()*event.mouse.dx);
 			al_set_mouse_xy(width/2, height/2);
 		}
-		camera_distance += event.mouse.dz;
+
+		camera_distance -= event.mouse.dz;
+		if(camera_distance<0)
+			camera_distance = 0;
 	}
 }
 
@@ -292,7 +302,7 @@ void Play::Add_heightmap(Heightmap* h)
 		delete heightmap;
 	}
 	heightmap = h;
-	camera->Set_position(Vector3(h->Get_width_x()/2, 5.f, 0));
+	camera->Set_position(Vector3(h->Get_width_x()/2, camera_elevation, 0));
 	heightmap->Set_texture(heightmap_texture);
 	light->Attach_node(heightmap);
 }

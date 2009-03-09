@@ -46,6 +46,7 @@ private:
 	int height;
 	
 	float camera_distance;
+	float camera_elevation;
 
 	ALLEGRO_FONT* font;
 	ALLEGRO_BITMAP* heightmap_texture;
