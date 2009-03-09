@@ -44,6 +44,8 @@ private:
 	float far;
 	int width;
 	int height;
+	
+	float camera_distance;
 
 	ALLEGRO_FONT* font;
 	ALLEGRO_BITMAP* heightmap_texture;

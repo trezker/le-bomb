@@ -24,6 +24,8 @@ Play::Play()
 	far = 1000.f;
 	width = 640;
 	height = 480;
+
+	camera_distance = 20;
 }
 
 Play::~Play()
@@ -103,7 +105,25 @@ void Play::Update(double dt)
 		}
 	}
 
-	camera->Look_at(player->Get_position());
+	camera->Look_at(player->Get_position()+Vector3(0, 2, 0));
+	Vector3 camera_position = camera->Get_position();
+	Vector3 player_position = player->Get_position();
+//	float camera_height = camera_position.y;
+//	float player_height = player_position.y;
+	camera_position.y = 0;
+	player_position.y = 0;
+	Vector3 adjust;
+	if((camera_position-player_position).Length()>camera_distance+1)
+	{
+		adjust = camera->Get_front();
+		adjust.y = 0;
+	}
+	if((camera_position-player_position).Length()<camera_distance)
+	{
+		adjust = -camera->Get_front();
+		adjust.y = 0;
+	}
+	camera->Set_position(camera->Get_position()+adjust*dt*20);
 
 	for(Bombs::iterator i = bombs.begin(); i != bombs.end(); )
 	{
@@ -270,7 +290,7 @@ void Play::Add_heightmap(Heightmap* h)
 		delete heightmap;
 	}
 	heightmap = h;
-	camera->Set_position(Vector3(h->Get_width_x()/2, 10.f, 0));
+	camera->Set_position(Vector3(h->Get_width_x()/2, 5.f, 0));
 	heightmap->Set_texture(heightmap_texture);
 	light->Attach_node(heightmap);
 }
