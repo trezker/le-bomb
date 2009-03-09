@@ -57,7 +57,8 @@ void Play::Init()
 	camera->Attach_node(light);
 
 	bomb_texture = al_iio_load("media/bomb_sprite.png");
-	darwinian_texture = al_iio_load("media/darwinian.png");
+//	darwinian_texture = al_iio_load("media/darwinian.png");
+	darwinian_texture = al_iio_load("media/darwinian_textured.png");
 	heightmap_texture = al_iio_load("media/grass.png");
 
 	Add_heightmap(new Heightmap);
@@ -279,6 +280,7 @@ void Play::Event(ALLEGRO_EVENT event)
 			camera->Set_rotation(camera->Get_rotation()+Vector3(event.mouse.dy, event.mouse.dx, 0));
 			al_set_mouse_xy(width/2, height/2);
 		}
+		camera_distance += event.mouse.dz;
 	}
 }
 

@@ -8,8 +8,60 @@ void Modelnode::Set_texture(ALLEGRO_BITMAP* t)
 	texture = t;
 }
 
+void Modelnode::Load_tmf(const std::string& filename)
+{
+	std::ifstream f;
+	f.open(filename.c_str());
+	while(!f.eof())
+	{
+		char t;
+		f>>t;
+		if(t=='C')
+		{
+			Vector3 p;
+			f>>p.x;
+			f>>p.z;
+			f>>p.y;
+			coords.push_back(p);
+		}
+		if(t=='N')
+		{
+			Vector3 p;
+			f>>p.x;
+			f>>p.z;
+			f>>p.y;
+			normals.push_back(p);
+		}
+		if(t=='F')
+		{
+			for(int i = 0; i<4; ++i)
+			{
+				int index;
+				f>>index;
+				quads.push_back(index);
+			}
+		}
+		if(t=='T')
+		{
+			UV_coord uv_coord;
+			f>>uv_coord.u;
+			f>>uv_coord.v;
+			uv_coords.push_back(uv_coord);
+		}
+	}
+	is_tmf = true;
+	f.close();
+}
+
 void Modelnode::Loadmodel(const std::string& filename)
 {
+	if(filename.substr(filename.length()-4, 4) == ".tmf")
+	{
+		Load_tmf(filename);
+		return;
+	}
+	is_tmf = false;
+	
 	std::ifstream f;
 	f.open(filename.c_str());
 	while(!f.eof())
@@ -25,6 +77,7 @@ void Modelnode::Loadmodel(const std::string& filename)
 		quad->Set_corners(p);
 		Attach_node(quad);
 	}
+	f.close();
 }
 
 void Modelnode::Prerender()
@@ -37,6 +90,22 @@ void Modelnode::Prerender()
 
 		glAlphaFunc(GL_GREATER,0.1f);
 		glEnable(GL_ALPHA_TEST);
+	}
+}
+
+void Modelnode::Render()
+{
+	if(is_tmf)
+	{
+		glBegin(GL_QUADS);
+		UV_coords::iterator uv=uv_coords.begin();
+		for(Indexes::iterator i=quads.begin(); i!=quads.end(); ++i, ++uv)
+		{
+			glNormal3f(normals[*i].x, normals[*i].y, normals[*i].z);
+//			glTexCoord2f(0, 0); glVertex3f(coords[*i].x, coords[*i].y, coords[*i].z);
+			glTexCoord2f(uv->u, uv->v); glVertex3f(coords[*i].x, coords[*i].y, coords[*i].z);
+		}
+		glEnd();
 	}
 }
 

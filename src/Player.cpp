@@ -18,7 +18,8 @@ Player::Player()
 	transform = new Transformnode();
 	Attach_node(transform);
 	model = new Modelnode;
-	model->Loadmodel("media/darwinian.raw");
+//	model->Loadmodel("media/darwinian.raw");
+	model->Loadmodel("media/darwinian_textured.tmf");
 	transform->Attach_node(model);
 }
 
