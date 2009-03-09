@@ -13,3 +13,8 @@ You need the scons build tool.
 Release build: scons
 Debug build: scons debug=1
 Clean: scons -c
+
+Making custom models:
+Use the tmf_export.py script to export to a .tmf file.
+Currently does NOT support triangles.
+You can use the script by opening a text editor in Blender, open the script and press ALT+P.
