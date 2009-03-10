@@ -18,19 +18,29 @@ void Modelnode::Load_tmf(const std::string& filename)
 		f>>t;
 		if(t=='C')
 		{
-			Vector3 p;
-			f>>p.x;
-			f>>p.z;
-			f>>p.y;
-			coords.push_back(p);
+			int num_coords;
+			f>>num_coords;
+			for(int i=0; i<num_coords; ++i)
+			{
+				Vector3 p;
+				f>>p.x;
+				f>>p.z;
+				f>>p.y;
+				coords.push_back(p);
+			}
 		}
 		if(t=='N')
 		{
-			Vector3 p;
-			f>>p.x;
-			f>>p.z;
-			f>>p.y;
-			normals.push_back(p);
+			int num_normals;
+			f>>num_normals;
+			for(int i=0; i<num_normals; ++i)
+			{
+				Vector3 p;
+				f>>p.x;
+				f>>p.z;
+				f>>p.y;
+				normals.push_back(p);
+			}
 		}
 		if(t=='F')
 		{
@@ -45,10 +55,15 @@ void Modelnode::Load_tmf(const std::string& filename)
 		}
 		if(t=='T')
 		{
-			UV_coord uv_coord;
-			f>>uv_coord.u;
-			f>>uv_coord.v;
-			uv_coords.push_back(uv_coord);
+			int num_coords;
+			f>>num_coords;
+			for(int i=0; i<num_coords; ++i)
+			{
+				UV_coord uv_coord;
+				f>>uv_coord.u;
+				f>>uv_coord.v;
+				uv_coords.push_back(uv_coord);
+			}
 		}
 	}
 	is_tmf = true;

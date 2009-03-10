@@ -2,7 +2,7 @@ import Blender
 import BPyMesh
 
 def add_uvdata(uvdata, uv):
-	return uvdata + 'T %.6f %.6f ' % tuple(uv)
+	return uvdata + '%.6f %.6f ' % tuple(uv)
 
 def write(filename):
 	start = Blender.sys.time()
@@ -28,9 +28,14 @@ def write(filename):
 	file = open(filename, "wb")
 
 	#Write vertex coords and normals
+	file.write("C " + `len(mesh.verts)` + "\n")
 	for v in mesh.verts:
-		file.write('C %.6f %.6f %.6f ' % tuple(v.co))
-		file.write('N %.6f %.6f %.6f ' % tuple(v.no))
+		file.write('%.6f %.6f %.6f ' % tuple(v.co))
+		file.write('\n')
+
+	file.write("N " + `len(mesh.verts)` + "\n")
+	for v in mesh.verts:
+		file.write('%.6f %.6f %.6f ' % tuple(v.no))
 		file.write('\n')
 
 	#Process faces
@@ -64,6 +69,8 @@ def write(filename):
 	# Now I can write the header with the correct face count, and then the data
 	file.write("F " + `faces` + "\n")
 	file.write(data)
+	uvs = faces*3
+	file.write("T " + `uvs` + "\n")
 	file.write(uvdata)
 
 	file.close()
