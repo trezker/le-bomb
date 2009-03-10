@@ -89,6 +89,8 @@ void Play::Update(double dt)
 		}
 	}
 
+	heightmap->Process_net_events();
+
 	if(player)
 		player->Update(dt, camera->Get_right(), camera->Get_front(), heightmap);
 

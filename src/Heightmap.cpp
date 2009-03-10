@@ -5,6 +5,7 @@
 #include <allegro5/a5_opengl.h>
 #include <cmath>
 #include <iostream>
+#include "Net.h"
 
 Heightmap::Heightmap()
 :tilesize(1)
@@ -239,6 +240,8 @@ void Heightmap::Render()
 void Heightmap::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
 {
 	net_node = new ZCom_Node;
+//	net_node->setMustSync(true, 1);
+	net_node->setEventNotification(true, true);
 	net_node->registerNodeDynamic(class_id, control);
 }
 
@@ -259,6 +262,50 @@ void Heightmap::Process_net_events()
 		// the server object has been deleted on the server, we should delete it here, too
 		if (remote_role == eZCom_RoleAuthority && type == eZCom_EventRemoved)
 			deleteme = true;
+
+		//Init, give the 
+		if (type == eZCom_EventInit && net_node->getRole() == eZCom_RoleAuthority)
+		{
+/*		if (type == eZCom_EventSyncRequest)// && net_node->getRole() == eZCom_RoleAuthority)
+		{
+			printf("Map sync event on authority\n");
+*/
+			for(unsigned int ix = 0; ix<rows.size()-1; ++ix)
+			{
+				ZCom_BitStream *mapstate = new ZCom_BitStream();
+				mapstate->addInt(SYNC_MAP, PACKET_TYPE_SIZE);
+				mapstate->addInt(ix, MAP_ROW_SIZE);
+				for(unsigned int iz = 0; iz<rows[0].size()-1; ++iz)
+				{
+					mapstate->addFloat(rows[ix][iz].height, POSITION_MANTISSA);
+				}
+				net_node->sendEventDirect(eZCom_ReliableOrdered, mapstate, conn_id);
+			}
+//			net_node->setSyncResult(conn_id, true, NULL);
+		}
+
+		if (remote_role == eZCom_RoleAuthority && type == eZCom_EventUser)
+		{
+			int packet_type = data->getInt(PACKET_TYPE_SIZE);
+			switch(packet_type)
+			{
+				case SYNC_MAP:
+				{
+					int ix = data->getInt(MAP_ROW_SIZE);
+					for(unsigned int iz = 0; iz<rows[0].size()-1; ++iz)
+					{
+						float h = data->getFloat(POSITION_MANTISSA);
+						if(h != rows[ix][iz].height)
+						{
+							rows[ix][iz].height = h;
+							rows[ix][iz].normal_dirty = true;
+							Recalc_normals();
+						}
+					}
+					break;
+				}
+			}
+		}
 	}
 }
 

@@ -39,6 +39,7 @@ void Server::Register_classes()
 
 void Server::Update(double dt)
 {
+	heightmap->Process_net_events();
 	for(Bombs::iterator i = bombs.begin(); i != bombs.end(); )
 	{
 		(*i)->Update(dt, Vector3());
@@ -48,6 +49,10 @@ void Server::Update(double dt)
 			float curve[5] = {-1, -.7, 0, .3, 0};
 			heightmap->Apply_brush(point.x, point.z, 10, 3, curve, 5);
 */
+			Vector3 point = (*i)->Get_position();
+			float curve[5] = {-1, -.7, 0, .3, 0};
+			heightmap->Apply_brush(point.x, point.z, 10, 1, curve, 5);
+
 			for(Players::iterator p = players.begin(); p!=players.end(); ++p)
 			{
 				Player* bomb_player = (*i)->Get_player();
