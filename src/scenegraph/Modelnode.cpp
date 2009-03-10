@@ -34,7 +34,9 @@ void Modelnode::Load_tmf(const std::string& filename)
 		}
 		if(t=='F')
 		{
-			for(int i = 0; i<4; ++i)
+			int num_faces;
+			f>>num_faces;
+			for(int i = 0; i<num_faces*3; ++i)
 			{
 				int index;
 				f>>index;
@@ -97,7 +99,8 @@ void Modelnode::Render()
 {
 	if(is_tmf)
 	{
-		glBegin(GL_QUADS);
+//		glBegin(GL_QUADS);
+		glBegin(GL_TRIANGLES);
 		UV_coords::iterator uv=uv_coords.begin();
 		for(Indexes::iterator i=quads.begin(); i!=quads.end(); ++i, ++uv)
 		{

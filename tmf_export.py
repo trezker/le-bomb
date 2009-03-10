@@ -1,6 +1,9 @@
 import Blender
 import BPyMesh
 
+def add_uvdata(uvdata, uv):
+	return uvdata + 'T %.6f %.6f ' % tuple(uv)
+
 def write(filename):
 	start = Blender.sys.time()
 	if not filename.lower().endswith('.tmf'):
@@ -30,19 +33,39 @@ def write(filename):
 		file.write('N %.6f %.6f %.6f ' % tuple(v.no))
 		file.write('\n')
 
-	#Write faces		
-	for f in mesh.faces:
-		file.write('F ')
-		for v in f:
-			file.write('%i ' % v.index)
-		file.write('\n')
+	#Process faces
+	faces = len(mesh.faces)
+	data = ""
+	uvdata = ""
+	for face in mesh.faces:
+		if face.v[2] < 0:
+			# discard
+			faces = faces - 1
+		elif face.v[2] < 0:
+			# Already a triangle, add it to the data, do not change the count
+			data = data + `face.v[0].index` + " " + `face.v[1].index` + " " + `face.v[2].index` + "\n"
+			for v in face.uv:
+				add_uvdata(uvdata, v)
+		else:
+			# this one is a quad
+			# Break it up into two triangles
+			# Hence one additional face
+			faces = faces + 1
+			data = data + `face.v[0].index` + " " + `face.v[1].index` + " " + `face.v[3].index` + "\n"
+			data = data + `face.v[1].index` + " " + `face.v[2].index` + " " + `face.v[3].index` + "\n"
+			uvdata = add_uvdata(uvdata, face.uv[0])
+			uvdata = add_uvdata(uvdata, face.uv[1])
+			uvdata = add_uvdata(uvdata, face.uv[3])
+			uvdata = uvdata + "\n"
+			uvdata = add_uvdata(uvdata, face.uv[1])
+			uvdata = add_uvdata(uvdata, face.uv[2])
+			uvdata = add_uvdata(uvdata, face.uv[3])
+			uvdata = uvdata + "\n"
+	# Now I can write the header with the correct face count, and then the data
+	file.write("F " + `faces` + "\n")
+	file.write(data)
+	file.write(uvdata)
 
-	#Write texture coordinates
-	for f in mesh.faces:
-		for v in f.uv:
-			file.write('T %.6f %.6f ' % tuple(v))
-		file.write('\n')
-		
 	file.close()
 	
 	end = Blender.sys.time()
