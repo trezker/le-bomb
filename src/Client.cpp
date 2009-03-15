@@ -23,6 +23,11 @@ Client::~Client()
 	}
 }
 
+void Client::Update(double dt)
+{
+	ZCom_processReplicators(dt);
+}
+
 void Client::Set_play(Play* p)
 {
 	play = p;

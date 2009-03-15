@@ -80,6 +80,7 @@ void Play::Update(double dt)
 	}
 	if(client)
 	{
+		client->Update(dt);
 		client->ZCom_processInput();
 		client->ZCom_processOutput();
 		if(client->Disconnected())

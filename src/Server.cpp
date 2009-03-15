@@ -39,6 +39,7 @@ void Server::Register_classes()
 
 void Server::Update(double dt)
 {
+	ZCom_processReplicators(dt);
 	heightmap->Process_net_events();
 	for(Bombs::iterator i = bombs.begin(); i != bombs.end(); )
 	{
