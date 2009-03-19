@@ -2,6 +2,7 @@
 #define interface_Button_h
 
 #include <interface/Widget.h>
+#include <interface/Label.h>
 
 namespace interface
 {
@@ -13,6 +14,7 @@ public:
 	virtual ~Button();
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
+	void Set_label(const std::string& text);
 private:
 	//Was pressed by mouse, mouse not released yet
 	bool pressed;
@@ -22,6 +24,7 @@ private:
 	bool activated;
 	//Button toggles
 	bool toggle;
+	Label* label;
 };
 
 }

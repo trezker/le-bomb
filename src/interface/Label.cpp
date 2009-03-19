@@ -13,7 +13,6 @@ Label::Label()
 void Label::Render()
 {
 	Renderer* renderer = Get_renderer();
-	renderer->Draw_raised_panel(Get_bounding_rect());
 	renderer->Draw_text(Get_bounding_rect(), text, halignment, valignment);
 }
 

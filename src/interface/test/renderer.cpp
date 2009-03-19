@@ -28,6 +28,7 @@ bool Init()
 
 	button = new interface::Button();
 	button->Set_bounding_rect(interface::Rect(120, 120, 100, 20));
+	button->Set_label("Ze button");
 	renderer->Add_widget(button);
 	
 	label_left = new interface::Label();
