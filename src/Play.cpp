@@ -35,16 +35,16 @@ Play::~Play()
 	delete light;
 	delete client;
 	delete server;
-	al_config_write(netconf, "net.cfg");
-	al_config_destroy(netconf);
+	al_save_config_file(netconf, "net.cfg");
+	al_destroy_config(netconf);
 }
 
 void Play::Init()
 {
-	netconf = al_config_read("net.cfg");
+	netconf = al_load_config_file("net.cfg");
 	if(!netconf)
 	{
-		netconf = al_config_create();
+		netconf = al_create_config();
 	}
 	
 	font = al_ttf_load_font("media/DejaVuSans.ttf", 20, 0);
@@ -203,7 +203,7 @@ void Play::Event(ALLEGRO_EVENT event)
 				server = new Server();
 				server->ZCom_setDebugName("Server");
 				server->Register_classes();
-				const char *port_str = al_config_get_value(netconf, "server", "port");
+				const char *port_str = al_get_config_value(netconf, "server", "port");
 				int port=0;
 				if(port_str)
 				{
@@ -211,7 +211,7 @@ void Play::Event(ALLEGRO_EVENT event)
 				}
 				if(port==0)
 				{
-					al_config_set_value(netconf, "server", "port", "10000");
+					al_set_config_value(netconf, "server", "port", "10000");
 					port = 10000;
 				}
 				bool result = server->ZCom_initSockets(true, port, 0);
@@ -247,10 +247,10 @@ void Play::Event(ALLEGRO_EVENT event)
 				// ZoidCom object gets deleted)
 				else
 				{
-					const char *server_str = al_config_get_value(netconf, "client", "server");
+					const char *server_str = al_get_config_value(netconf, "client", "server");
 					if(!server_str)
 					{
-						al_config_set_value(netconf, "client", "server", "localhost:10000");
+						al_set_config_value(netconf, "client", "server", "localhost:10000");
 						server_str = "localhost:10000";
 					}
 
