@@ -9,23 +9,35 @@
 #include "interface/Rect.h"
 #include "interface/Events.h"
 #include "interface/Label.h"
+#include "interface/Widget_editor.h"
+#include "interface/Group.h"
 
 interface::Renderer* renderer = NULL;
-interface::Button* button;
+interface::Group* root_interface;
+interface::Group* edit_interface;
+
+typedef std::vector<interface::Widget*> Widgets;
+Widgets root_widgets;
+Widgets edit_widgets;
+Widgets prototypes;
+
+//interface::Button* button;
 interface::Label* label_left;
 interface::Label* label_right;
 interface::Label* label_center;
+interface::Widget_editor* widget_editor;
 interface::Event_queue event_queue;
 ALLEGRO_FONT* font = NULL;
 
 bool Init()
 {
 	interface::Add_event_queue(&event_queue);
+
 	renderer = new interface::Renderer();
 	interface::Set_renderer(renderer);
 	font = al_ttf_load_font("media/DejaVuSans.ttf", -12, 0);
 	renderer->Set_font(font);
-
+/*
 	button = new interface::Button();
 	button->Set_bounding_rect(interface::Rect(120, 120, 100, 20));
 	button->Set_label("Ze button");
@@ -34,7 +46,11 @@ bool Init()
 	label_left = new interface::Label();
 	label_left->Set_bounding_rect(interface::Rect(120, 150, 100, 30));
 	label_left->Set_text("top left");
-	renderer->Add_widget(label_left);
+//	renderer->Add_widget(label_left);
+	
+	widget_editor = new interface::Widget_editor;
+	widget_editor->Set_widget(label_left);
+	renderer->Add_widget(widget_editor);
 
 	label_right = new interface::Label();
 	label_right->Set_bounding_rect(interface::Rect(120, 200, 100, 30));
@@ -49,13 +65,43 @@ bool Init()
 	label_center->Set_alignment(interface::HALIGN_CENTER);
 	label_center->Set_vertical_alignment(interface::VALIGN_CENTER);
 	renderer->Add_widget(label_center);
+*/
+
+	interface::Button* button = new interface::Button;
+	button->Set_bounding_rect(interface::Rect(0, 0, 100, 20));
+	button->Set_label("Button");
+	renderer->Add_widget(button);
+	root_widgets.push_back(button);
+
+	interface::Button* button_prototype = new interface::Button;
+	button_prototype->Set_bounding_rect(interface::Rect(0, 0, 100, 20));
+	button_prototype->Set_label("Button");
+	prototypes.push_back(button_prototype);
+
+	button = new interface::Button;
+	button->Set_bounding_rect(interface::Rect(0, 20, 100, 20));
+	button->Set_label("Label");
+	renderer->Add_widget(button);
+	root_widgets.push_back(button);
+
+	interface::Label* label_prototype = new interface::Label;
+	label_prototype->Set_bounding_rect(interface::Rect(0, 0, 100, 20));
+	label_prototype->Set_text("Label");
+	prototypes.push_back(label_prototype);
+
+	root_interface = new interface::Group;
+	edit_interface = new interface::Group;
+	root_interface->Add_widget(edit_interface);
+
+	for(Widgets::iterator i = root_widgets.begin(); i != root_widgets.end(); ++i)
+		root_interface->Add_widget(*i);
 	
 	return true;
 }
 
 void Shutdown()
 {
-	delete button;
+//	delete button;
 	delete renderer;
 	renderer = NULL;
 	interface::Set_renderer(NULL);
@@ -67,23 +113,41 @@ void Update(double dt)
 
 void Render()
 {
-	interface::Rect rect(10, 10, 100, 100);
+/*	interface::Rect rect(10, 10, 100, 100);
 	renderer->Draw_raised_panel(rect);
 
 	rect.Set(120, 10, 100, 100);
 	renderer->Draw_sunken_panel(rect);
-	
+*/	
 	renderer->Render();
 }
 
 void Event(ALLEGRO_EVENT event)
 {
-	button->Event(event);
+	root_interface->Event(event);
 	
 	interface::Event e = event_queue.Get_next_event();
-	if(e.source == button && e.type == "Activated")
+/*	if(e.source == button && e.type == "Activated")
 	{
 		printf("Button activated\n");
+	}
+*/	if(e.type == "Activated")
+	{
+		for(unsigned int i = 0; i < root_widgets.size(); ++i)
+		{
+				printf("Woot\n");
+			if(root_widgets[i] == e.source)
+			{
+				interface::Widget* n = prototypes[i]->Clone();
+				edit_widgets.push_back(n);
+
+				interface::Widget_editor* widget_editor = new interface::Widget_editor;
+				widget_editor->Set_widget(n);
+				renderer->Add_widget(widget_editor);
+				edit_interface->Add_widget(widget_editor);
+				break;
+			}
+		}
 	}
 }
 

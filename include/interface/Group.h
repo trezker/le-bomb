@@ -12,6 +12,7 @@ class Group: public Widget
 public:
 	Group();
 	virtual ~Group();
+	virtual Widget* Clone();
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
 	/* Allows you to have regular tab for groups that manages "low level" widgets

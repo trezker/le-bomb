@@ -18,6 +18,14 @@ Button::~Button()
 {
 }
 
+Widget* Button::Clone()
+{
+	Button* b = new Button(*this);
+	if(label)
+		b->label = dynamic_cast<Label*>(label->Clone());
+	return b;
+}
+
 void Button::Event(const ALLEGRO_EVENT &event)
 {
 	if(ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type)
@@ -76,7 +84,10 @@ void Button::Render()
 		renderer->Draw_raised_panel(Get_bounding_rect());
 	}
 	if(label)
+	{
+		label->Set_bounding_rect(Get_bounding_rect());
 		label->Render();
+	}
 }
 
 void Button::Set_label(const std::string& text)

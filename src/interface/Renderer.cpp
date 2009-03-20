@@ -59,6 +59,12 @@ void Renderer::Remove_widget(Widget* w)
 	}
 }
 
+void Renderer::Draw_rect(Rect rect, ALLEGRO_COLOR c)
+{
+	al_draw_rectangle(rect.Topleft().x, rect.Topleft().y, rect.Bottomright().x, rect.Bottomright().y
+					, c, 0);
+}
+
 void Renderer::Draw_raised_panel(Rect rect)
 {
 	al_draw_rectangle(rect.Topleft().x, rect.Topleft().y, rect.Bottomright().x, rect.Bottomright().y

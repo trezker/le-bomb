@@ -12,10 +12,23 @@ Rect::Rect(float x, float y, float w, float h)
 	bottomright.Set(x+w, y+h);
 }
 
+Rect::Rect(Vector2 tl, Vector2 br)
+{
+	topleft = tl;
+	bottomright = br;
+}
+
 void Rect::Set(float x, float y, float w, float h)
 {
 	topleft.Set(x, y);
 	bottomright.Set(x+w, y+h);
+}
+
+void Rect::Move(float dx, float dy)
+{
+	Vector2 d(dx, dy);
+	topleft += d;
+	bottomright += d;
 }
 
 Vector2 Rect::Topleft()

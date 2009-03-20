@@ -26,6 +26,7 @@ public:
 	void Add_widget(Widget* w);
 	void Remove_widget(Widget* w);
 	
+	void Draw_rect(Rect rect, ALLEGRO_COLOR c);
 	void Draw_raised_panel(Rect rect);
 	void Draw_sunken_panel(Rect rect);
 	void Draw_text(Rect rect, const std::string& text, HAlignment halignment, VAlignment valignment);

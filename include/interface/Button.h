@@ -12,6 +12,7 @@ class Button: public Widget
 public:
 	Button();
 	virtual ~Button();
+	virtual Widget* Clone();
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
 	void Set_label(const std::string& text);

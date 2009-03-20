@@ -15,8 +15,17 @@ Group::~Group()
 {
 }
 
+Widget* Group::Clone()
+{
+	return new Group(*this);
+}
+
 void Group::Event(const ALLEGRO_EVENT &event)
 {
+	for(Widgets::iterator i =  widgets.begin(); i != widgets.end(); ++i)
+	{
+		(*i)->Event(event);
+	}
 }
 
 void Group::Render()

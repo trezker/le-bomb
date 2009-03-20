@@ -20,6 +20,7 @@ class Widget
 {
 public:
 	virtual ~Widget();
+	virtual Widget* Clone()=0;
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
 	void Set_bounding_rect(const Rect& rect);

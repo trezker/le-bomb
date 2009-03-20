@@ -11,6 +11,7 @@ class Label: public Widget
 {
 public:
 	Label();
+	virtual Widget* Clone();
 	virtual void Render();
 	
 	void Set_text(const std::string& t);

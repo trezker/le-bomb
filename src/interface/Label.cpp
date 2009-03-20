@@ -10,6 +10,11 @@ Label::Label()
 {
 }
 
+Widget* Label::Clone()
+{
+	return new Label(*this);
+}
+
 void Label::Render()
 {
 	Renderer* renderer = Get_renderer();

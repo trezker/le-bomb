@@ -11,7 +11,9 @@ class Rect
 public:
 	Rect();
 	Rect(float x, float y, float w, float h);
+	Rect(Vector2 tl, Vector2 br);
 	void Set(float x, float y, float w, float h);
+	void Move(float dx, float dy);
 	Vector2 Topleft();
 	Vector2 Bottomright();
 	Vector2 Size();
