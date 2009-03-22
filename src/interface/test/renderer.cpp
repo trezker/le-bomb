@@ -41,35 +41,12 @@ bool Init()
 	interface::Set_renderer(renderer);
 	font = al_ttf_load_font("media/DejaVuSans.ttf", -12, 0);
 	renderer->Set_font(font);
-/*
-	button = new interface::Button();
-	button->Set_bounding_rect(interface::Rect(120, 120, 100, 20));
-	button->Set_label("Ze button");
-	renderer->Add_widget(button);
-	
-	label_left = new interface::Label();
-	label_left->Set_bounding_rect(interface::Rect(120, 150, 100, 30));
-	label_left->Set_text("top left");
-//	renderer->Add_widget(label_left);
-	
-	widget_editor = new interface::Widget_editor;
-	widget_editor->Set_widget(label_left);
-	renderer->Add_widget(widget_editor);
 
-	label_right = new interface::Label();
-	label_right->Set_bounding_rect(interface::Rect(120, 200, 100, 30));
-	label_right->Set_text("bottom right");
-	label_right->Set_alignment(interface::HALIGN_RIGHT);
-	label_right->Set_vertical_alignment(interface::VALIGN_BOTTOM);
-	renderer->Add_widget(label_right);
-
-	label_center = new interface::Label();
-	label_center->Set_bounding_rect(interface::Rect(120, 250, 100, 30));
-	label_center->Set_text("center_center");
-	label_center->Set_alignment(interface::HALIGN_CENTER);
-	label_center->Set_vertical_alignment(interface::VALIGN_CENTER);
-	renderer->Add_widget(label_center);
-*/
+	interface::Inputbox* inputbox = new interface::Inputbox;
+	inputbox->Set_bounding_rect(interface::Rect(100, 100, 100, 20));
+	inputbox->Set_text("Inputbox");
+	renderer->Add_widget(inputbox);
+	root_widgets.push_back(inputbox);
 
 	//Button
 	interface::Button* button = new interface::Button;

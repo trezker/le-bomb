@@ -10,6 +10,7 @@ namespace interface
 class Inputbox: public Widget
 {
 public:
+	Inputbox();
 	virtual Widget* Clone();
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
@@ -17,6 +18,8 @@ public:
 	std::string Get_text();
 private:
 	std::string text;
+	bool pressed;
+	bool input_focus;
 };
 
 }
