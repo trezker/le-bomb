@@ -1,5 +1,6 @@
 #include "interface/Inputbox.h"
 #include "interface/Renderer.h"
+#include "interface/Events.h"
 
 namespace interface
 {
@@ -59,6 +60,14 @@ void Inputbox::Event(const ALLEGRO_EVENT &event)
 				--pos;
 				text.erase(pos, 1);
 			}
+			special_key = true;
+			break;
+		case ALLEGRO_KEY_ENTER:
+		case ALLEGRO_KEY_PAD_ENTER:
+			interface::Event e;
+			e.source = this;
+			e.type = "Send";
+			Emit_event(e);
 			special_key = true;
 			break;
 		}
