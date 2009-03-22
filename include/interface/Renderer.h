@@ -28,7 +28,8 @@ public:
 	void Draw_rect(Rect rect, ALLEGRO_COLOR c);
 	void Draw_raised_panel(Rect rect);
 	void Draw_sunken_panel(Rect rect);
-	void Draw_text(Rect rect, const std::string& text, HAlignment halignment, VAlignment valignment);
+	void Draw_text_field(Rect rect);
+	void Draw_text(Rect rect, const std::string& text, HAlignment halignment, VAlignment valignment, ALLEGRO_COLOR color);
 private:
 	bool use_cache;
 

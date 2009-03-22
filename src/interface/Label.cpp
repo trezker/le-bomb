@@ -18,7 +18,7 @@ Widget* Label::Clone()
 void Label::Render()
 {
 	Renderer* renderer = Get_renderer();
-	renderer->Draw_text(Get_bounding_rect(), text, halignment, valignment);
+	renderer->Draw_text(Get_bounding_rect(), text, halignment, valignment, al_map_rgb(255, 255, 255));
 }
 
 void Label::Set_text(const std::string& t)

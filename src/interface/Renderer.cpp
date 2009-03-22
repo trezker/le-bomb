@@ -85,8 +85,20 @@ void Renderer::Draw_sunken_panel(Rect rect)
 					, al_map_rgba(100, 100, 100, 255));
 }
 
-void Renderer::Draw_text(Rect rect, const std::string& text, HAlignment halignment, VAlignment valignment)
+void Renderer::Draw_text_field(Rect rect)
 {
+	al_draw_rectangle(rect.Topleft().x, rect.Topleft().y, rect.Bottomright().x, rect.Bottomright().y
+					, al_map_rgba(200, 200, 200, 255), 0);
+	al_draw_rectangle(rect.Topleft().x+1, rect.Topleft().y+1, rect.Bottomright().x-1, rect.Bottomright().y-1
+					, al_map_rgba(100, 100, 100, 255), 0);
+	al_draw_filled_rectangle(rect.Topleft().x+2, rect.Topleft().y+2, rect.Bottomright().x-2, rect.Bottomright().y-2
+					, al_map_rgba(250, 250, 250, 255));
+}
+
+void Renderer::Draw_text(Rect rect, const std::string& text, HAlignment halignment, VAlignment valignment, ALLEGRO_COLOR color)
+{
+    al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, color);
+
 	float y = rect.Topleft().y;
 	if(valignment == VALIGN_BOTTOM)
 		y = rect.Bottomright().y - al_font_text_height(font);
@@ -98,6 +110,8 @@ void Renderer::Draw_text(Rect rect, const std::string& text, HAlignment halignme
 		al_font_textout_right(font, rect.Bottomright().x, y, text.c_str(), -1);
 	if(halignment == HALIGN_CENTER)
 		al_font_textout_centre(font, (rect.Topleft().x+rect.Bottomright().x)/2, y, text.c_str(), -1);
+	
+	al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, al_map_rgba_f(1, 1, 1, 1));
 }
 
 }

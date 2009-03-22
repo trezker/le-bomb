@@ -31,6 +31,14 @@ void Rect::Move(float dx, float dy)
 	bottomright += d;
 }
 
+void Rect::Shrink(float dx, float dy)
+{
+	topleft.x += dx;
+	topleft.y += dy;
+	bottomright.x -= dx;
+	bottomright.y -= dy;
+}
+
 Vector2 Rect::Topleft()
 {
 	return topleft;

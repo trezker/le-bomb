@@ -9,6 +9,7 @@
 #include "interface/Rect.h"
 #include "interface/Events.h"
 #include "interface/Label.h"
+#include "interface/Inputbox.h"
 #include "interface/Widget_editor.h"
 #include "interface/Group.h"
 
@@ -70,6 +71,7 @@ bool Init()
 	renderer->Add_widget(label_center);
 */
 
+	//Button
 	interface::Button* button = new interface::Button;
 	button->Set_bounding_rect(interface::Rect(0, 0, 100, 20));
 	button->Set_label("Button");
@@ -81,6 +83,7 @@ bool Init()
 	button_prototype->Set_label("Button");
 	prototypes.push_back(button_prototype);
 
+	//Label
 	button = new interface::Button;
 	button->Set_bounding_rect(interface::Rect(0, 20, 100, 20));
 	button->Set_label("Label");
@@ -91,6 +94,18 @@ bool Init()
 	label_prototype->Set_bounding_rect(interface::Rect(100, 0, 100, 20));
 	label_prototype->Set_text("Label");
 	prototypes.push_back(label_prototype);
+
+	//Inputbox
+	button = new interface::Button;
+	button->Set_bounding_rect(interface::Rect(0, 40, 100, 20));
+	button->Set_label("Inputbox");
+	renderer->Add_widget(button);
+	root_widgets.push_back(button);
+
+	interface::Inputbox* inputbox_prototype = new interface::Inputbox;
+	inputbox_prototype->Set_bounding_rect(interface::Rect(100, 0, 100, 20));
+	inputbox_prototype->Set_text("Inputbox");
+	prototypes.push_back(inputbox_prototype);
 
 	root_interface = new interface::Group;
 	root_interface->Set_bounding_rect(interface::Rect(0, 0, width, height));
