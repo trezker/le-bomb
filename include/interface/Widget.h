@@ -19,6 +19,7 @@ enum VAlignment
 class Widget
 {
 public:
+	Widget();
 	virtual ~Widget();
 	virtual Widget* Clone()=0;
 	virtual void Event(const ALLEGRO_EVENT &event);
@@ -27,9 +28,13 @@ public:
 	Rect Get_bounding_rect();
 	bool Is_dirty();
 	void Set_dirty(bool t);
+
+	void Set_cover_mouse_down(bool active);
+	bool Covers_mouse_down();
 private:
 	Rect brect;
 	bool dirty;
+	bool covers_mouse_down;
 };
 
 }

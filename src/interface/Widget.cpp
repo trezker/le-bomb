@@ -3,6 +3,12 @@
 namespace interface
 {
 
+Widget::Widget()
+:dirty(false)
+,covers_mouse_down(true)
+{
+}
+
 Widget::~Widget()
 {
 }
@@ -33,6 +39,16 @@ bool Widget::Is_dirty()
 void Widget::Set_dirty(bool t)
 {
 	dirty = t;
+}
+
+void Widget::Set_cover_mouse_down(bool active)
+{
+	covers_mouse_down = active;
+}
+
+bool Widget::Covers_mouse_down()
+{
+	return covers_mouse_down;
 }
 
 }

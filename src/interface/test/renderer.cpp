@@ -29,6 +29,9 @@ interface::Widget_editor* widget_editor;
 interface::Event_queue event_queue;
 ALLEGRO_FONT* font = NULL;
 
+int width = 800;
+int height = 600;
+
 bool Init()
 {
 	interface::Add_event_queue(&event_queue);
@@ -74,7 +77,7 @@ bool Init()
 	root_widgets.push_back(button);
 
 	interface::Button* button_prototype = new interface::Button;
-	button_prototype->Set_bounding_rect(interface::Rect(0, 0, 100, 20));
+	button_prototype->Set_bounding_rect(interface::Rect(100, 0, 100, 20));
 	button_prototype->Set_label("Button");
 	prototypes.push_back(button_prototype);
 
@@ -85,17 +88,19 @@ bool Init()
 	root_widgets.push_back(button);
 
 	interface::Label* label_prototype = new interface::Label;
-	label_prototype->Set_bounding_rect(interface::Rect(0, 0, 100, 20));
+	label_prototype->Set_bounding_rect(interface::Rect(100, 0, 100, 20));
 	label_prototype->Set_text("Label");
 	prototypes.push_back(label_prototype);
 
 	root_interface = new interface::Group;
+	root_interface->Set_bounding_rect(interface::Rect(0, 0, width, height));
 	edit_interface = new interface::Group;
+	edit_interface->Set_bounding_rect(interface::Rect(100, 0, width-100, height));
 	root_interface->Add_widget(edit_interface);
 
 	for(Widgets::iterator i = root_widgets.begin(); i != root_widgets.end(); ++i)
 		root_interface->Add_widget(*i);
-	
+
 	return true;
 }
 
@@ -162,8 +167,6 @@ int main()
 	ALLEGRO_DISPLAY *display;
 	al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
 	al_set_new_display_option(ALLEGRO_DEPTH_SIZE, 24, ALLEGRO_REQUIRE);
-	int width = 800;
-	int height = 600;
  	display = al_create_display(width, height);
  	if(!display)
  	{

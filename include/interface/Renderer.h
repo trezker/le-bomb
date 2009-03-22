@@ -3,7 +3,6 @@
 
 #include <map>
 #include <list>
-#include <vector>
 #include <string>
 #include <allegro5/allegro5.h>
 #include <allegro5/a5_font.h>
@@ -38,7 +37,7 @@ private:
 	Widget_cache widget_cache;
 
 	//Rendering order
-	typedef std::vector<Widget*> Widgets;
+	typedef std::list<Widget*> Widgets;
 	Widgets widgets;
 	
 	ALLEGRO_FONT* font;

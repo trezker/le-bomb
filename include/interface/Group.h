@@ -2,7 +2,7 @@
 #define interface_Group_h
 
 #include "interface/Widget.h"
-#include <vector>
+#include <list>
 
 namespace interface
 {
@@ -27,7 +27,7 @@ public:
 private:
 	int tab_modifier;
 	int tab_position;
-	typedef std::vector<Widget*> Widgets;
+	typedef std::list<Widget*> Widgets;
 	Widgets widgets;
 	Widgets tab_order;
 	Widget* focus;

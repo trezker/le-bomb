@@ -22,9 +22,17 @@ Widget* Group::Clone()
 
 void Group::Event(const ALLEGRO_EVENT &event)
 {
+	if(ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type)
+		Set_cover_mouse_down(false);
 	for(Widgets::iterator i =  widgets.begin(); i != widgets.end(); ++i)
 	{
 		(*i)->Event(event);
+		if(ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type && (*i)->Covers_mouse_down()
+		&& (*i)->Get_bounding_rect().Contains_point(event.mouse.x, event.mouse.y))
+		{
+			Set_cover_mouse_down(true);
+			break;
+		}
 	}
 }
 
@@ -43,7 +51,7 @@ void Group::Set_tab_modifier(int m)
 
 void Group::Add_widget(Widget* i)
 {
-	widgets.push_back(i);
+	widgets.push_front(i);
 }
 
 void Group::Remove_widget(Widget* i)
@@ -61,7 +69,8 @@ void Group::Set_tab_order(Widget* i, int o)
 	if(o==-1 || o>=static_cast<int>(tab_order.size()))
 		tab_order.push_back(i);
 	else
-		tab_order.insert(tab_order.begin()+o, i);
+		tab_order.push_back(i);
+//		tab_order.insert(tab_order.begin()+o, i);
 }
 
 }
