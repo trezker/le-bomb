@@ -23,6 +23,8 @@ private:
 	bool top;
 	bool bottom;
 	bool move;
+	bool selected;
+	Vector2 pos;
 };
 
 }

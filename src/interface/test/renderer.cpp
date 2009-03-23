@@ -42,11 +42,6 @@ bool Init()
 	font = al_ttf_load_font("media/DejaVuSans.ttf", -12, 0);
 	renderer->Set_font(font);
 
-	interface::Inputbox* inputbox = new interface::Inputbox;
-	inputbox->Set_bounding_rect(interface::Rect(100, 100, 100, 20));
-	inputbox->Set_text("Inputbox");
-	renderer->Add_widget(inputbox);
-	root_widgets.push_back(inputbox);
 
 	//Button
 	interface::Button* button = new interface::Button;
@@ -92,6 +87,12 @@ bool Init()
 
 	for(Widgets::iterator i = root_widgets.begin(); i != root_widgets.end(); ++i)
 		root_interface->Add_widget(*i);
+
+	interface::Inputbox* inputbox = new interface::Inputbox;
+	inputbox->Set_bounding_rect(interface::Rect(100, 100, 100, 20));
+	inputbox->Set_text("Inputbox");
+	renderer->Add_widget(inputbox);
+	root_interface->Add_widget(inputbox);
 
 	return true;
 }
