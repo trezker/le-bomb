@@ -44,6 +44,15 @@ void Group::Render()
 	}
 }
 
+void Group::Move_to(float x, float y)
+{
+	for(Widgets::iterator i =  widgets.begin(); i != widgets.end(); ++i)
+	{
+		(*i)->Move(x - Get_bounding_rect().Topleft().x, y - Get_bounding_rect().Topleft().y);
+	}
+	Widget::Move_to(x, y);
+}
+
 void Group::Set_tab_modifier(int m)
 {
 	tab_modifier = m;

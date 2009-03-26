@@ -1,11 +1,13 @@
 #include "interface/Widget_editor.h"
 #include "interface/Renderer.h"
+#include "interface/Label.h"
 
 namespace interface
 {
 
 Widget_editor::Widget_editor()
 :widget(NULL)
+,editing_attributes(false)
 ,pressed(false)
 ,left(false)
 ,right(false)
@@ -14,10 +16,45 @@ Widget_editor::Widget_editor()
 ,move(false)
 ,selected(false)
 {
+	float margin = 4;
+	attributes_max_y = 0;
+	attribute_group = new Group;
+	attribute_group->Set_bounding_rect(Rect(0, 0, 200, 400));
+
+	Label* label = new Label;
+	label->Set_bounding_rect(Rect(margin, attributes_max_y, 200, 20));
+	label->Set_text("Base attributes");
+	attribute_group->Add_widget(label);
+	attributes_max_y += 20;
+
+	label = new Label;
+	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
+	label->Set_text("Top");
+	attribute_group->Add_widget(label);
+	attributes_max_y += 20;
+
+	label = new Label;
+	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
+	label->Set_text("Left");
+	attribute_group->Add_widget(label);
+	attributes_max_y += 20;
+
+	label = new Label;
+	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
+	label->Set_text("Width");
+	attribute_group->Add_widget(label);
+	attributes_max_y += 20;
+
+	label = new Label;
+	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
+	label->Set_text("Height");
+	attribute_group->Add_widget(label);
+	attributes_max_y += 20;
 }
 
 Widget_editor::~Widget_editor()
 {
+	delete attribute_group;
 }
 
 Widget* Widget_editor::Clone()
@@ -31,61 +68,76 @@ void Widget_editor::Event(const ALLEGRO_EVENT &event)
 {
 	if(ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type)
 	{
-		Rect brect = Get_bounding_rect();
-		if(brect.Contains_point(event.mouse.x, event.mouse.y))
+		if(event.mouse.button == 1)
 		{
-			pressed = true;
-			if(event.mouse.x < brect.Topleft().x+5)
+			Rect brect = Get_bounding_rect();
+			if(brect.Contains_point(event.mouse.x, event.mouse.y))
 			{
-				pos.x = brect.Topleft().x;
-				left = true;
+				pressed = true;
+				if(event.mouse.x < brect.Topleft().x+5)
+				{
+					pos.x = brect.Topleft().x;
+					left = true;
+				}
+				else if(event.mouse.x > brect.Bottomright().x-5)
+				{
+					pos.x = brect.Bottomright().x;
+					right = true;
+				}
+				if(event.mouse.y < brect.Topleft().y+5)
+				{
+					pos.y = brect.Topleft().y;
+					top = true;
+				}
+				else if(event.mouse.y > brect.Bottomright().y-5)
+				{
+					pos.y = brect.Bottomright().y;
+					bottom = true;
+				}
+				if(!(left || right || top || bottom))
+				{
+					move = true;
+					pos = brect.Topleft();
+				}
+				if(!selected)
+				{
+					selected = true;
+					Set_dirty(true);
+				}
 			}
-			else if(event.mouse.x > brect.Bottomright().x-5)
+			else if(selected)
 			{
-				pos.x = brect.Bottomright().x;
-				right = true;
-			}
-			if(event.mouse.y < brect.Topleft().y+5)
-			{
-				pos.y = brect.Topleft().y;
-				top = true;
-			}
-			else if(event.mouse.y > brect.Bottomright().y-5)
-			{
-				pos.y = brect.Bottomright().y;
-				bottom = true;
-			}
-			if(!(left || right || top || bottom))
-			{
-				move = true;
-				pos = brect.Topleft();
-			}
-			if(!selected)
-			{
-				selected = true;
+				selected = false;
 				Set_dirty(true);
 			}
-		}
-		else if(selected)
-		{
-			selected = false;
-			Set_dirty(true);
 		}
 	}
 	if(ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
 	{
-		pressed = false;
-		left = false;
-		right = false;
-		top = false;
-		bottom = false;
-		move = false;
-
-		Rect brect = Get_bounding_rect();
-		if(selected && !brect.Contains_point(event.mouse.x, event.mouse.y))
+		if(event.mouse.button == 1)
 		{
-			selected = false;
-			Set_dirty(true);
+			pressed = false;
+			left = false;
+			right = false;
+			top = false;
+			bottom = false;
+			move = false;
+
+			Rect brect = Get_bounding_rect();
+			if(selected && !brect.Contains_point(event.mouse.x, event.mouse.y))
+			{
+				selected = false;
+				Set_dirty(true);
+			}
+		}
+		if(event.mouse.button == 2)
+		{
+			Rect brect = Get_bounding_rect();
+			if(brect.Contains_point(event.mouse.x, event.mouse.y))
+			{
+				editing_attributes = true;
+				attribute_group->Move_to(event.mouse.x, event.mouse.y);
+			}
 		}
 	}
 	if(ALLEGRO_EVENT_MOUSE_AXES == event.type)
@@ -126,6 +178,14 @@ void Widget_editor::Event(const ALLEGRO_EVENT &event)
 			Set_dirty(true);
 		}
 	}
+	if (ALLEGRO_EVENT_KEY_DOWN == event.type)
+	{
+		if (ALLEGRO_KEY_ESCAPE == event.keyboard.keycode)
+		{
+			editing_attributes = false;
+		}
+	}
+
 }
 
 void Widget_editor::Render()
@@ -137,6 +197,12 @@ void Widget_editor::Render()
 		Renderer* renderer = Get_renderer();
 		renderer->Draw_rect(Get_bounding_rect(), al_map_rgb(c, c, c));
 	}
+	if(editing_attributes)
+	{
+		Renderer* renderer = Get_renderer();
+		renderer->Draw_raised_panel(attribute_group->Get_bounding_rect());
+		attribute_group->Render();
+	}
 }
 
 void Widget_editor::Set_widget(Widget* w)
@@ -144,6 +210,5 @@ void Widget_editor::Set_widget(Widget* w)
 	widget = w;
 	Set_bounding_rect(widget->Get_bounding_rect());
 }
-
 
 }

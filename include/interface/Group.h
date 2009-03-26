@@ -15,6 +15,7 @@ public:
 	virtual Widget* Clone();
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
+	virtual void Move_to(float x, float y);
 	/* Allows you to have regular tab for groups that manages "low level" widgets
 	 * and for instance CTRL+TAB for a group that manages groups.
 	 * */

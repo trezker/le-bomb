@@ -2,6 +2,7 @@
 #define interface_Widget_editor_h
 
 #include "interface/Widget.h"
+#include "interface/Group.h"
 
 namespace interface
 {
@@ -15,8 +16,12 @@ public:
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
 	void Set_widget(Widget* w);
-private:
+protected:
 	Widget* widget;
+	Group* attribute_group;
+	bool editing_attributes;
+	float attributes_max_y;
+private:
 	bool pressed;
 	bool left;
 	bool right;

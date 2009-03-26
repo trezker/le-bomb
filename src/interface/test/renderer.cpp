@@ -20,7 +20,15 @@ interface::Group* edit_interface;
 typedef std::vector<interface::Widget*> Widgets;
 Widgets root_widgets;
 Widgets edit_widgets;
+Widgets editor_prototypes;
 Widgets prototypes;
+
+class Button_editor: public interface::Widget_editor
+{
+public:
+	Button_editor();
+private:
+};
 
 //interface::Button* button;
 interface::Label* label_left;
@@ -188,7 +196,7 @@ int main()
 			{
 				if (ALLEGRO_KEY_ESCAPE == event.keyboard.keycode)
 				{
-					quit = true;
+//					quit = true;
 				}
 			}
 			if (ALLEGRO_EVENT_DISPLAY_CLOSE == event.type)

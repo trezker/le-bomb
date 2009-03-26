@@ -24,6 +24,8 @@ public:
 	virtual Widget* Clone()=0;
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
+	virtual void Move_to(float x, float y);
+	virtual void Move(float x, float y);
 	void Set_bounding_rect(const Rect& rect);
 	Rect Get_bounding_rect();
 	bool Is_dirty();
