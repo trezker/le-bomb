@@ -47,7 +47,7 @@ bool Init()
 
 	renderer = new interface::Renderer();
 	interface::Set_renderer(renderer);
-	font = al_ttf_load_font("media/DejaVuSans.ttf", -12, 0);
+	font = al_load_ttf_font("media/DejaVuSans.ttf", -12, 0);
 	renderer->Set_font(font);
 
 
@@ -162,8 +162,8 @@ int main()
 	al_init();
 	al_install_mouse();
 	al_install_keyboard();
-	al_iio_init();
-	al_font_init();
+	al_init_iio_addon();
+	al_init_font_addon();
 
 	ALLEGRO_DISPLAY *display;
 	al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
@@ -213,7 +213,7 @@ int main()
 		last_time = current_time;
 		Update(dt);
 
-		al_clear(al_map_rgb(0, 0, 0));
+		al_clear_to_color(al_map_rgb(0, 0, 0));
 		Render();
 		al_flip_display();
 

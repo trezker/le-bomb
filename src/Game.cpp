@@ -34,8 +34,8 @@ void Game::Run()
 	al_init();
 	al_install_mouse();
 	al_install_keyboard();
-	al_iio_init();
-	al_font_init();
+	al_init_iio_addon();
+	al_init_font_addon();
 
 	ALLEGRO_DISPLAY *display;
 	al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
@@ -83,7 +83,7 @@ void Game::Run()
 		last_time = current_time;
 		Update(dt);
 
-		al_clear(al_map_rgb(0, 0, 0));
+		al_clear_to_color(al_map_rgb(0, 0, 0));
 		Render();
 		al_flip_display();
 

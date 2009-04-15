@@ -61,7 +61,7 @@ void Editor::Init()
 	billboard->Set_position(Vector3(5, 0, 5));
 	light->Attach_node(billboard);
 
-	bomb_texture = al_iio_load("media/bomb_sprite.png");
+	bomb_texture = al_load_bitmap("media/bomb_sprite.png");
 	Quadnode* quad = new Quadnode();
 	quad->Set_texture(bomb_texture);
 	Vector3 p[4];
@@ -72,7 +72,7 @@ void Editor::Init()
 	quad->Set_corners(p);
 	billboard->Attach_node(quad);
 	
-	ALLEGRO_BITMAP* darwinian_texture = al_iio_load("media/darwinian.png");
+	ALLEGRO_BITMAP* darwinian_texture = al_load_bitmap("media/darwinian.png");
 	Modelnode* model = new Modelnode;
 	model->Loadmodel("media/darwinian.raw");
 	model->Set_texture(darwinian_texture);

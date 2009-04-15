@@ -15,6 +15,11 @@ namespace interface
 class Renderable
 {};
 
+enum Direction{
+	TRIANGLE_UP,
+	TRIANGLE_DOWN,
+};
+
 class Renderer
 {
 public:
@@ -26,6 +31,7 @@ public:
 	void Remove_widget(Widget* w);
 	
 	void Draw_rect(Rect rect, ALLEGRO_COLOR c);
+	void Draw_triangle(Rect rect, Direction d);
 	void Draw_raised_panel(Rect rect);
 	void Draw_sunken_panel(Rect rect);
 	void Draw_text_field(Rect rect);

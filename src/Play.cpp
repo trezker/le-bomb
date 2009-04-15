@@ -47,7 +47,7 @@ void Play::Init()
 		netconf = al_create_config();
 	}
 	
-	font = al_ttf_load_font("media/DejaVuSans.ttf", 20, 0);
+	font = al_load_ttf_font("media/DejaVuSans.ttf", 20, 0);
 
 	camera = new Cameranode();
 	camera->Set_position(Vector3(0, 1.5f, 0));
@@ -57,10 +57,10 @@ void Play::Init()
 	light = new Lightnode;
 	camera->Attach_node(light);
 
-	bomb_texture = al_iio_load("media/bomb_sprite.png");
+	bomb_texture = al_load_bitmap("media/bomb_sprite.png");
 //	darwinian_texture = al_iio_load("media/darwinian.png");
-	darwinian_texture = al_iio_load("media/darwinian_textured.png");
-	heightmap_texture = al_iio_load("media/grass.png");
+	darwinian_texture = al_load_bitmap("media/darwinian_textured.png");
+	heightmap_texture = al_load_bitmap("media/grass.png");
 
 	Add_heightmap(new Heightmap);
 
@@ -169,7 +169,7 @@ void Play::Render()
 	if(player)
 	{
 		al_draw_filled_rectangle(10, 10, 10+player->Get_health(), 30, al_map_rgb(255, 0, 0));
-		al_font_textprintf(font, 10, 40, "Score: %d", player->Get_score());
+		al_draw_textf(font, 10, 40, 0, "Score: %d", player->Get_score());
 	}
 }
 

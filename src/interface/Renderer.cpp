@@ -65,6 +65,27 @@ void Renderer::Draw_rect(Rect rect, ALLEGRO_COLOR c)
 					, c, 0);
 }
 
+void Draw_triangle(Rect rect, Direction d)
+{
+	float x1 = rect.Topleft().x;
+	float x2 = (rect.Topleft().x + rect.Bottomright().x) /2;
+	float x3 = rect.Bottomright().x;
+	float y1, y2, y3;
+	if(d == TRIANGLE_UP)
+	{
+		y1 = rect.Bottomright().y;
+		y2 = rect.Topleft().y;
+		y3 = rect.Bottomright().y;
+	}
+	else
+	{
+		y1 = rect.Topleft().y;
+		y2 = rect.Bottomright().y;
+		y3 = rect.Topleft().y;
+	}
+	al_draw_filled_triangle(x1, y1, x2, y2, x3, y3, al_map_rgba(0, 0, 0, 255));
+}
+
 void Renderer::Draw_raised_panel(Rect rect)
 {
 	al_draw_rectangle(rect.Topleft().x, rect.Topleft().y, rect.Bottomright().x, rect.Bottomright().y
@@ -101,15 +122,15 @@ void Renderer::Draw_text(Rect rect, const std::string& text, HAlignment halignme
 
 	float y = rect.Topleft().y;
 	if(valignment == VALIGN_BOTTOM)
-		y = rect.Bottomright().y - al_font_text_height(font);
+		y = rect.Bottomright().y - al_get_font_line_height(font);
 	if(valignment == VALIGN_CENTER)
-		y = (y + rect.Bottomright().y - al_font_text_height(font))/2;
+		y = (y + rect.Bottomright().y - al_get_font_line_height(font))/2;
 	if(halignment == HALIGN_LEFT)
-		al_font_textout(font, rect.Topleft().x, y, text.c_str(), -1);
+		al_draw_text(font, rect.Topleft().x, y, ALLEGRO_ALIGN_LEFT, text.c_str());
 	if(halignment == HALIGN_RIGHT)
-		al_font_textout_right(font, rect.Bottomright().x, y, text.c_str(), -1);
+		al_draw_text(font, rect.Bottomright().x, y, ALLEGRO_ALIGN_RIGHT, text.c_str());
 	if(halignment == HALIGN_CENTER)
-		al_font_textout_centre(font, (rect.Topleft().x+rect.Bottomright().x)/2, y, text.c_str(), -1);
+		al_draw_text(font, (rect.Topleft().x+rect.Bottomright().x)/2, y, ALLEGRO_ALIGN_CENTRE, text.c_str());
 	
 	al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, al_map_rgba_f(1, 1, 1, 1));
 }
