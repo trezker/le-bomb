@@ -31,6 +31,9 @@ void Add_event_queue(Event_queue* event_queue);
 void Remove_event_queue(Event_queue* event_queue);
 void Emit_event(Event event);
 
+void Push_event_queues();
+void Pop_event_queues();
+
 }
 
 #endif

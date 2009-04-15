@@ -1,12 +1,16 @@
 #include "interface/Events.h"
 #include <list>
 #include <algorithm>
+#include <stack>
 
 namespace interface
 {
 
 typedef std::list<Event_queue*> Event_queues;
 Event_queues event_queues;
+
+typedef std::stack<Event_queues> Event_queues_stack;
+Event_queues_stack event_queues_stack;
 
 void Add_event_queue(Event_queue* event_queue)
 {
@@ -28,6 +32,18 @@ void Emit_event(Event event)
 	{
 		(*i)->Add_event(event);
 	}
+}
+
+void Push_event_queues()
+{
+	event_queues_stack.push(event_queues);
+	event_queues.clear();
+}
+
+void Pop_event_queues()
+{
+	event_queues = event_queues_stack.top();
+	event_queues_stack.pop();
 }
 
 void Event_queue::Add_event(Event event)
