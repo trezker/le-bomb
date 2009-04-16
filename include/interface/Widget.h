@@ -34,6 +34,8 @@ public:
 	void Set_cover_mouse_down(bool active);
 	bool Covers_mouse_down();
 private:
+	virtual void New_bounding_rect();
+
 	Rect brect;
 	bool dirty;
 	bool covers_mouse_down;

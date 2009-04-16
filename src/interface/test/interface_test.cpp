@@ -10,6 +10,7 @@
 #include "interface/Events.h"
 #include "interface/Label.h"
 #include "interface/Inputbox.h"
+#include "interface/Spinbox.h"
 #include "interface/Widget_editor.h"
 #include "interface/Group.h"
 
@@ -86,6 +87,18 @@ bool Init()
 	inputbox_prototype->Set_bounding_rect(interface::Rect(100, 0, 100, 20));
 	inputbox_prototype->Set_text("Inputbox");
 	prototypes.push_back(inputbox_prototype);
+
+	//Spinbox
+	button = new interface::Button;
+	button->Set_bounding_rect(interface::Rect(0, 60, 100, 20));
+	button->Set_label("Spinbox");
+	renderer->Add_widget(button);
+	root_widgets.push_back(button);
+
+	interface::Spinbox* spinbox_prototype = new interface::Spinbox;
+	spinbox_prototype->Set_bounding_rect(interface::Rect(100, 0, 100, 20));
+	prototypes.push_back(spinbox_prototype);
+
 
 	root_interface = new interface::Group;
 	root_interface->Set_bounding_rect(interface::Rect(0, 0, width, height));

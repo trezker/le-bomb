@@ -34,6 +34,7 @@ void Widget::Move(float x, float y)
 void Widget::Set_bounding_rect(const Rect& rect)
 {
 	brect = rect;
+	New_bounding_rect();
 }
 
 Rect Widget::Get_bounding_rect()
@@ -59,6 +60,10 @@ void Widget::Set_cover_mouse_down(bool active)
 bool Widget::Covers_mouse_down()
 {
 	return covers_mouse_down;
+}
+
+void Widget::New_bounding_rect()
+{
 }
 
 }

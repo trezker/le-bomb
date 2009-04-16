@@ -65,7 +65,7 @@ void Renderer::Draw_rect(Rect rect, ALLEGRO_COLOR c)
 					, c, 0);
 }
 
-void Draw_triangle(Rect rect, Direction d)
+void Renderer::Draw_triangle(Rect rect, Direction d)
 {
 	float x1 = rect.Topleft().x;
 	float x2 = (rect.Topleft().x + rect.Bottomright().x) /2;
