@@ -25,6 +25,7 @@ class Renderer
 public:
 	Renderer();
 	void Set_font(ALLEGRO_FONT* f);
+	ALLEGRO_FONT* Get_font();
 	
 	void Render();
 	void Add_widget(Widget* w);

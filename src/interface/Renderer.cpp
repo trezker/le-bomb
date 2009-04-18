@@ -28,6 +28,11 @@ void Renderer::Set_font(ALLEGRO_FONT* f)
 	font = f;
 }
 
+ALLEGRO_FONT* Renderer::Get_font()
+{
+	return font;
+}
+
 void Renderer::Render()
 {
 	for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
