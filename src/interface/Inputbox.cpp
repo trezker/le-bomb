@@ -114,9 +114,27 @@ void Inputbox::Render()
 	Vector2 tl = text_rect.Topleft();
 	Vector2 br = text_rect.Bottomright();
 
-	int posx = al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
-	Rect cur(tl.x+posx, tl.y, 1, br.y-tl.y);
-	renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
+	if(halignment == HALIGN_LEFT)
+	{
+		int posx = al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
+		Rect cur(tl.x+posx, tl.y, 1, br.y-tl.y);
+		renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
+	}
+	if(halignment == HALIGN_RIGHT)
+	{
+		//Todo
+		int startx = -al_get_text_width(renderer->Get_font(), text.c_str());
+		int posx = startx + al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
+		Rect cur(br.x+posx, tl.y, 1, br.y-tl.y);
+		renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
+	}
+	if(halignment == HALIGN_CENTER)
+	{
+		//Todo
+		int posx = al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
+		Rect cur(tl.x+posx, tl.y, 1, br.y-tl.y);
+		renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
+	}
 }
 
 void Inputbox::Set_text(const std::string& t)
