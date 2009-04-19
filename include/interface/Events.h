@@ -20,6 +20,7 @@ public:
 class Event_queue
 {
 public:
+	bool Empty();
 	void Add_event(Event event);
 	Event Get_next_event();
 private:

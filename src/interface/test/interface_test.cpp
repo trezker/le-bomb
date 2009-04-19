@@ -31,7 +31,11 @@ public:
 private:
 };
 
-//interface::Button* button;
+interface::Button* button_left;
+interface::Button* button_right;
+interface::Button* button_center;
+interface::Inputbox* inputbox;
+
 interface::Label* label_left;
 interface::Label* label_right;
 interface::Label* label_center;
@@ -109,11 +113,25 @@ bool Init()
 	for(Widgets::iterator i = root_widgets.begin(); i != root_widgets.end(); ++i)
 		root_interface->Add_widget(*i);
 
-	interface::Inputbox* inputbox = new interface::Inputbox;
+	inputbox = new interface::Inputbox;
 	inputbox->Set_bounding_rect(interface::Rect(100, 100, 100, 20));
 	inputbox->Set_text("Inputbox");
 	renderer->Add_widget(inputbox);
 	root_interface->Add_widget(inputbox);
+	
+	button_left = new interface::Button;
+	button_left->Set_bounding_rect(interface::Rect(100, 120, 33, 20));
+	button_center = new interface::Button;
+	button_center->Set_bounding_rect(interface::Rect(134, 120, 33, 20));
+	button_right = new interface::Button;
+	button_right->Set_bounding_rect(interface::Rect(168, 120, 33, 20));
+
+	renderer->Add_widget(button_left);
+	renderer->Add_widget(button_center);
+	renderer->Add_widget(button_right);
+	root_interface->Add_widget(button_left);
+	root_interface->Add_widget(button_center);
+	root_interface->Add_widget(button_right);
 
 	return true;
 }
@@ -145,26 +163,40 @@ void Event(ALLEGRO_EVENT event)
 {
 	root_interface->Event(event);
 	
-	interface::Event e = event_queue.Get_next_event();
-/*	if(e.source == button && e.type == "Activated")
+	while(!event_queue.Empty())
 	{
-		printf("Button activated\n");
-	}
-*/	if(e.type == "Activated")
-	{
-		for(unsigned int i = 0; i < root_widgets.size(); ++i)
+		interface::Event e = event_queue.Get_next_event();
+		if(e.type == "Activated")
 		{
-				printf("Woot\n");
-			if(root_widgets[i] == e.source)
-			{
-				interface::Widget* n = prototypes[i]->Clone();
-				edit_widgets.push_back(n);
+			printf("Event: %s, source = %p \n", e.type.c_str(), e.source);
 
-				interface::Widget_editor* widget_editor = new interface::Widget_editor;
-				widget_editor->Set_widget(n);
-				renderer->Add_widget(widget_editor);
-				edit_interface->Add_widget(widget_editor);
-				break;
+			//Prototypes
+			for(unsigned int i = 0; i < root_widgets.size(); ++i)
+			{
+				if(root_widgets[i] == e.source)
+				{
+					interface::Widget* n = prototypes[i]->Clone();
+					edit_widgets.push_back(n);
+
+					interface::Widget_editor* widget_editor = new interface::Widget_editor;
+					widget_editor->Set_widget(n);
+					renderer->Add_widget(widget_editor);
+					edit_interface->Add_widget(widget_editor);
+					break;
+				}
+			}
+			
+			if(e.source == button_left)
+			{
+				inputbox->Set_alignment(interface::HALIGN_LEFT);
+			}
+			if(e.source == button_right)
+			{
+				inputbox->Set_alignment(interface::HALIGN_RIGHT);
+			}
+			if(e.source == button_center)
+			{
+				inputbox->Set_alignment(interface::HALIGN_CENTER);
 			}
 		}
 	}
@@ -216,6 +248,7 @@ int main()
 			{
 				quit = true;
 			}
+//	 		printf("Event type: %i\n", event.type);
 			Event(event);
 		}
 		if (quit)

@@ -46,6 +46,11 @@ void Pop_event_queues()
 	event_queues_stack.pop();
 }
 
+bool Event_queue::Empty()
+{
+	return queue.empty();
+}
+
 void Event_queue::Add_event(Event event)
 {
 	queue.push(event);
