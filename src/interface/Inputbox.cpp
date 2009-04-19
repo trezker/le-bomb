@@ -52,7 +52,11 @@ void Inputbox::Event(const ALLEGRO_EVENT &event)
 	}
 	if(input_focus && (ALLEGRO_EVENT_KEY_DOWN == event.type || ALLEGRO_EVENT_KEY_REPEAT == event.type))
 	{
-//		int pos = text.length();
+		if(pos<0)
+			pos = 0;
+		if(pos>int(text.length()))
+			pos = text.length();
+
 		bool special_key = false;
 		switch(event.keyboard.keycode)
 		{
@@ -118,6 +122,10 @@ void Inputbox::Render()
 void Inputbox::Set_text(const std::string& t)
 {
 	text = t;
+	if(pos<0)
+		pos = 0;
+	if(pos>int(text.length()))
+		pos = text.length();
 }
 
 void Inputbox::Set_alignment(HAlignment a)
