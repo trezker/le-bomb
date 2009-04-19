@@ -35,6 +35,7 @@ interface::Button* button_left;
 interface::Button* button_right;
 interface::Button* button_center;
 interface::Inputbox* inputbox;
+interface::Spinbox* spinbox;
 
 interface::Label* label_left;
 interface::Label* label_right;
@@ -132,6 +133,11 @@ bool Init()
 	root_interface->Add_widget(button_left);
 	root_interface->Add_widget(button_center);
 	root_interface->Add_widget(button_right);
+
+	spinbox = new interface::Spinbox;
+	spinbox->Set_bounding_rect(interface::Rect(100, 80, 100, 20));
+	renderer->Add_widget(spinbox);
+	root_interface->Add_widget(spinbox);
 
 	return true;
 }
