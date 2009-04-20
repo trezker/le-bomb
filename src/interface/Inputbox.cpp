@@ -111,28 +111,31 @@ void Inputbox::Render()
 	text_rect.Shrink(2, 2);
 	renderer->Draw_text(text_rect, text, halignment, VALIGN_TOP, al_map_rgb(0, 0, 0));
 	
-	Vector2 tl = text_rect.Topleft();
-	Vector2 br = text_rect.Bottomright();
+	if(input_focus)
+	{
+		Vector2 tl = text_rect.Topleft();
+		Vector2 br = text_rect.Bottomright();
 
-	if(halignment == HALIGN_LEFT)
-	{
-		int posx = al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
-		Rect cur(tl.x+posx, tl.y, 1, br.y-tl.y);
-		renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
-	}
-	if(halignment == HALIGN_RIGHT)
-	{
-		int startx = -al_get_text_width(renderer->Get_font(), text.c_str());
-		int posx = startx + al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
-		Rect cur(br.x+posx, tl.y, 1, br.y-tl.y);
-		renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
-	}
-	if(halignment == HALIGN_CENTER)
-	{
-		int startx = (tl.x + br.x - al_get_text_width(renderer->Get_font(), text.c_str()))/2;
-		int posx = startx + al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
-		Rect cur(posx, tl.y, 1, br.y-tl.y);
-		renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
+		if(halignment == HALIGN_LEFT)
+		{
+			int posx = al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
+			Rect cur(tl.x+posx, tl.y, 1, br.y-tl.y);
+			renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
+		}
+		if(halignment == HALIGN_RIGHT)
+		{
+			int startx = -al_get_text_width(renderer->Get_font(), text.c_str());
+			int posx = startx + al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
+			Rect cur(br.x+posx, tl.y, 1, br.y-tl.y);
+			renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
+		}
+		if(halignment == HALIGN_CENTER)
+		{
+			int startx = (tl.x + br.x - al_get_text_width(renderer->Get_font(), text.c_str()))/2;
+			int posx = startx + al_get_text_width(renderer->Get_font(), text.substr(0, pos).c_str());
+			Rect cur(posx, tl.y, 1, br.y-tl.y);
+			renderer->Draw_rect(cur, al_map_rgb(222, 222, 222));
+		}
 	}
 }
 
