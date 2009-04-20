@@ -7,6 +7,14 @@
 namespace interface
 {
 
+#define EVENT_UPDATE 1025
+
+struct UPDATE_EVENT
+{
+	double dt;
+};
+
+
 enum HAlignment
 {
 	HALIGN_LEFT, HALIGN_RIGHT, HALIGN_CENTER

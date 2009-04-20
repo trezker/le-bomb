@@ -225,11 +225,14 @@ int main()
  		printf("Failed to create display\n");
  		return 0;
 	}
-
+	
+	ALLEGRO_EVENT_SOURCE *time_event_source = al_create_user_event_source();
+	
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)al_get_keyboard());
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)al_get_mouse());
+	al_register_event_source(event_queue, time_event_source);
 
 	if(!Init())
 		return 0;
@@ -240,6 +243,18 @@ int main()
 
 	while(!quit)
 	{
+		double current_time = al_current_time();
+		double dt = current_time - last_time;
+		last_time = current_time;
+
+		ALLEGRO_EVENT time_event;
+		time_event.type = EVENT_UPDATE;
+		interface::UPDATE_EVENT ue;
+		ue.dt = dt;
+		time_event.user.data1 = (intptr_t)(&ue);
+		al_emit_user_event(time_event_source, &time_event, NULL);
+		
+
 		ALLEGRO_EVENT event;
 		while (al_get_next_event(event_queue, &event))
 		{
@@ -260,9 +275,6 @@ int main()
 		if (quit)
 			break;
 
-		double current_time = al_current_time();
-		double dt = current_time - last_time;
-		last_time = current_time;
 		Update(dt);
 
 		al_clear_to_color(al_map_rgb(0, 0, 0));

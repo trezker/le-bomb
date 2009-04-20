@@ -19,16 +19,22 @@ Widget* Spinbox::Clone()
 
 void Spinbox::Event(const ALLEGRO_EVENT &event)
 {
+	if(EVENT_UPDATE == event.type)
+	{
+		UPDATE_EVENT* ue = (UPDATE_EVENT*)event.user.data1;
+		//Todo: value change over time when buttons are pressed.
+//		value += ue->dt;
+
+		Set_value(value);
+		return;
+	}
+	
 	if(ALLEGRO_EVENT_MOUSE_AXES == event.type)
 	{
 		if(Get_bounding_rect().Contains_point(event.mouse.x, event.mouse.y))
 		{
 			value += event.mouse.dz;
-			std::stringstream os;
-			os<<value;
-			std::string text;
-			os>>text;
-			inputbox.Set_text(text);
+			Set_value(value);
 			return;
 		}
 	}
@@ -45,10 +51,7 @@ void Spinbox::Event(const ALLEGRO_EVENT &event)
 /*	else
 	{
 */
-		std::stringstream os;
-		os<<value;
-		os>>text;
-		inputbox.Set_text(text);
+		Set_value(value);
 //	}
 }
 
@@ -73,6 +76,12 @@ void Spinbox::Render()
 void Spinbox::Set_value(float v)
 {
 	value = v;
+
+	std::stringstream os;
+	os<<value;
+	std::string text;
+	os>>text;
+	inputbox.Set_text(text);
 }
 
 float Spinbox::Get_value()
