@@ -19,9 +19,9 @@ Widget* Spinbox::Clone()
 
 void Spinbox::Event(const ALLEGRO_EVENT &event)
 {
-	if(Get_bounding_rect().Contains_point(event.mouse.x, event.mouse.y))
+	if(ALLEGRO_EVENT_MOUSE_AXES == event.type)
 	{
-		if(ALLEGRO_EVENT_MOUSE_AXES == event.type)
+		if(Get_bounding_rect().Contains_point(event.mouse.x, event.mouse.y))
 		{
 			value += event.mouse.dz;
 			std::stringstream os;
