@@ -9,6 +9,9 @@ Spinbox::Spinbox()
 :value(0)
 ,press_up(false)
 ,press_down(false)
+,stepsize(1)
+,tick_cd(0)
+,ticktime(.25)
 {
 	inputbox.Set_text("0");
 	inputbox.Set_alignment(HALIGN_RIGHT);
@@ -46,18 +49,29 @@ void Spinbox::Event(const ALLEGRO_EVENT &event)
 			press_down = false;
 			Set_dirty(true);
 		}
+		tick_cd = 0;
+		ticktime = .25;
 	}
 
 	if(EVENT_UPDATE == event.type)
 	{
 		UPDATE_EVENT* ue = (UPDATE_EVENT*)event.user.data1;
 		//Todo: ticks, stepsize
-		if(press_up)
-			value += ue->dt;
-		if(press_down)
-			value -= ue->dt;
-
-		Set_value(value);
+		if(press_up || press_down)
+		{
+			tick_cd-=ue->dt;
+			if(tick_cd<=0)
+			{
+				ticktime*=.95;
+				tick_cd+=ticktime;
+			
+				if(press_up)
+					value += stepsize;
+				if(press_down)
+					value -= stepsize;
+				Set_value(value);
+			}
+		}
 		return;
 	}
 	

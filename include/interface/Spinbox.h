@@ -26,6 +26,9 @@ private:
 	Rect b_down;
 	bool press_up;
 	bool press_down;
+	float stepsize;
+	float tick_cd;
+	float ticktime;
 };
 
 }
