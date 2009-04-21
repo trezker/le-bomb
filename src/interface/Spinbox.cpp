@@ -79,7 +79,7 @@ void Spinbox::Event(const ALLEGRO_EVENT &event)
 	{
 		if(Get_bounding_rect().Contains_point(event.mouse.x, event.mouse.y))
 		{
-			value += event.mouse.dz;
+			value += event.mouse.dz * stepsize;
 			Set_value(value);
 			return;
 		}
