@@ -195,6 +195,12 @@ void Widget_editor::Event(const ALLEGRO_EVENT &event)
 			Rect n(topleft, bottomright);
 			widget->Set_bounding_rect(n);
 			Set_bounding_rect(n);
+
+			w_top.Set_value(n.Topleft().y);
+			w_left.Set_value(n.Topleft().x);
+			w_width.Set_value(n.Size().x);
+			w_height.Set_value(n.Size().y);
+
 			Set_dirty(true);
 		}
 	}
