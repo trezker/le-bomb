@@ -63,12 +63,10 @@ void Spinbox::Render()
 	Vector2 tl = brect.Topleft();
 	Vector2 br = brect.Bottomright();
 	
-	Rect up(br.x-height, tl.y, height, height/2);
-	Rect down(br.x-height, tl.y+height/2, height, height/2);
-	renderer->Draw_raised_panel(up);
-	renderer->Draw_triangle(up, TRIANGLE_UP);
-	renderer->Draw_raised_panel(down);
-	renderer->Draw_triangle(down, TRIANGLE_DOWN);
+	renderer->Draw_raised_panel(b_up);
+	renderer->Draw_triangle(b_up, TRIANGLE_UP);
+	renderer->Draw_raised_panel(b_down);
+	renderer->Draw_triangle(b_down, TRIANGLE_DOWN);
 	
 	inputbox.Render();
 }
@@ -96,6 +94,8 @@ void Spinbox::New_bounding_rect()
 	Vector2 tl = brect.Topleft();
 	Vector2 br = brect.Bottomright();
 	inputbox.Set_bounding_rect(Rect(tl.x, tl.y, brect.Size().x-height, height));
+	b_up.Set(br.x-height, tl.y, height, height/2);
+	b_down.Set(br.x-height, tl.y+height/2, height, height/2);
 }
 
 }

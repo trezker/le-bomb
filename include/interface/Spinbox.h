@@ -18,9 +18,12 @@ public:
 	void Set_value(float v);
 	float Get_value();
 private:
+	virtual void New_bounding_rect();
+
 	float value;
 	Inputbox inputbox;
-	virtual void New_bounding_rect();
+	Rect b_up;
+	Rect b_down;
 };
 
 }
