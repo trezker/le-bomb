@@ -24,11 +24,13 @@ void Widget::Render()
 void Widget::Move_to(float x, float y)
 {
 	brect.Move_to(x, y);
+	New_bounding_rect();
 }
 
 void Widget::Move(float x, float y)
 {
 	brect.Move(x, y);
+	New_bounding_rect();
 }
 
 void Widget::Set_bounding_rect(const Rect& rect)

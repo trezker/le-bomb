@@ -3,6 +3,7 @@
 
 #include "interface/Widget.h"
 #include "interface/Group.h"
+#include "interface/Spinbox.h"
 
 namespace interface
 {
@@ -30,6 +31,10 @@ private:
 	bool move;
 	bool selected;
 	Vector2 pos;
+	Spinbox w_top;
+	Spinbox w_left;
+	Spinbox w_width;
+	Spinbox w_height;
 };
 
 }

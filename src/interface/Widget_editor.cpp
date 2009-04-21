@@ -27,28 +27,44 @@ Widget_editor::Widget_editor()
 	attribute_group->Add_widget(label);
 	attributes_max_y += 20;
 
+	//Attribute Top
 	label = new Label;
 	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
 	label->Set_text("Top");
 	attribute_group->Add_widget(label);
+
+	w_top.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 100, 20));
+	attribute_group->Add_widget(&w_top);
 	attributes_max_y += 20;
 
+	//Attribute Left
 	label = new Label;
 	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
 	label->Set_text("Left");
 	attribute_group->Add_widget(label);
+
+	w_left.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 100, 20));
+	attribute_group->Add_widget(&w_left);
 	attributes_max_y += 20;
 
+	//Attribute Width
 	label = new Label;
 	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
 	label->Set_text("Width");
 	attribute_group->Add_widget(label);
+
+	w_width.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 100, 20));
+	attribute_group->Add_widget(&w_width);
 	attributes_max_y += 20;
 
+	//Attribute Height
 	label = new Label;
 	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
 	label->Set_text("Height");
 	attribute_group->Add_widget(label);
+
+	w_height.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 100, 20));
+	attribute_group->Add_widget(&w_height);
 	attributes_max_y += 20;
 }
 
@@ -137,6 +153,10 @@ void Widget_editor::Event(const ALLEGRO_EVENT &event)
 			{
 				editing_attributes = true;
 				attribute_group->Move_to(event.mouse.x, event.mouse.y);
+				w_top.Set_value(brect.Topleft().y);
+				w_left.Set_value(brect.Topleft().x);
+				w_width.Set_value(brect.Size().x);
+				w_height.Set_value(brect.Size().y);
 			}
 		}
 	}
@@ -185,7 +205,17 @@ void Widget_editor::Event(const ALLEGRO_EVENT &event)
 			editing_attributes = false;
 		}
 	}
-
+	if(editing_attributes)
+	{
+		attribute_group->Event(event);
+		float top = w_top.Get_value();
+		float left = w_left.Get_value();
+		float width = w_width.Get_value();
+		float height = w_height.Get_value();
+		Rect n(left, top, width, height);
+		widget->Set_bounding_rect(n);
+		Set_bounding_rect(n);
+	}
 }
 
 void Widget_editor::Render()
