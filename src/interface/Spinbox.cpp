@@ -7,6 +7,8 @@ namespace interface
 
 Spinbox::Spinbox()
 :value(0)
+,press_up(false)
+,press_down(false)
 {
 	inputbox.Set_text("0");
 	inputbox.Set_alignment(HALIGN_RIGHT);
@@ -19,11 +21,41 @@ Widget* Spinbox::Clone()
 
 void Spinbox::Event(const ALLEGRO_EVENT &event)
 {
+	if(ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type)
+	{
+		if(b_up.Contains_point(event.mouse.x, event.mouse.y))
+		{
+			press_up = true;
+			Set_dirty(true);
+		}
+		if(b_down.Contains_point(event.mouse.x, event.mouse.y))
+		{
+			press_down = true;
+			Set_dirty(true);
+		}
+	}
+	if(ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
+	{
+		if(press_up)
+		{
+			press_up = false;
+			Set_dirty(true);
+		}
+		if(press_down)
+		{
+			press_down = false;
+			Set_dirty(true);
+		}
+	}
+
 	if(EVENT_UPDATE == event.type)
 	{
 		UPDATE_EVENT* ue = (UPDATE_EVENT*)event.user.data1;
-		//Todo: value change over time when buttons are pressed.
-//		value += ue->dt;
+		//Todo: ticks, stepsize
+		if(press_up)
+			value += ue->dt;
+		if(press_down)
+			value -= ue->dt;
 
 		Set_value(value);
 		return;
@@ -62,10 +94,16 @@ void Spinbox::Render()
 	float height = brect.Size().y;
 	Vector2 tl = brect.Topleft();
 	Vector2 br = brect.Bottomright();
-	
-	renderer->Draw_raised_panel(b_up);
+
+	if(!press_up)
+		renderer->Draw_raised_panel(b_up);
+	else
+		renderer->Draw_sunken_panel(b_up);
 	renderer->Draw_triangle(b_up, TRIANGLE_UP);
-	renderer->Draw_raised_panel(b_down);
+	if(!press_down)
+		renderer->Draw_raised_panel(b_down);
+	else
+		renderer->Draw_sunken_panel(b_down);
 	renderer->Draw_triangle(b_down, TRIANGLE_DOWN);
 	
 	inputbox.Render();

@@ -24,6 +24,8 @@ private:
 	Inputbox inputbox;
 	Rect b_up;
 	Rect b_down;
+	bool press_up;
+	bool press_down;
 };
 
 }
