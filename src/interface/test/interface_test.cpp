@@ -13,6 +13,7 @@
 #include "interface/Spinbox.h"
 #include "interface/Widget_editor.h"
 #include "interface/Group.h"
+#include "interface/Attribute_group.h"
 
 interface::Renderer* renderer = NULL;
 interface::Group* root_interface;
@@ -24,12 +25,20 @@ Widgets edit_widgets;
 Widgets editor_prototypes;
 Widgets prototypes;
 
-class Button_editor: public interface::Widget_editor
+
+namespace interface
+{
+
+class Spinbox_attribute_group: public Attribute_group
 {
 public:
-	Button_editor();
+	Spinbox_attribute_group();
+	void Set_widget(Widget* w);
+	virtual void Event(ALLEGRO_EVENT event);
 private:
 };
+
+}
 
 interface::Button* button_left;
 interface::Button* button_right;

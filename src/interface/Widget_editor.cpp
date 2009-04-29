@@ -66,6 +66,8 @@ Widget_editor::Widget_editor()
 	w_height.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 100, 20));
 	attribute_group->Add_widget(&w_height);
 	attributes_max_y += 20;
+
+	attributes_height = attributes_max_y;
 }
 
 Widget_editor::~Widget_editor()
@@ -221,6 +223,12 @@ void Widget_editor::Event(const ALLEGRO_EVENT &event)
 		Rect n(left, top, width, height);
 		widget->Set_bounding_rect(n);
 		Set_bounding_rect(n);
+		
+		for(Attribute_groups::iterator i = attribute_groups.begin(); i != attribute_groups.end(); ++i)
+		{
+			(*i)->Set_widget(widget);
+			(*i)->Event(event);
+		}
 	}
 }
 
@@ -238,6 +246,11 @@ void Widget_editor::Render()
 		Renderer* renderer = Get_renderer();
 		renderer->Draw_raised_panel(attribute_group->Get_bounding_rect());
 		attribute_group->Render();
+		//Todo: Set bounding box for these, have to calc height values.
+		for(Attribute_groups::iterator i = attribute_groups.begin(); i != attribute_groups.end(); ++i)
+		{
+			(*i)->Render();
+		}
 	}
 }
 
@@ -245,6 +258,11 @@ void Widget_editor::Set_widget(Widget* w)
 {
 	widget = w;
 	Set_bounding_rect(widget->Get_bounding_rect());
+}
+
+void Widget_editor::Add_attribute_group(Attribute_group* a)
+{
+	attribute_groups.push_back(a);
 }
 
 }

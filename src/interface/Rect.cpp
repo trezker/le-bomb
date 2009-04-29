@@ -24,6 +24,16 @@ void Rect::Set(float x, float y, float w, float h)
 	bottomright.Set(x+w, y+h);
 }
 
+void Rect::Set_width(float w)
+{
+	bottomright.x = topleft.x + w;
+}
+
+void Rect::Set_height(float h)
+{
+	bottomright.y = topleft.y + h;
+}
+
 void Rect::Move(float dx, float dy)
 {
 	Vector2 d(dx, dy);

@@ -13,6 +13,8 @@ public:
 	Rect(float x, float y, float w, float h);
 	Rect(Vector2 tl, Vector2 br);
 	void Set(float x, float y, float w, float h);
+	void Set_width(float w);
+	void Set_height(float h);
 	void Move(float dx, float dy);
 	void Move_to(float x, float y);
 	void Shrink(float dx, float dy);
