@@ -234,7 +234,11 @@ void Event(ALLEGRO_EVENT event)
 
 					interface::Widget_editor* widget_editor = new interface::Widget_editor;
 					widget_editor->Set_widget(n);
-					widget_editor->Add_attribute_group(attribute_groups[e.source]);
+					Attribute_groups::iterator ag = attribute_groups.find(e.source);
+					if(ag != attribute_groups.end())
+					{
+						widget_editor->Add_attribute_group(attribute_groups[e.source]);
+					}
 					renderer->Add_widget(widget_editor);
 					edit_interface->Add_widget(widget_editor);
 					break;
