@@ -155,6 +155,10 @@ void Widget_editor::Event(const ALLEGRO_EVENT &event)
 			{
 				editing_attributes = true;
 				attribute_group->Move_to(event.mouse.x, event.mouse.y);
+				for(Attribute_groups::iterator i = attribute_groups.begin(); i != attribute_groups.end(); ++i)
+				{
+					(*i)->Move_to(event.mouse.x, event.mouse.y+attributes_height);
+				}
 				w_top.Set_value(brect.Topleft().y);
 				w_left.Set_value(brect.Topleft().x);
 				w_width.Set_value(brect.Size().x);

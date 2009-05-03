@@ -24,6 +24,8 @@ Widgets root_widgets;
 Widgets edit_widgets;
 Widgets editor_prototypes;
 Widgets prototypes;
+typedef std::map<interface::Widget*, interface::Attribute_group*> Attribute_groups;
+Attribute_groups attribute_groups;
 
 
 namespace interface
@@ -33,10 +35,36 @@ class Spinbox_attribute_group: public Attribute_group
 {
 public:
 	Spinbox_attribute_group();
-	void Set_widget(Widget* w);
 	virtual void Event(ALLEGRO_EVENT event);
 private:
+	Spinbox value;
 };
+
+Spinbox_attribute_group::Spinbox_attribute_group()
+{
+	float margin = 4;
+	float attributes_max_y = 0;
+
+	Label* label = new Label;
+	label->Set_bounding_rect(Rect(margin, attributes_max_y, 200, 20));
+	label->Set_text("Spinbox attributes");
+	Add_widget(label);
+	attributes_max_y += 20;
+
+	//Attribute Value
+	label = new Label;
+	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
+	label->Set_text("Value");
+	Add_widget(label);
+
+	value.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 100, 20));
+	Add_widget(&value);
+	attributes_max_y += 20;
+}
+
+void Spinbox_attribute_group::Event(ALLEGRO_EVENT event)
+{
+}
 
 }
 
@@ -64,7 +92,6 @@ bool Init()
 	interface::Set_renderer(renderer);
 	font = al_load_ttf_font("media/DejaVuSans.ttf", -12, 0);
 	renderer->Set_font(font);
-
 
 	//Button
 	interface::Button* button = new interface::Button;
@@ -112,6 +139,8 @@ bool Init()
 	interface::Spinbox* spinbox_prototype = new interface::Spinbox;
 	spinbox_prototype->Set_bounding_rect(interface::Rect(100, 0, 100, 20));
 	prototypes.push_back(spinbox_prototype);
+
+	attribute_groups[button] = new interface::Spinbox_attribute_group;
 
 
 	root_interface = new interface::Group;
@@ -195,6 +224,7 @@ void Event(ALLEGRO_EVENT event)
 
 					interface::Widget_editor* widget_editor = new interface::Widget_editor;
 					widget_editor->Set_widget(n);
+					widget_editor->Add_attribute_group(attribute_groups[e.source]);
 					renderer->Add_widget(widget_editor);
 					edit_interface->Add_widget(widget_editor);
 					break;
