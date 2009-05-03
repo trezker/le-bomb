@@ -35,10 +35,17 @@ class Spinbox_attribute_group: public Attribute_group
 {
 public:
 	Spinbox_attribute_group();
+	virtual void Set_widget(Widget* w);
 	virtual void Event(ALLEGRO_EVENT event);
 private:
 	Spinbox value;
+	Spinbox* widget;
 };
+
+void Spinbox_attribute_group::Set_widget(Widget* w)
+{
+	widget = dynamic_cast<Spinbox*>(w);
+}
 
 Spinbox_attribute_group::Spinbox_attribute_group()
 {
@@ -64,6 +71,9 @@ Spinbox_attribute_group::Spinbox_attribute_group()
 
 void Spinbox_attribute_group::Event(ALLEGRO_EVENT event)
 {
+	Group::Event(event);
+	float v = value.Get_value();
+	widget->Set_value(v);
 }
 
 }
