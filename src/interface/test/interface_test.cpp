@@ -14,6 +14,7 @@
 #include "interface/Widget_editor.h"
 #include "interface/Group.h"
 #include "interface/Attribute_group.h"
+#include "interface/Attribute_groups.h"
 
 interface::Renderer* renderer = NULL;
 interface::Group* root_interface;
@@ -28,55 +29,6 @@ typedef std::map<interface::Widget*, interface::Attribute_group*> Attribute_grou
 Attribute_groups attribute_groups;
 
 
-namespace interface
-{
-
-class Spinbox_attribute_group: public Attribute_group
-{
-public:
-	Spinbox_attribute_group();
-	virtual void Set_widget(Widget* w);
-	virtual void Event(ALLEGRO_EVENT event);
-private:
-	Spinbox value;
-	Spinbox* widget;
-};
-
-void Spinbox_attribute_group::Set_widget(Widget* w)
-{
-	widget = dynamic_cast<Spinbox*>(w);
-}
-
-Spinbox_attribute_group::Spinbox_attribute_group()
-{
-	float margin = 4;
-	float attributes_max_y = 0;
-
-	Label* label = new Label;
-	label->Set_bounding_rect(Rect(margin, attributes_max_y, 200, 20));
-	label->Set_text("Spinbox attributes");
-	Add_widget(label);
-	attributes_max_y += 20;
-
-	//Attribute Value
-	label = new Label;
-	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
-	label->Set_text("Value");
-	Add_widget(label);
-
-	value.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 100, 20));
-	Add_widget(&value);
-	attributes_max_y += 20;
-}
-
-void Spinbox_attribute_group::Event(ALLEGRO_EVENT event)
-{
-	Group::Event(event);
-	float v = value.Get_value();
-	widget->Set_value(v);
-}
-
-}
 
 interface::Button* button_left;
 interface::Button* button_right;
