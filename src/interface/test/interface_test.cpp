@@ -67,6 +67,8 @@ bool Init()
 	button_prototype->Set_label("Button");
 	prototypes.push_back(button_prototype);
 
+	attribute_groups[button] = new interface::AG_Button;
+
 	//Label
 	button = new interface::Button;
 	button->Set_bounding_rect(interface::Rect(0, 20, 100, 20));
@@ -102,7 +104,7 @@ bool Init()
 	spinbox_prototype->Set_bounding_rect(interface::Rect(100, 0, 100, 20));
 	prototypes.push_back(spinbox_prototype);
 
-	attribute_groups[button] = new interface::Spinbox_attribute_group;
+	attribute_groups[button] = new interface::AG_Spinbox;
 
 
 	root_interface = new interface::Group;

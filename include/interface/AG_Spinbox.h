@@ -7,10 +7,10 @@
 namespace interface
 {
 
-class Spinbox_attribute_group: public Attribute_group
+class AG_Spinbox: public Attribute_group
 {
 public:
-	Spinbox_attribute_group();
+	AG_Spinbox();
 	virtual void Set_widget(Widget* w);
 	virtual void Event(ALLEGRO_EVENT event);
 private:
