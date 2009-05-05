@@ -90,7 +90,7 @@ void Button::Render()
 	}
 }
 
-void Button::Set_label(const std::string& text)
+void Button::Set_text(const std::string& text)
 {
 	if(label == NULL)
 	{
@@ -100,6 +100,11 @@ void Button::Set_label(const std::string& text)
 	label->Set_text(text);
 	label->Set_alignment(HALIGN_CENTER);
 	label->Set_vertical_alignment(VALIGN_CENTER);
+}
+
+std::string Button::Get_text()
+{
+	return label->Get_text();
 }
 
 }

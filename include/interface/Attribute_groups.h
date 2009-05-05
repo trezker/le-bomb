@@ -7,5 +7,6 @@
 
 #include "interface/AG_Spinbox.h"
 #include "interface/AG_Button.h"
+#include "interface/AG_Label.h"
 
 #endif

@@ -15,7 +15,8 @@ public:
 	virtual Widget* Clone();
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
-	void Set_label(const std::string& text);
+	void Set_text(const std::string& text);
+	std::string Get_text();
 private:
 	//Was pressed by mouse, mouse not released yet
 	bool pressed;

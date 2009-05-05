@@ -58,13 +58,13 @@ bool Init()
 	//Button
 	interface::Button* button = new interface::Button;
 	button->Set_bounding_rect(interface::Rect(0, 0, 100, 20));
-	button->Set_label("Button");
+	button->Set_text("Button");
 	renderer->Add_widget(button);
 	root_widgets.push_back(button);
 
 	interface::Button* button_prototype = new interface::Button;
 	button_prototype->Set_bounding_rect(interface::Rect(100, 0, 100, 20));
-	button_prototype->Set_label("Button");
+	button_prototype->Set_text("Button");
 	prototypes.push_back(button_prototype);
 
 	attribute_groups[button] = new interface::AG_Button;
@@ -72,7 +72,7 @@ bool Init()
 	//Label
 	button = new interface::Button;
 	button->Set_bounding_rect(interface::Rect(0, 20, 100, 20));
-	button->Set_label("Label");
+	button->Set_text("Label");
 	renderer->Add_widget(button);
 	root_widgets.push_back(button);
 
@@ -81,10 +81,12 @@ bool Init()
 	label_prototype->Set_text("Label");
 	prototypes.push_back(label_prototype);
 
+	attribute_groups[button] = new interface::AG_Label;
+
 	//Inputbox
 	button = new interface::Button;
 	button->Set_bounding_rect(interface::Rect(0, 40, 100, 20));
-	button->Set_label("Inputbox");
+	button->Set_text("Inputbox");
 	renderer->Add_widget(button);
 	root_widgets.push_back(button);
 
@@ -96,7 +98,7 @@ bool Init()
 	//Spinbox
 	button = new interface::Button;
 	button->Set_bounding_rect(interface::Rect(0, 60, 100, 20));
-	button->Set_label("Spinbox");
+	button->Set_text("Spinbox");
 	renderer->Add_widget(button);
 	root_widgets.push_back(button);
 

@@ -1,28 +1,27 @@
-#include "interface/AG_Button.h"
-#include "interface/Label.h"
+#include "interface/AG_Label.h"
 
 namespace interface
 {
 
-Widget* AG_Button::Clone()
+Widget* AG_Label::Clone()
 {
-	return new AG_Button();
+	return new AG_Label();
 }
 
-void AG_Button::Set_widget(Widget* w)
+void AG_Label::Set_widget(Widget* w)
 {
-	widget = dynamic_cast<Button*>(w);
+	widget = dynamic_cast<Label*>(w);
 	text.Set_text(widget->Get_text());
 }
 
-AG_Button::AG_Button()
+AG_Label::AG_Label()
 {
 	float margin = 4;
 	float attributes_max_y = 0;
 
 	Label* label = new Label;
 	label->Set_bounding_rect(Rect(margin, attributes_max_y, 200, 20));
-	label->Set_text("Button attributes");
+	label->Set_text("Label attributes");
 	Add_widget(label);
 	attributes_max_y += 20;
 
@@ -37,7 +36,7 @@ AG_Button::AG_Button()
 	attributes_max_y += 20;
 }
 
-void AG_Button::Event(ALLEGRO_EVENT event)
+void AG_Label::Event(ALLEGRO_EVENT event)
 {
 	Group::Event(event);
 	std::string t = text.Get_text();

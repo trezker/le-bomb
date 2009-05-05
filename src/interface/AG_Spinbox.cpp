@@ -41,7 +41,6 @@ void AG_Spinbox::Event(ALLEGRO_EVENT event)
 	Group::Event(event);
 	float v = value.Get_value();
 	widget->Set_value(v);
-//	printf("%f, %f", v, widget->Get_value());
 }
 
 }

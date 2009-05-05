@@ -15,6 +15,7 @@ public:
 	virtual void Render();
 	
 	void Set_text(const std::string& t);
+	std::string Get_text();
 	void Set_alignment(HAlignment a);
 	void Set_vertical_alignment(VAlignment a);
 private:

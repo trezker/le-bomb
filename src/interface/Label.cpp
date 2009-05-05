@@ -26,6 +26,11 @@ void Label::Set_text(const std::string& t)
 	text = t;
 }
 
+std::string Label::Get_text()
+{
+	return text;
+}
+
 void Label::Set_alignment(HAlignment a)
 {
 	halignment = a;
