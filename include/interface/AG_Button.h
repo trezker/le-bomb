@@ -12,6 +12,7 @@ class AG_Button: public Attribute_group
 {
 public:
 	AG_Button();
+	virtual Widget* Clone();
 	virtual void Set_widget(Widget* w);
 	virtual void Event(ALLEGRO_EVENT event);
 private:

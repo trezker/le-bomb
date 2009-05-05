@@ -266,7 +266,7 @@ void Widget_editor::Set_widget(Widget* w)
 
 void Widget_editor::Add_attribute_group(Attribute_group* a)
 {
-	attribute_groups.push_back(a);
+	attribute_groups.push_back(dynamic_cast<Attribute_group*>(a->Clone()));
 }
 
 }

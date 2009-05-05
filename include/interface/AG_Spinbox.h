@@ -11,6 +11,7 @@ class AG_Spinbox: public Attribute_group
 {
 public:
 	AG_Spinbox();
+	virtual Widget* Clone();
 	virtual void Set_widget(Widget* w);
 	virtual void Event(ALLEGRO_EVENT event);
 private:

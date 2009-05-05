@@ -19,7 +19,6 @@ public:
 	virtual void Render();
 	void Set_widget(Widget* w);
 	void Add_attribute_group(Attribute_group* a);
-//	void Add_editable_attribute(std::string& label, Widget* control, float control_width);
 protected:
 	Widget* widget;
 	Group* attribute_group;

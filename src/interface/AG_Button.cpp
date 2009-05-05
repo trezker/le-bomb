@@ -4,6 +4,11 @@
 namespace interface
 {
 
+Widget* AG_Button::Clone()
+{
+	return new AG_Button();
+}
+
 void AG_Button::Set_widget(Widget* w)
 {
 	widget = dynamic_cast<Button*>(w);
