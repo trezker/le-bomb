@@ -123,13 +123,17 @@ bool Init()
 	inputbox->Set_text("Inputbox");
 	renderer->Add_widget(inputbox);
 	root_interface->Add_widget(inputbox);
-	
+
 	button_left = new interface::Button;
 	button_left->Set_bounding_rect(interface::Rect(100, 120, 33, 20));
+	button_left->Set_radio(true);
+	button_left->Press();
 	button_center = new interface::Button;
 	button_center->Set_bounding_rect(interface::Rect(134, 120, 33, 20));
+	button_center->Set_radio(true);
 	button_right = new interface::Button;
 	button_right->Set_bounding_rect(interface::Rect(168, 120, 33, 20));
+	button_right->Set_radio(true);
 
 	renderer->Add_widget(button_left);
 	renderer->Add_widget(button_center);
@@ -204,14 +208,20 @@ void Event(ALLEGRO_EVENT event)
 			if(e.source == button_left)
 			{
 				inputbox->Set_alignment(interface::HALIGN_LEFT);
+				button_center->Release();
+				button_right->Release();
 			}
 			if(e.source == button_right)
 			{
 				inputbox->Set_alignment(interface::HALIGN_RIGHT);
+				button_center->Release();
+				button_left->Release();
 			}
 			if(e.source == button_center)
 			{
 				inputbox->Set_alignment(interface::HALIGN_CENTER);
+				button_left->Release();
+				button_right->Release();
 			}
 		}
 	}

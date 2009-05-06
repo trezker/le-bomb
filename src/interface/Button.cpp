@@ -41,9 +41,30 @@ void Button::Event(const ALLEGRO_EVENT &event)
 	{
 		if(pressed && Get_bounding_rect().Contains_point(event.mouse.x, event.mouse.y))
 		{
-			if(toggle)
+			if(toggle || radio)
 			{
 				activated = !activated;
+				if(activated)
+				{
+					interface::Event e;
+					e.source = this;
+					e.type = "Activated";
+					Emit_event(e);
+				}
+				else
+				{
+					if(radio)
+					{
+						activated = true;
+					}
+					else
+					{
+						interface::Event e;
+						e.source = this;
+						e.type = "Deactivated";
+						Emit_event(e);
+					}
+				}
 			}
 			else
 			{
@@ -75,7 +96,7 @@ void Button::Event(const ALLEGRO_EVENT &event)
 void Button::Render()
 {
 	Renderer* renderer = Get_renderer();
-	if((pressed && mouse_over) || (activated && toggle))
+	if((pressed && mouse_over) || (activated))
 	{
 		renderer->Draw_sunken_panel(Get_bounding_rect());
 	}
@@ -87,6 +108,50 @@ void Button::Render()
 	{
 		label->Set_bounding_rect(Get_bounding_rect());
 		label->Render();
+	}
+}
+
+void Button::Set_toggle(bool t)
+{
+	toggle = t;
+}
+
+bool Button::Get_toggle()
+{
+	return toggle;
+}
+
+void Button::Set_radio(bool t)
+{
+	radio = t;
+}
+
+bool Button::Get_radio()
+{
+	return radio;
+}
+
+void Button::Press()
+{
+	if(!activated)
+	{
+		activated = true;
+		interface::Event e;
+		e.source = this;
+		e.type = "Activated";
+		Emit_event(e);
+	}
+}
+
+void Button::Release()
+{
+	if(activated)
+	{
+		activated = false;
+		interface::Event e;
+		e.source = this;
+		e.type = "Deactivated";
+		Emit_event(e);
 	}
 }
 

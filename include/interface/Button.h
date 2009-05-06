@@ -15,6 +15,12 @@ public:
 	virtual Widget* Clone();
 	virtual void Event(const ALLEGRO_EVENT &event);
 	virtual void Render();
+	void Set_toggle(bool t);
+	bool Get_toggle();
+	void Set_radio(bool t);
+	bool Get_radio();
+	void Press();
+	void Release();
 	void Set_text(const std::string& text);
 	std::string Get_text();
 private:
@@ -26,6 +32,7 @@ private:
 	bool activated;
 	//Button toggles
 	bool toggle;
+	bool radio;
 	Label* label;
 };
 
