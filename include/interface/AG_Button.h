@@ -17,6 +17,8 @@ public:
 	virtual void Event(ALLEGRO_EVENT event);
 private:
 	Inputbox text;
+	Button toggle;
+	Button radio;
 	Button* widget;
 };
 
