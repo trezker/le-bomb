@@ -10,6 +10,7 @@ Button::Button()
 ,mouse_over(false)
 ,activated(false)
 ,toggle(false)
+,radio(false)
 ,label(NULL)
 {
 }

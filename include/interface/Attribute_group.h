@@ -2,6 +2,7 @@
 #define Attribute_group_h
 
 #include "interface/Group.h"
+#include <string>
 
 namespace interface
 {
@@ -16,9 +17,12 @@ public:
 	//The group total height 
 	float Get_height();
 	void Set_height(float h);
+	void New_attribute(const std::string& text);
 	virtual void Event(ALLEGRO_EVENT event);
 protected:
 	float height;
+	float margin;
+	float attributes_max_y;
 };
 
 }

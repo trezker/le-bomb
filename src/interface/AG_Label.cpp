@@ -17,31 +17,18 @@ void AG_Label::Set_widget(Widget* w)
 
 AG_Label::AG_Label()
 {
-	float margin = 4;
-	float attributes_max_y = 0;
-
 	Label* label = new Label;
 	label->Set_bounding_rect(Rect(margin, attributes_max_y, 200, 20));
 	label->Set_text("Label attributes");
 	Add_widget(label);
-	attributes_max_y += 20;
 
 	//Attribute Text
-	label = new Label;
-	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
-	label->Set_text("Text");
-	Add_widget(label);
-
+	New_attribute("Text");
 	text.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 100, 20));
 	Add_widget(&text);
-	attributes_max_y += 20;
 
 	//Attribute Alignment
-	label = new Label;
-	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
-	label->Set_text("Alignment");
-	Add_widget(label);
-
+	New_attribute("Alignment");
 	align_left.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 33, 20));
 	align_left.Set_radio(true);
 	align_left.Set_text("L");
@@ -56,14 +43,9 @@ AG_Label::AG_Label()
 	Add_widget(&align_left);
 	Add_widget(&align_center);
 	Add_widget(&align_right);
-	attributes_max_y += 20;
 
 	//Attribute Vertical Alignment
-	label = new Label;
-	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
-	label->Set_text("V align");
-	Add_widget(label);
-
+	New_attribute("V Align");
 	valign_top.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 33, 20));
 	valign_top.Set_radio(true);
 	valign_top.Set_text("T");
@@ -78,7 +60,6 @@ AG_Label::AG_Label()
 	Add_widget(&valign_top);
 	Add_widget(&valign_center);
 	Add_widget(&valign_bottom);
-	attributes_max_y += 20;
 }
 
 void AG_Label::Event(ALLEGRO_EVENT event)
