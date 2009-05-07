@@ -26,7 +26,7 @@ AG_Button::AG_Button()
 	Add_widget(label);
 	attributes_max_y += 20;
 
-	//Attribute Value
+	//Attribute Text
 	label = new Label;
 	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
 	label->Set_text("Text");

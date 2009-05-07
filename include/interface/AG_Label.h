@@ -4,6 +4,7 @@
 #include "interface/Attribute_group.h"
 #include "interface/Label.h"
 #include "interface/Inputbox.h"
+#include "interface/Button.h"
 
 namespace interface
 {
@@ -17,6 +18,7 @@ public:
 	virtual void Event(ALLEGRO_EVENT event);
 private:
 	Inputbox text;
+	Button align_left, align_center, align_right;
 	Label* widget;
 };
 
