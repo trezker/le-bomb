@@ -57,6 +57,28 @@ AG_Label::AG_Label()
 	Add_widget(&align_center);
 	Add_widget(&align_right);
 	attributes_max_y += 20;
+
+	//Attribute Vertical Alignment
+	label = new Label;
+	label->Set_bounding_rect(Rect(margin, attributes_max_y, 100, 20));
+	label->Set_text("V align");
+	Add_widget(label);
+
+	valign_top.Set_bounding_rect(interface::Rect(100-margin, attributes_max_y, 33, 20));
+	valign_top.Set_radio(true);
+	valign_top.Set_text("T");
+	valign_top.Press();
+	valign_center.Set_bounding_rect(interface::Rect(134-margin, attributes_max_y, 33, 20));
+	valign_center.Set_radio(true);
+	valign_center.Set_text("C");
+	valign_bottom.Set_bounding_rect(interface::Rect(168-margin, attributes_max_y, 33, 20));
+	valign_bottom.Set_radio(true);
+	valign_bottom.Set_text("B");
+
+	Add_widget(&valign_top);
+	Add_widget(&valign_center);
+	Add_widget(&valign_bottom);
+	attributes_max_y += 20;
 }
 
 void AG_Label::Event(ALLEGRO_EVENT event)
@@ -93,6 +115,25 @@ void AG_Label::Event(ALLEGRO_EVENT event)
 				widget->Set_alignment(interface::HALIGN_CENTER);
 				align_right.Release();
 				align_left.Release();
+			}
+
+			if(e.source == &valign_top)
+			{
+				widget->Set_vertical_alignment(interface::VALIGN_TOP);
+				valign_center.Release();
+				valign_bottom.Release();
+			}
+			if(e.source == &valign_bottom)
+			{
+				widget->Set_vertical_alignment(interface::VALIGN_BOTTOM);
+				valign_center.Release();
+				valign_top.Release();
+			}
+			if(e.source == &valign_center)
+			{
+				widget->Set_vertical_alignment(interface::VALIGN_CENTER);
+				valign_bottom.Release();
+				valign_top.Release();
 			}
 		}
 	}

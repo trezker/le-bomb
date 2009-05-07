@@ -19,6 +19,7 @@ public:
 private:
 	Inputbox text;
 	Button align_left, align_center, align_right;
+	Button valign_top, valign_center, valign_bottom;
 	Label* widget;
 };
 
