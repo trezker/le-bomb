@@ -1,7 +1,7 @@
 #ifndef Transformnode_h
 #define Transformnode_h
 
-#include "Vector3.h"
+#include "math/Vector3.h"
 #include "Scenenode.h"
 
 class Transformnode: public Scenenode

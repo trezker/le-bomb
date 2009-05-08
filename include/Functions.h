@@ -1,7 +1,7 @@
 #ifndef Functions_h
 #define Functions_h
 
-#include "Vector3.h"
+#include "math/Vector3.h"
 #include "scenegraph/Cameranode.h"
 
 void Prerender_perspective_view(float fov, float aspect, float near, float far);

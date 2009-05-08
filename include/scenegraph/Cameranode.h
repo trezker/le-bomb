@@ -2,7 +2,7 @@
 #define Cameranode_h
 
 #include <vector>
-#include "Vector3.h"
+#include "math/Vector3.h"
 #include "Scenenode.h"
 
 class Cameranode: public Scenenode

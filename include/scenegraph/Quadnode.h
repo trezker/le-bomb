@@ -1,7 +1,7 @@
 #ifndef Quadnode_h
 #define Quadnode_h
 
-#include "Vector3.h"
+#include "math/Vector3.h"
 #include "Scenenode.h"
 #include <allegro5/allegro5.h>
 #include <allegro5/a5_opengl.h>

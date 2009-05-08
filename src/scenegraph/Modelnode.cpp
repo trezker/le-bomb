@@ -1,6 +1,6 @@
 #include "scenegraph/Modelnode.h"
 #include <fstream>
-#include "Vector3.h"
+#include "math/Vector3.h"
 #include "scenegraph/Quadnode.h"
 
 void Modelnode::Set_texture(ALLEGRO_BITMAP* t)
