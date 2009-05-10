@@ -139,6 +139,16 @@ float Spinbox::Get_value()
 	return value;
 }
 
+void Spinbox::Set_stepsize(float v)
+{
+	stepsize = v;
+}
+
+float Spinbox::Get_stepsize()
+{
+	return stepsize;
+}
+
 void Spinbox::New_bounding_rect()
 {
 	Rect brect = Get_bounding_rect();

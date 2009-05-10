@@ -31,6 +31,8 @@ interface::Group* root_interface;
 interface::Button* load_button;
 interface::Label* filename_label;
 
+interface::Spinbox* rotate_y_spinbox;
+
 interface::Event_queue event_queue;
 ALLEGRO_FONT* font = NULL;
 
@@ -42,6 +44,8 @@ Modelnode* model;
 Cameranode* camera;
 Lightnode* light;
 Scenenode root;
+
+float rotate_y = 0;
 
 ALLEGRO_BITMAP* texture;
 
@@ -62,11 +66,16 @@ bool Init()
 	filename_label = new interface::Label;
 	filename_label->Set_bounding_rect(interface::Rect(0, 30, 100, 20));
 	filename_label->Set_text("No model loaded");
+	
+	rotate_y_spinbox = new interface::Spinbox;
+	rotate_y_spinbox->Set_bounding_rect(interface::Rect(0, 60, 100, 20));
+	rotate_y_spinbox->Set_stepsize(.1);
 
 	root_interface = new interface::Group();
 	renderer->Add_widget(root_interface);
 	root_interface->Add_widget(load_button);
 	root_interface->Add_widget(filename_label);
+	root_interface->Add_widget(rotate_y_spinbox);
 
 
 	camera = new Cameranode();
@@ -82,11 +91,12 @@ bool Init()
 	light->Attach_node(transform);
 	model = NULL;
 
+	texture = al_load_bitmap("media/darwinian_textured.png");
+
 	model = new Modelnode;
-	model->Loadmodel("media/darwinian_textured.tmf");
+//	model->Loadmodel("media/darwinian_textured.tmf");
 	transform->Attach_node(model);
 
-	texture = al_load_bitmap("media/darwinian_textured.png");
 	model->Set_texture(texture);
 
 	return true;
@@ -101,7 +111,11 @@ void Shutdown()
 
 void Update(double dt)
 {
+	Vector3 rot = transform->Get_rotation();
+	rot.y += rotate_y;
+	transform->Set_rotation(rot);
 }
+
 void Prerender_perspective_view(float fov, float aspect, float near, float far)
 {
 	glMatrixMode(GL_PROJECTION);
@@ -150,16 +164,40 @@ void Event(ALLEGRO_EVENT event)
 			if(e.source == load_button)
 			{
 				ALLEGRO_NATIVE_DIALOG *file_chooser = al_create_native_file_dialog(
-					al_path_create("./media/"), "Choose model to load", ".", ALLEGRO_FILECHOOSER_FILE_MUST_EXIST);
+					al_path_create("./media/"), "Choose model to load", ".;tmf", ALLEGRO_FILECHOOSER_FILE_MUST_EXIST);
 				al_show_native_file_dialog(file_chooser);
 				if(al_get_native_file_dialog_count(file_chooser) != 0)
 				{
 					const ALLEGRO_PATH *path = al_get_native_file_dialog_path(file_chooser, 0);
 					const char *char_path = al_path_to_string(path, '/');
 					filename_label->Set_text(char_path);
+
+					model->Loadmodel(char_path);
 				}
 				al_destroy_native_dialog(file_chooser);
 			}
+		}
+	}
+	
+	rotate_y = rotate_y_spinbox->Get_value();
+
+	ALLEGRO_MOUSE_STATE mouse_state;
+	al_get_mouse_state(&mouse_state);
+	bool lmb = al_mouse_button_down(&mouse_state, 1);
+
+	ALLEGRO_KEYBOARD_STATE keyboard_state;
+	al_get_keyboard_state(&keyboard_state);
+	
+	if (ALLEGRO_EVENT_MOUSE_AXES == event.type)
+	{
+		if(lmb)
+		{
+			Vector3 rot = transform->Get_rotation();
+			if(!al_key_down(&keyboard_state, ALLEGRO_KEY_X))
+				rot.y += event.mouse.dx;
+			if(!al_key_down(&keyboard_state, ALLEGRO_KEY_Y))
+				rot.x += event.mouse.dy;
+			transform->Set_rotation(rot);
 		}
 	}
 }

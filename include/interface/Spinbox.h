@@ -17,6 +17,8 @@ public:
 	virtual void Render();
 	void Set_value(float v);
 	float Get_value();
+	void Set_stepsize(float v);
+	float Get_stepsize();
 private:
 	virtual void New_bounding_rect();
 
