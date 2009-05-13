@@ -20,6 +20,8 @@ public:
 	Vector3 Get_position();
 	Vector3 Get_rotation();
 	
+	void Set_rotate_around_world_origo(bool t);
+	
 	virtual void Prerender();
 	virtual void Postrender();
 private:
@@ -31,6 +33,8 @@ private:
 	Vector3 front;
 	Vector3 right;
 	float matrix[16];
+	
+	bool rotate_around_world_origo;
 };
 
 #endif

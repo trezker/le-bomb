@@ -79,7 +79,8 @@ bool Init()
 
 
 	camera = new Cameranode();
-	camera->Set_position(Vector3(0, 1.5f, 0));
+	camera->Set_rotate_around_world_origo(true);
+	camera->Set_position(Vector3(0, 1.5f, 5));
 	camera->Set_rotation(Vector3(0, 0, 0));
 	root.Attach_node(camera);
 
@@ -87,7 +88,7 @@ bool Init()
 	camera->Attach_node(light);
 
 	transform = new Transformnode();
-	transform->Set_position(Vector3(0, 0, -5));
+	transform->Set_position(Vector3(0, 0, 0));
 	light->Attach_node(transform);
 	model = NULL;
 
@@ -192,12 +193,12 @@ void Event(ALLEGRO_EVENT event)
 	{
 		if(lmb)
 		{
-			Vector3 rot = transform->Get_rotation();
+			Vector3 rot = camera->Get_rotation();
 			if(!al_key_down(&keyboard_state, ALLEGRO_KEY_X))
 				rot.y += event.mouse.dx;
 			if(!al_key_down(&keyboard_state, ALLEGRO_KEY_Y))
 				rot.x += event.mouse.dy;
-			transform->Set_rotation(rot);
+			camera->Set_rotation(rot);
 		}
 	}
 }

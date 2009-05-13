@@ -8,6 +8,7 @@
 
 Cameranode::Cameranode()
 :lookat(false)
+,rotate_around_world_origo(false)
 {}
 
 void Cameranode::Look_at(Vector3 p)
@@ -81,15 +82,30 @@ Vector3 Cameranode::Get_rotation()
 	return rotation;
 }
 
+void Cameranode::Set_rotate_around_world_origo(bool t)
+{
+	rotate_around_world_origo = t;
+}
+
 void Cameranode::Prerender()
 {
 	glPushMatrix();
 	if(!lookat)
 	{
-		glRotatef(rotation.x, 1, 0, 0);
-		glRotatef(rotation.y, 0, 1, 0);
-		glRotatef(rotation.z, 0, 0, 1);
-		glTranslatef(-position.x, -position.y, -position.z);
+		if(!rotate_around_world_origo)
+		{
+			glRotatef(rotation.x, 1, 0, 0);
+			glRotatef(rotation.y, 0, 1, 0);
+			glRotatef(rotation.z, 0, 0, 1);
+			glTranslatef(-position.x, -position.y, -position.z);
+		}
+		else
+		{
+			glTranslatef(-position.x, -position.y, -position.z);
+			glRotatef(rotation.x, 1, 0, 0);
+			glRotatef(rotation.y, 0, 1, 0);
+			glRotatef(rotation.z, 0, 0, 1);
+		}
 	}
 	else
 	{
