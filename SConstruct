@@ -8,7 +8,7 @@ env = Environment(CPPPATH = ['include'])
 debug = ARGUMENTS.get('debug', 0)
 if int(debug):
 	env.Append(CCFLAGS = '-g')
-	env.Append(LIBS=['GL','GLU','glut','allegro-debug-4.9.11','a5_iio-debug-4.9.11','a5_font-debug-4.9.11','a5_ttf-debug-4.9.10','a5_primitives-debug-4.9.11','a5_dialog-debug-4.9.11','zoidcomd'])
+	env.Append(LIBS=['GL','GLU','glut','allegro-debug-4.9.11','a5_iio-debug-4.9.11','a5_font-debug-4.9.11','a5_ttf-debug-4.9.11','a5_primitives-debug-4.9.11','a5_dialog-debug-4.9.11','zoidcomd'])
 else:
 	env.Append(LIBS=['GL','GLU','glut','allegro-4.9.11','a5_iio-4.9.11','a5_font-4.9.11','a5_ttf-4.9.11','a5_primitives-4.9.11','a5_dialog-4.9.11','zoidcom'])
 

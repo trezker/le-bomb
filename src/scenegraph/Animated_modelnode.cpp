@@ -26,8 +26,9 @@ Animated_modelnode::~Animated_modelnode()
 		Destroy_skeleton(skeleton);
 		skeleton = NULL;
 	}
-
+/*
 	FreeVertexArrays (&vertexArray, &vertexIndices);
+*/
 }
 
 void Animated_modelnode::Set_texture(ALLEGRO_BITMAP* t)
