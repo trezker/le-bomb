@@ -17,9 +17,13 @@ Player::Player()
 {
 	transform = new Transformnode();
 	Attach_node(transform);
-	model = new Modelnode;
+/*	model = new Modelnode;
 //	model->Loadmodel("media/darwinian.raw");
 	model->Loadmodel("media/darwinian_textured.tmf");
+*/
+	model = new Animated_modelnode;
+	model->Load_model("media/darw.md5mesh");
+	model->Load_animation("media/darw_walk.md5anim");
 	transform->Attach_node(model);
 }
 
@@ -49,6 +53,8 @@ void Player::Set_texture(ALLEGRO_BITMAP* t)
 void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heightmap* heightmap)
 {
 	Process_net_events();
+
+	model->Update(dt);
 
 	Vector3 direction(move_left-move_right, 0/*move_up-move_down*/, move_forward-move_backward);
 	direction.Normalize();

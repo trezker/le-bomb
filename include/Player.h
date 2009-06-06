@@ -2,7 +2,7 @@
 #define Player_h
 
 #include "scenegraph/Transformnode.h"
-#include "scenegraph/Modelnode.h"
+#include "scenegraph/Animated_modelnode.h"
 #include "scenegraph/Scenenode.h"
 #include "Heightmap.h"
 #include <allegro5/allegro5.h>
@@ -34,7 +34,7 @@ private:
 	float fallspeed;
 
 	Transformnode* transform;
-	Modelnode* model;
+	Animated_modelnode* model;
 
 	bool move_forward;
 	bool move_backward;

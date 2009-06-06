@@ -8,9 +8,9 @@ env = Environment(CPPPATH = ['include'])
 debug = ARGUMENTS.get('debug', 0)
 if int(debug):
 	env.Append(CCFLAGS = '-g')
-	env.Append(LIBS=['allegro-debug-4.9.11','a5_iio-debug-4.9.11','a5_font-debug-4.9.11','a5_ttf-debug-4.9.10','a5_primitives-debug-4.9.11','a5_dialog-debug-4.9.11','zoidcomd'])
+	env.Append(LIBS=['GL','GLU','glut','allegro-debug-4.9.11','a5_iio-debug-4.9.11','a5_font-debug-4.9.11','a5_ttf-debug-4.9.10','a5_primitives-debug-4.9.11','a5_dialog-debug-4.9.11','zoidcomd'])
 else:
-	env.Append(LIBS=['allegro-4.9.11','a5_iio-4.9.11','a5_font-4.9.11','a5_ttf-4.9.11','a5_primitives-4.9.11','a5_dialog-4.9.11','zoidcom'])
+	env.Append(LIBS=['GL','GLU','glut','allegro-4.9.11','a5_iio-4.9.11','a5_font-4.9.11','a5_ttf-4.9.11','a5_primitives-4.9.11','a5_dialog-4.9.11','zoidcom'])
 
 env.Append(CCFLAGS = '-Wall')
 
@@ -18,6 +18,10 @@ env.Append(CCFLAGS = '-Wall')
 math_files = glob.glob('src/math/*.cpp')
 math_files = [x.replace("src", "obj") for x in math_files]
 math = env.StaticLibrary('lib/math', math_files)
+
+#md5_files = glob.glob('src/md5/*.cpp')
+#md5_files = [x.replace("src", "obj") for x in md5_files]
+#md5 = env.StaticLibrary('lib/md5', md5_files)
 
 scenegraph_files = glob.glob('src/scenegraph/*.cpp')
 scenegraph_files = [x.replace("src", "obj") for x in scenegraph_files]
