@@ -43,7 +43,6 @@
 float *texCoords = NULL;
 vec3_t *normals = NULL;
 
-
 /**
  * Load an MD5 model from file.
  */
@@ -342,6 +341,18 @@ PrepareMesh (const struct md5_mesh_t *mesh,
 		in2[1] = (*v[2])[1] - (*v[0])[1];
 		in2[2] = (*v[2])[2] - (*v[0])[2];
 		vec3_CrossProduct(in2, in1, &normals[i*3]);
+		float x = normals[i*3][0];
+		float y = normals[i*3][1];
+		float z = normals[i*3][2];
+		float len = sqrt( x * x + y * y + z * z );
+		len = (len != 0.0f ? len : 1.0f);
+		float lengthMul = 1.0f / len;
+		x *= lengthMul;
+		y *= lengthMul;
+		z *= lengthMul;
+		normals[i*3][0] = x;
+		normals[i*3][1] = y;
+		normals[i*3][2] = z;
 /*		normals[i][0] = 1;
 		normals[i][1] = 0;
 		normals[i][2] = 0;
@@ -444,7 +455,17 @@ void Draw_model(struct md5_model_t md5file, struct md5_joint_t *skeleton, vec3_t
 	
 		glDrawElements (GL_TRIANGLES, md5file.meshes[i].num_tris * 3,
 						GL_UNSIGNED_INT, vertexIndices);
-	}
+
+/*		glBegin(GL_LINES);
+		for(int j = 0; j < md5file.meshes[i].num_tris*3; ++j)
+		{
+			vec3_t *v = &vertexArray[vertexIndices[j]];
+			vec3_t *n = &normals[vertexIndices[j]];
+			glTexCoord1f(0); glVertex3f((*v)[0], (*v)[1], (*v)[2]);
+			glTexCoord1f(1); glVertex3f((*v)[0]+(*n)[0], (*v)[1]+(*n)[1], (*v)[2]+(*n)[2]);
+		}
+		glEnd();
+*/	}
 
 	glDisableClientState (GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState (GL_NORMAL_ARRAY);
