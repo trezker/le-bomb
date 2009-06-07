@@ -23,7 +23,7 @@ Player::Player()
 */
 	model = new Animated_modelnode;
 	model->Load_model("media/darw.md5mesh");
-	model->Load_animation("media/darw_walk.md5anim");
+	model->Load_animation("media/darw_walk.md5anim", "walk");
 	transform->Attach_node(model);
 }
 
@@ -82,6 +82,11 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 		{
 			speed += map_normal*1.1;
 		}
+		model->Pause_animation(false);
+	}
+	else
+	{
+		model->Pause_animation(true);
 	}
 	
 	Vector3 newpos = Get_position()+speed*speed_factor;

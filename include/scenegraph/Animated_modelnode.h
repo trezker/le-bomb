@@ -6,6 +6,7 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/a5_opengl.h>
 #include <vector>
+#include <map>
 #include "math/Vector3.h"
 #include "scenegraph/md5model.h"
 
@@ -16,22 +17,27 @@ public:
 	~Animated_modelnode();
 	void Set_texture(ALLEGRO_BITMAP* t);
 	void Load_model(const std::string& filename);
-	void Load_animation(const std::string& filename);
+	void Load_animation(const std::string& filename, const std::string& name);
+	void Pause_animation(bool b);
 	virtual void Prerender();
 	virtual void Render();
 	virtual void Postrender();
 	
 	void Update(double dt);
 private:
+	typedef std::map<std::string, md5_anim_t> Animations;
+	Animations animations;
+	md5_anim_t *active_animation;
+
 	ALLEGRO_BITMAP* texture;
 
-	struct md5_model_t md5file;
-	struct md5_anim_t md5anim;
+	md5_model_t md5file;
 
 	int animated;
+	bool paused;
 
-	struct md5_joint_t *skeleton;
-	struct anim_info_t animInfo;
+	md5_joint_t *skeleton;
+	anim_info_t animInfo;
 
 	vec3_t *vertexArray;
 	GLuint *vertexIndices;

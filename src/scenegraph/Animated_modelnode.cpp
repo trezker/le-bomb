@@ -5,6 +5,7 @@
 
 Animated_modelnode::Animated_modelnode()
 {
+	paused = false;
 	animated = 0;
 	skeleton = NULL;
 }
@@ -12,7 +13,8 @@ Animated_modelnode::Animated_modelnode()
 Animated_modelnode::~Animated_modelnode()
 {
 	FreeModel (&md5file);
-	FreeAnim (&md5anim);
+	
+//	FreeAnim (&md5anim);
 
 	if (animated && skeleton)
 	{
@@ -36,12 +38,13 @@ void Animated_modelnode::Load_model(const std::string& filename)
 	}
 }
 
-void Animated_modelnode::Load_animation(const std::string& filename)
+void Animated_modelnode::Load_animation(const std::string& filename, const std::string &name)
 {
 	/* Load MD5 animation file */
-	if (!ReadMD5Anim (filename.c_str(), &md5anim))
+	active_animation = &animations[name];
+	if (!ReadMD5Anim (filename.c_str(), active_animation))
 	{
-		FreeAnim (&md5anim);
+		FreeAnim (active_animation);
 	}
 	else
 	{
@@ -49,10 +52,10 @@ void Animated_modelnode::Load_animation(const std::string& filename)
 		animInfo.next_frame = 1;
 
 		animInfo.last_time = 0;
-		animInfo.max_time = 1.0 / md5anim.frameRate;
+		animInfo.max_time = 1.0 / active_animation->frameRate;
 
 		/* Allocate memory for animated skeleton */
-		skeleton = Create_skeleton(md5anim.num_joints);
+		skeleton = Create_skeleton(active_animation->num_joints);
 		animated = 1;
 	}
 }
@@ -94,13 +97,16 @@ void Animated_modelnode::Update(double dt)
 	if (animated)
 	{
 		/* Calculate current and next frames */
-		Animate (&md5anim, &animInfo, dt);
+		if(!paused)
+		{
+			Animate (active_animation, &animInfo, dt);
+		}
 
 		/* Interpolate skeletons between two frames */
-		InterpolateSkeletons (md5anim.skelFrames[animInfo.curr_frame],
-			md5anim.skelFrames[animInfo.next_frame],
-			md5anim.num_joints,
-			animInfo.last_time * md5anim.frameRate,
+		InterpolateSkeletons (active_animation->skelFrames[animInfo.curr_frame],
+			active_animation->skelFrames[animInfo.next_frame],
+			active_animation->num_joints,
+			animInfo.last_time * active_animation->frameRate,
 			skeleton);
 	}
 	else
@@ -108,4 +114,9 @@ void Animated_modelnode::Update(double dt)
 		/* No animation, use bind-pose skeleton */
 		skeleton = md5file.baseSkel;
 	}
+}
+
+void Animated_modelnode::Pause_animation(bool b)
+{
+	paused = b;
 }
