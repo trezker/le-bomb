@@ -1,4 +1,4 @@
-#include "md5/Quat.h"
+#include "scenegraph/Quat.h"
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>

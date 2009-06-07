@@ -36,24 +36,29 @@
 #include <string.h>
 #include <math.h>
 
-#include "md5/md5model.h"
+#include "scenegraph/md5model.h"
 
 
 
 float *texCoords = NULL;
 vec3_t *normals = NULL;
+vec3_t *vertexArray = NULL;
+GLuint *vertexIndices = NULL;
+int max_verts = 0;
+int max_tris = 0;
 
 /**
  * Load an MD5 model from file.
  */
 int
-ReadMD5Model (const char *filename, struct md5_model_t *mdl, int *max_verts, int *max_tris)
+ReadMD5Model (const char *filename, struct md5_model_t *mdl)
 {
   FILE *fp;
   char buff[512];
   int version;
   int curr_mesh = 0;
   int i;
+  int realloc = 0;
 
   fp = fopen (filename, "rb");
   if (!fp)
@@ -155,8 +160,11 @@ ReadMD5Model (const char *filename, struct md5_model_t *mdl, int *max_verts, int
 			malloc (sizeof (struct md5_vertex_t) * mesh->num_verts);
 		    }
 
-		  if (mesh->num_verts > *max_verts)
-		    *max_verts = mesh->num_verts;
+		  if (mesh->num_verts > max_verts)
+		  {
+				realloc = 1;
+		  		max_verts = mesh->num_verts;
+		  }
 		}
 	      else if (sscanf (buff, " numtris %d", &mesh->num_tris) == 1)
 		{
@@ -167,8 +175,11 @@ ReadMD5Model (const char *filename, struct md5_model_t *mdl, int *max_verts, int
 			malloc (sizeof (struct md5_triangle_t) * mesh->num_tris);
 		    }
 
-		  if (mesh->num_tris > *max_tris)
-		    *max_tris = mesh->num_tris;
+		  if (mesh->num_tris > max_tris)
+		  {
+			  realloc = 1;
+		      max_tris = mesh->num_tris;
+		  }
 		}
 	      else if (sscanf (buff, " numweights %d", &mesh->num_weights) == 1)
 		{
@@ -214,6 +225,12 @@ ReadMD5Model (const char *filename, struct md5_model_t *mdl, int *max_verts, int
     }
 
   fclose (fp);
+
+	if(realloc == 1)
+	{
+		FreeVertexArrays();
+		AllocVertexArrays();
+	}
 
   return 1;
 }
@@ -279,8 +296,7 @@ void vec3_CrossProduct(vec3_t in1, vec3_t in2, vec3_t *out)
  * given a skeleton.  Put the vertices in vertex arrays.
  */
 void
-PrepareMesh (const struct md5_mesh_t *mesh,
-	     const struct md5_joint_t *skeleton, vec3_t *vertexArray, GLuint *vertexIndices, float *texCoords)
+PrepareMesh (const struct md5_mesh_t *mesh, const struct md5_joint_t *skeleton)
 {
 	int i, j, k;
 
@@ -353,13 +369,7 @@ PrepareMesh (const struct md5_mesh_t *mesh,
 		normals[i*3][0] = x;
 		normals[i*3][1] = y;
 		normals[i*3][2] = z;
-/*		normals[i][0] = 1;
-		normals[i][1] = 0;
-		normals[i][2] = 0;
-		normals[i*3][0] = 1;
-		normals[i*3][1] = 0;
-		normals[i*3][2] = 0;
-*/
+
 		normals[i*3+1][0] = normals[i*3][0];
 		normals[i*3+1][1] = normals[i*3][1];
 		normals[i*3+1][2] = normals[i*3][2];
@@ -371,36 +381,38 @@ PrepareMesh (const struct md5_mesh_t *mesh,
 
 
 void
-AllocVertexArrays (vec3_t **vertexArray, GLuint **vertexIndices, int max_verts, int max_tris)
+AllocVertexArrays ()
 {
-	*vertexArray = (vec3_t *)malloc (sizeof (vec3_t) * max_verts);
-	*vertexIndices = (GLuint *)malloc (sizeof (GLuint) * max_tris * 3);
+	vertexArray = (vec3_t *)malloc (sizeof (vec3_t) * max_verts);
+	vertexIndices = (GLuint *)malloc (sizeof (GLuint) * max_tris * 3);
 	texCoords = (float *)malloc (sizeof (float) * max_verts * 2);
 	normals = (vec3_t *)malloc (sizeof (vec3_t) * max_tris * 3);
 }
 
 void
-FreeVertexArrays (vec3_t **vertexArray, GLuint **vertexIndices)
+FreeVertexArrays ()
 {
-  if (*vertexArray)
-    {
-      free (*vertexArray);
-      *vertexArray = NULL;
-    }
-
-  if (*vertexIndices)
-    {
-      free (*vertexIndices);
-      *vertexIndices = NULL;
-    }
-/*	if (*texCoords)
+	if (vertexArray)
 	{
-		free (*texCoords);
-		*texCoords = NULL;
+		free (vertexArray);
+		vertexArray = NULL;
 	}
-*/
-	free (texCoords);
-	free (normals);
+
+	if (vertexIndices)
+	{
+		free (vertexIndices);
+		vertexIndices = NULL;
+	}
+	if (texCoords)
+	{
+		free (texCoords);
+		texCoords = NULL;
+	}
+	if (normals)
+	{
+		free (normals);
+		normals = NULL;
+	}
 }
 
 /**
@@ -434,7 +446,7 @@ DrawSkeleton (const struct md5_joint_t *skeleton, int num_joints)
   glEnd();
 }
 
-void Draw_model(struct md5_model_t md5file, struct md5_joint_t *skeleton, vec3_t *vertexArray, GLuint *vertexIndices)
+void Draw_model(struct md5_model_t md5file, struct md5_joint_t *skeleton)
 {
 	int i = 0;
 	glColor3f (1.0f, 1.0f, 1.0f);
@@ -447,7 +459,7 @@ void Draw_model(struct md5_model_t md5file, struct md5_joint_t *skeleton, vec3_t
 
 	for (i = 0; i < md5file.num_meshes; ++i)
 	{
-		PrepareMesh (&md5file.meshes[i], skeleton, vertexArray, vertexIndices, texCoords);
+		PrepareMesh (&md5file.meshes[i], skeleton);
 
 		glVertexPointer (3, GL_FLOAT, 0, vertexArray);
 		glTexCoordPointer(2, GL_FLOAT, 0, texCoords);

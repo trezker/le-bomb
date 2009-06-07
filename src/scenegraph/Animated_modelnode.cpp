@@ -6,14 +6,7 @@
 Animated_modelnode::Animated_modelnode()
 {
 	animated = 0;
-
 	skeleton = NULL;
-
-	vertexArray = NULL;
-	vertexIndices = NULL;
-
-	max_verts = 0;
-	max_tris = 0;
 }
 
 Animated_modelnode::~Animated_modelnode()
@@ -26,9 +19,6 @@ Animated_modelnode::~Animated_modelnode()
 		Destroy_skeleton(skeleton);
 		skeleton = NULL;
 	}
-/*
-	FreeVertexArrays (&vertexArray, &vertexIndices);
-*/
 }
 
 void Animated_modelnode::Set_texture(ALLEGRO_BITMAP* t)
@@ -39,13 +29,11 @@ void Animated_modelnode::Set_texture(ALLEGRO_BITMAP* t)
 void Animated_modelnode::Load_model(const std::string& filename)
 {
 	/* Load MD5 model file */
-	if (!ReadMD5Model (filename.c_str(), &md5file, &max_verts, &max_tris))
+	if (!ReadMD5Model (filename.c_str(), &md5file))
 	{
 		//Todo: Handle error
 		return;
 	}
-
-	AllocVertexArrays (&vertexArray, &vertexIndices, max_verts, max_tris);
 }
 
 void Animated_modelnode::Load_animation(const std::string& filename)
@@ -87,7 +75,7 @@ void Animated_modelnode::Render()
 	/* Draw skeleton */
 //	DrawSkeleton (skeleton, md5file.num_joints);
 
-	Draw_model(md5file, skeleton, vertexArray, vertexIndices); 
+	Draw_model(md5file, skeleton);
 }
 
 void Animated_modelnode::Postrender()

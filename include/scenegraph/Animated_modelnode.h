@@ -7,7 +7,7 @@
 #include <allegro5/a5_opengl.h>
 #include <vector>
 #include "math/Vector3.h"
-#include "md5/md5model.h"
+#include "scenegraph/md5model.h"
 
 class Animated_modelnode: public Scenenode
 {

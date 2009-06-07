@@ -131,14 +131,13 @@ struct anim_info_t
 /**
  * md5mesh prototypes
  */
-int ReadMD5Model (const char *filename, struct md5_model_t *mdl, int *max_verts, int *max_tris);
+int ReadMD5Model (const char *filename, struct md5_model_t *mdl);
 void FreeModel (struct md5_model_t *mdl);
-void PrepareMesh (const struct md5_mesh_t *mesh,
-		  const struct md5_joint_t *skeleton, vec3_t *vertexArray, GLuint *vertexIndices, float *texCoords);
-void AllocVertexArrays (vec3_t **vertexArray, GLuint **vertexIndices, int max_verts, int max_tris);
-void FreeVertexArrays (vec3_t **vertexArray, GLuint **vertexIndices);
+void PrepareMesh (const struct md5_mesh_t *mesh, const struct md5_joint_t *skeleton);
+void AllocVertexArrays ();
+void FreeVertexArrays ();
 void DrawSkeleton (const struct md5_joint_t *skeleton, int num_joints);
-void Draw_model(struct md5_model_t md5file, struct md5_joint_t *skeleton, vec3_t *vertexArray, GLuint *vertexIndices);
+void Draw_model(struct md5_model_t md5file, struct md5_joint_t *skeleton);
 
 /**
  * md5anim prototypes

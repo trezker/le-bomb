@@ -37,7 +37,7 @@
 #include <math.h>
 #include <assert.h>
 
-#include "md5/md5model.h"
+#include "scenegraph/md5model.h"
 
 /* Joint info */
 struct joint_info_t
