@@ -194,6 +194,7 @@ void Play::Event(ALLEGRO_EVENT event)
 				ZCom_BitStream *packet = new ZCom_BitStream();
 				packet->addInt(CREATE_BOMB, PACKET_TYPE_SIZE);
 				client->Send_data(packet);
+				player->Drop_bomb();
 			}
 		}
 		if(ALLEGRO_KEY_F5 == event.keyboard.keycode)

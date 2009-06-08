@@ -12,6 +12,7 @@ Player::Player()
 ,move_down(false)
 ,health(100)
 ,score(0)
+,dropping_bomb(false)
 ,net_node(NULL)
 ,deleteme(false)
 {
@@ -23,7 +24,9 @@ Player::Player()
 */
 	model = new Animated_modelnode;
 	model->Load_model("media/darw.md5mesh");
+	model->Load_animation("media/darw_drop.md5anim", "drop");
 	model->Load_animation("media/darw_walk.md5anim", "walk");
+	model->Play_animation("walk", true);
 	transform->Attach_node(model);
 }
 
@@ -86,7 +89,8 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 	}
 	else
 	{
-		model->Pause_animation(true);
+		if(!dropping_bomb)
+			model->Pause_animation(true);
 	}
 	
 	Vector3 newpos = Get_position()+speed*speed_factor;
@@ -189,6 +193,14 @@ int Player::Get_score()
 {
 	return score;
 }
+
+void Player::Drop_bomb()
+{
+	model->Play_animation("drop", false);
+	model->Pause_animation(false);
+	dropping_bomb = true;
+}
+
 
 ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_id)
 {

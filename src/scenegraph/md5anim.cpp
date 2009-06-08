@@ -393,26 +393,37 @@ InterpolateSkeletons (const struct md5_joint_t *skelA,
  * next frames, given a delta time.
  */
 void
-Animate (const struct md5_anim_t *anim,
-	 struct anim_info_t *animInfo, double dt)
+Animate (const struct md5_anim_t *anim, struct anim_info_t *animInfo, double dt)
 {
-  int maxFrames = anim->num_frames - 1;
+	int maxFrames = anim->num_frames - 1;
 
-  animInfo->last_time += dt;
+	if(!animInfo->loop && maxFrames == animInfo->curr_frame)
+	{
+		return;
+	}
 
-  /* move to next frame */
-  if (animInfo->last_time >= animInfo->max_time)
-    {
-      animInfo->curr_frame++;
-      animInfo->next_frame++;
-      animInfo->last_time = 0.0;
+	animInfo->last_time += dt;
 
-      if (animInfo->curr_frame > maxFrames)
-	animInfo->curr_frame = 0;
+	/* move to next frame */
+	if (animInfo->last_time >= animInfo->max_time)
+	{
+		animInfo->curr_frame++;
+		animInfo->next_frame++;
+		
+		animInfo->last_time -= animInfo->max_time;
 
-      if (animInfo->next_frame > maxFrames)
-	animInfo->next_frame = 0;
-    }
+		if (animInfo->curr_frame > maxFrames)
+			animInfo->curr_frame = 0;
+
+		if (animInfo->next_frame > maxFrames)
+			animInfo->next_frame = 0;
+	}
+
+	if(!animInfo->loop && maxFrames == animInfo->curr_frame)
+	{
+		animInfo->last_time = 0.0f;
+		return;
+	}
 }
 
 struct md5_joint_t *Create_skeleton(int num_joints)

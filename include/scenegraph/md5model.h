@@ -125,6 +125,8 @@ struct anim_info_t
 
   double last_time;
   double max_time;
+  
+  bool loop;
 };
 
 

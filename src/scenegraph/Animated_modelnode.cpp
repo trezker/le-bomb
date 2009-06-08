@@ -36,6 +36,7 @@ void Animated_modelnode::Load_model(const std::string& filename)
 		//Todo: Handle error
 		return;
 	}
+	skeleton = Create_skeleton(md5file.num_joints);
 }
 
 void Animated_modelnode::Load_animation(const std::string& filename, const std::string &name)
@@ -55,7 +56,7 @@ void Animated_modelnode::Load_animation(const std::string& filename, const std::
 		animInfo.max_time = 1.0 / active_animation->frameRate;
 
 		/* Allocate memory for animated skeleton */
-		skeleton = Create_skeleton(active_animation->num_joints);
+//		skeleton = Create_skeleton(active_animation->num_joints);
 		animated = 1;
 	}
 }
@@ -94,7 +95,7 @@ void Animated_modelnode::Postrender()
 
 void Animated_modelnode::Update(double dt)
 {
-	if (animated)
+	if (animated && active_animation)
 	{
 		/* Calculate current and next frames */
 		if(!paused)
@@ -119,4 +120,22 @@ void Animated_modelnode::Update(double dt)
 void Animated_modelnode::Pause_animation(bool b)
 {
 	paused = b;
+}
+
+void Animated_modelnode::Play_animation(const std::string& name, bool loop)
+{
+	if(animations.find(name) != animations.end())
+	{
+		active_animation = &animations[name];
+		animInfo.curr_frame = 0;
+		animInfo.next_frame = 1;
+
+		animInfo.last_time = 0;
+		animInfo.max_time = 1.0 / active_animation->frameRate;
+		animInfo.loop = loop;
+	}
+	else
+	{
+		active_animation = NULL;
+	}
 }

@@ -23,6 +23,7 @@ public:
 	float Get_health();
 	void Add_score(int s);
 	int Get_score();
+	void Drop_bomb();
 
 	bool Deleteme();
 	ZCom_Node* Register_net_node(ZCom_Control *_control, ZCom_ClassID class_id);
@@ -45,7 +46,8 @@ private:
 	
 	float health;
 	int score;
-
+	bool dropping_bomb;
+	
 	ZCom_Node* net_node;
 	bool deleteme;
 };
