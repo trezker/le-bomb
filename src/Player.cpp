@@ -58,6 +58,11 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 	Process_net_events();
 
 	model->Update(dt);
+	if(dropping_bomb && model->Animation_has_ended())
+	{
+		model->Play_animation("walk", true);
+		dropping_bomb = false;
+	}
 
 	Vector3 direction(move_left-move_right, 0/*move_up-move_down*/, move_forward-move_backward);
 	direction.Normalize();

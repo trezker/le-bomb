@@ -139,3 +139,13 @@ void Animated_modelnode::Play_animation(const std::string& name, bool loop)
 		active_animation = NULL;
 	}
 }
+
+bool Animated_modelnode::Animation_has_ended()
+{
+	if(active_animation)
+	{
+		if(animInfo.next_frame == 0)
+			return true;
+	}
+	return false;
+}

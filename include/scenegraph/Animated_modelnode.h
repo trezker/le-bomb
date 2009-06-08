@@ -18,8 +18,11 @@ public:
 	void Set_texture(ALLEGRO_BITMAP* t);
 	void Load_model(const std::string& filename);
 	void Load_animation(const std::string& filename, const std::string& name);
+
 	void Play_animation(const std::string& name, bool loop);
 	void Pause_animation(bool b);
+	bool Animation_has_ended();
+
 	virtual void Prerender();
 	virtual void Render();
 	virtual void Postrender();
