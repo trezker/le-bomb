@@ -22,6 +22,9 @@ public:
 	void Play_animation(const std::string& name, bool loop);
 	void Pause_animation(bool b);
 	bool Animation_has_ended();
+	
+	void Attach_to_bone(const std::string& bone, Scenenode* node);
+	void Detach_from_bone(const std::string& bone, Scenenode* node);
 
 	virtual void Prerender();
 	virtual void Render();
@@ -43,11 +46,12 @@ private:
 	md5_joint_t *skeleton;
 	anim_info_t animInfo;
 
-	vec3_t *vertexArray;
-	GLuint *vertexIndices;
-
-	int max_verts;
-	int max_tris;
+	typedef std::map<std::string, int> Bones;
+	Bones bones;
+	
+	typedef std::vector<Scenenode*> Attachments;
+	typedef std::map<std::string, Attachments> Bone_attachments;
+	Bone_attachments bone_attachments;
 };
 
 #endif

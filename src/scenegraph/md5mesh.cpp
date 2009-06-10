@@ -53,178 +53,188 @@ int max_tris = 0;
 int
 ReadMD5Model (const char *filename, struct md5_model_t *mdl)
 {
-  FILE *fp;
-  char buff[512];
-  int version;
-  int curr_mesh = 0;
-  int i;
-  int realloc = 0;
+	FILE *fp;
+	char buff[512];
+	int version;
+	int curr_mesh = 0;
+	int i;
+	int realloc = 0;
 
-  fp = fopen (filename, "rb");
-  if (!fp)
-    {
-      fprintf (stderr, "Error: couldn't open \"%s\"!\n", filename);
-      return 0;
-    }
-
-  while (!feof (fp))
-    {
-      /* Read whole line */
-      fgets (buff, sizeof (buff), fp);
-
-      if (sscanf (buff, " MD5Version %d", &version) == 1)
+	fp = fopen (filename, "rb");
+	if (!fp)
 	{
-	  if (version != 10)
-	    {
-	      /* Bad version */
-	      fprintf (stderr, "Error: bad model version\n");
-	      fclose (fp);
-	      return 0;
-	    }
+		fprintf (stderr, "Error: couldn't open \"%s\"!\n", filename);
+		return 0;
 	}
-      else if (sscanf (buff, " numJoints %d", &mdl->num_joints) == 1)
-	{
-	  if (mdl->num_joints > 0)
-	    {
-	      /* Allocate memory for base skeleton joints */
-	      mdl->baseSkel = (struct md5_joint_t *)
-		calloc (mdl->num_joints, sizeof (struct md5_joint_t));
-	    }
-	}
-      else if (sscanf (buff, " numMeshes %d", &mdl->num_meshes) == 1)
-	{
-	  if (mdl->num_meshes > 0)
-	    {
-	      /* Allocate memory for meshes */
-	      mdl->meshes = (struct md5_mesh_t *)
-		calloc (mdl->num_meshes, sizeof (struct md5_mesh_t));
-	    }
-	}
-      else if (strncmp (buff, "joints {", 8) == 0)
-	{
-	  /* Read each joint */
-	  for (i = 0; i < mdl->num_joints; ++i)
-	    {
-	      struct md5_joint_t *joint = &mdl->baseSkel[i];
 
-	      /* Read whole line */
-	      fgets (buff, sizeof (buff), fp);
+	while (!feof (fp))
+	{
+		/* Read whole line */
+		fgets (buff, sizeof (buff), fp);
 
-	      if (sscanf (buff, "%s %d ( %f %f %f ) ( %f %f %f )",
-			  joint->name, &joint->parent, &joint->pos[0],
-			  &joint->pos[1], &joint->pos[2], &joint->orient[0],
-			  &joint->orient[1], &joint->orient[2]) == 8)
+		if (sscanf (buff, " MD5Version %d", &version) == 1)
 		{
-		  /* Compute the w component */
-		  Quat_computeW (joint->orient);
-		}
-	    }
-	}
-      else if (strncmp (buff, "mesh {", 6) == 0)
-	{
-	  struct md5_mesh_t *mesh = &mdl->meshes[curr_mesh];
-	  int vert_index = 0;
-	  int tri_index = 0;
-	  int weight_index = 0;
-	  float fdata[4];
-	  int idata[3];
-
-	  while ((buff[0] != '}') && !feof (fp))
-	    {
-	      /* Read whole line */
-	      fgets (buff, sizeof (buff), fp);
-
-	      if (strstr (buff, "shader "))
-		{
-		  int quote = 0, j = 0;
-
-		  /* Copy the shader name whithout the quote marks */
-		  for (i = 0; i < sizeof (buff) && (quote < 2); ++i)
-		    {
-		      if (buff[i] == '\"')
-			quote++;
-
-		      if ((quote == 1) && (buff[i] != '\"'))
+			if (version != 10)
 			{
-			  mesh->shader[j] = buff[i];
-			  j++;
+				/* Bad version */
+				fprintf (stderr, "Error: bad model version\n");
+				fclose (fp);
+				return 0;
 			}
-		    }
 		}
-	      else if (sscanf (buff, " numverts %d", &mesh->num_verts) == 1)
+		else if (sscanf (buff, " numJoints %d", &mdl->num_joints) == 1)
 		{
-		  if (mesh->num_verts > 0)
-		    {
-		      /* Allocate memory for vertices */
-		      mesh->vertices = (struct md5_vertex_t *)
-			malloc (sizeof (struct md5_vertex_t) * mesh->num_verts);
-		    }
+			if (mdl->num_joints > 0)
+			{
+				/* Allocate memory for base skeleton joints */
+				mdl->baseSkel = (struct md5_joint_t *)
+				calloc (mdl->num_joints, sizeof (struct md5_joint_t));
+			}
+		}
+		else if (sscanf (buff, " numMeshes %d", &mdl->num_meshes) == 1)
+		{
+			if (mdl->num_meshes > 0)
+			{
+				/* Allocate memory for meshes */
+				mdl->meshes = (struct md5_mesh_t *)
+				calloc (mdl->num_meshes, sizeof (struct md5_mesh_t));
+			}
+		}
+		else if (strncmp (buff, "joints {", 8) == 0)
+		{
+			/* Read each joint */
+			for (i = 0; i < mdl->num_joints; ++i)
+			{
+				struct md5_joint_t *joint = &mdl->baseSkel[i];
 
-		  if (mesh->num_verts > max_verts)
-		  {
-				realloc = 1;
-		  		max_verts = mesh->num_verts;
-		  }
-		}
-	      else if (sscanf (buff, " numtris %d", &mesh->num_tris) == 1)
-		{
-		  if (mesh->num_tris > 0)
-		    {
-		      /* Allocate memory for triangles */
-		      mesh->triangles = (struct md5_triangle_t *)
-			malloc (sizeof (struct md5_triangle_t) * mesh->num_tris);
-		    }
+				/* Read whole line */
+				fgets (buff, sizeof (buff), fp);
 
-		  if (mesh->num_tris > max_tris)
-		  {
-			  realloc = 1;
-		      max_tris = mesh->num_tris;
-		  }
+				if (sscanf (buff, "%s %d ( %f %f %f ) ( %f %f %f )",
+				joint->name, &joint->parent, &joint->pos[0],
+				&joint->pos[1], &joint->pos[2], &joint->orient[0],
+				&joint->orient[1], &joint->orient[2]) == 8)
+				{
+					int c = 0;
+					for(int k = 0; ;++k)
+					{
+						if(joint->name[k]=='"')
+							continue;
+						joint->name[c] = joint->name[k];
+						++c;
+						if(joint->name[k]=='\0')
+							break;
+					}
+					/* Compute the w component */
+					Quat_computeW (joint->orient);
+				}
+			}
 		}
-	      else if (sscanf (buff, " numweights %d", &mesh->num_weights) == 1)
+		else if (strncmp (buff, "mesh {", 6) == 0)
 		{
-		  if (mesh->num_weights > 0)
-		    {
-		      /* Allocate memory for vertex weights */
-		      mesh->weights = (struct md5_weight_t *)
-			malloc (sizeof (struct md5_weight_t) * mesh->num_weights);
-		    }
-		}
-	      else if (sscanf (buff, " vert %d ( %f %f ) %d %d", &vert_index,
-			       &fdata[0], &fdata[1], &idata[0], &idata[1]) == 5)
-		{
-		  /* Copy vertex data */
-		  mesh->vertices[vert_index].st[0] = fdata[0];
-		  mesh->vertices[vert_index].st[1] = fdata[1];
-		  mesh->vertices[vert_index].start = idata[0];
-		  mesh->vertices[vert_index].count = idata[1];
-		}
-	      else if (sscanf (buff, " tri %d %d %d %d", &tri_index,
-			       &idata[0], &idata[1], &idata[2]) == 4)
-		{
-		  /* Copy triangle data */
-		  mesh->triangles[tri_index ].index[0] = idata[0];
-		  mesh->triangles[tri_index ].index[1] = idata[1];
-		  mesh->triangles[tri_index ].index[2] = idata[2];
-		}
-	      else if (sscanf (buff, " weight %d %d %f ( %f %f %f )",
-			       &weight_index, &idata[0], &fdata[3],
-			       &fdata[0], &fdata[1], &fdata[2]) == 6)
-		{
-		  /* Copy vertex data */
-		  mesh->weights[weight_index].joint  = idata[0];
-		  mesh->weights[weight_index].bias   = fdata[3];
-		  mesh->weights[weight_index].pos[0] = fdata[0];
-		  mesh->weights[weight_index].pos[1] = fdata[1];
-		  mesh->weights[weight_index].pos[2] = fdata[2];
-		}
-	    }
+			struct md5_mesh_t *mesh = &mdl->meshes[curr_mesh];
+			int vert_index = 0;
+			int tri_index = 0;
+			int weight_index = 0;
+			float fdata[4];
+			int idata[3];
 
-	  curr_mesh++;
+			while ((buff[0] != '}') && !feof (fp))
+			{
+				/* Read whole line */
+				fgets (buff, sizeof (buff), fp);
+
+				if (strstr (buff, "shader "))
+				{
+					int quote = 0, j = 0;
+
+					/* Copy the shader name whithout the quote marks */
+					for (i = 0; i < sizeof (buff) && (quote < 2); ++i)
+					{
+						if (buff[i] == '\"')
+						quote++;
+
+						if ((quote == 1) && (buff[i] != '\"'))
+						{
+							mesh->shader[j] = buff[i];
+							j++;
+						}
+					}
+				}
+				else if (sscanf (buff, " numverts %d", &mesh->num_verts) == 1)
+				{
+					if (mesh->num_verts > 0)
+					{
+						/* Allocate memory for vertices */
+						mesh->vertices = (struct md5_vertex_t *)
+						malloc (sizeof (struct md5_vertex_t) * mesh->num_verts);
+					}
+
+					if (mesh->num_verts > max_verts)
+					{
+						realloc = 1;
+						max_verts = mesh->num_verts;
+					}
+				}
+				else if (sscanf (buff, " numtris %d", &mesh->num_tris) == 1)
+				{
+					if (mesh->num_tris > 0)
+					{
+						/* Allocate memory for triangles */
+						mesh->triangles = (struct md5_triangle_t *)
+						malloc (sizeof (struct md5_triangle_t) * mesh->num_tris);
+					}
+
+					if (mesh->num_tris > max_tris)
+					{
+						realloc = 1;
+						max_tris = mesh->num_tris;
+					}
+				}
+				else if (sscanf (buff, " numweights %d", &mesh->num_weights) == 1)
+				{
+					if (mesh->num_weights > 0)
+					{
+						/* Allocate memory for vertex weights */
+						mesh->weights = (struct md5_weight_t *)
+						malloc (sizeof (struct md5_weight_t) * mesh->num_weights);
+					}
+				}
+				else if (sscanf (buff, " vert %d ( %f %f ) %d %d", &vert_index,
+					&fdata[0], &fdata[1], &idata[0], &idata[1]) == 5)
+				{
+					/* Copy vertex data */
+					mesh->vertices[vert_index].st[0] = fdata[0];
+					mesh->vertices[vert_index].st[1] = fdata[1];
+					mesh->vertices[vert_index].start = idata[0];
+					mesh->vertices[vert_index].count = idata[1];
+				}
+				else if (sscanf (buff, " tri %d %d %d %d", &tri_index,
+					&idata[0], &idata[1], &idata[2]) == 4)
+				{
+					/* Copy triangle data */
+					mesh->triangles[tri_index ].index[0] = idata[0];
+					mesh->triangles[tri_index ].index[1] = idata[1];
+					mesh->triangles[tri_index ].index[2] = idata[2];
+				}
+				else if (sscanf (buff, " weight %d %d %f ( %f %f %f )",
+					&weight_index, &idata[0], &fdata[3],
+					&fdata[0], &fdata[1], &fdata[2]) == 6)
+				{
+					/* Copy vertex data */
+					mesh->weights[weight_index].joint  = idata[0];
+					mesh->weights[weight_index].bias   = fdata[3];
+					mesh->weights[weight_index].pos[0] = fdata[0];
+					mesh->weights[weight_index].pos[1] = fdata[1];
+					mesh->weights[weight_index].pos[2] = fdata[2];
+				}
+			}
+
+			curr_mesh++;
+		}
 	}
-    }
 
-  fclose (fp);
+	fclose (fp);
 
 	if(realloc == 1)
 	{
@@ -232,7 +242,7 @@ ReadMD5Model (const char *filename, struct md5_model_t *mdl)
 		AllocVertexArrays();
 	}
 
-  return 1;
+	return 1;
 }
 
 /**
@@ -455,7 +465,7 @@ void Draw_model(struct md5_model_t md5file, struct md5_joint_t *skeleton)
 	glEnableClientState (GL_NORMAL_ARRAY);
 	glEnableClientState (GL_TEXTURE_COORD_ARRAY);
 	
-	glRotatef (-90.f, 1.0f, .0f, .0f);
+//	glRotatef (-90.f, 1.0f, .0f, .0f);
 
 	for (i = 0; i < md5file.num_meshes; ++i)
 	{

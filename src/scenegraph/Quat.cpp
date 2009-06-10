@@ -161,3 +161,55 @@ Quat_slerp (const quat4_t qa, const quat4_t qb, float t, quat4_t out)
   out[Y] = (k0 * qa[1]) + (k1 * q1y);
   out[Z] = (k0 * qa[2]) + (k1 * q1z);
 }
+
+void Set_matrix4(matrix4_t m_matrix,
+					float m11, float m12, float m13, float m14,
+					float m21, float m22, float m23, float m24,
+					float m31, float m32, float m33, float m34,
+					float m41, float m42, float m43, float m44)
+{
+			m_matrix[0] = m11;
+			m_matrix[1] = m12;
+			m_matrix[2] = m13;
+			m_matrix[3] = m14;
+			m_matrix[4] = m21;
+			m_matrix[5] = m22;
+			m_matrix[6] = m23;
+			m_matrix[7] = m24;
+			m_matrix[8] = m31;
+			m_matrix[9] = m32;
+			m_matrix[10] = m33;
+			m_matrix[11] = m34;
+			m_matrix[12] = m41;
+			m_matrix[13] = m42;
+			m_matrix[14] = m43;
+			m_matrix[15] = m44;
+}
+
+void Quat_to_matrix4 (const quat4_t q, matrix4_t mo)
+{
+	float qx = q[0];
+	float qy = q[1];
+	float qz = q[2];
+	float qw = q[3];
+	Set_matrix4(mo,
+		(1 - 2 * qy * qy - 2 * qz * qz),
+		(2 * qx * qy - 2 * qz * qw),
+		(2 * qx * qz + 2 * qy * qw),
+		0,
+
+		(2 * qx * qy + 2 * qz * qw),
+		(1 - 2 * qx * qx - 2 * qz * qz),
+		(2 * qy * qz - 2 * qx * qw),
+		0,
+
+		(2 * qx * qz - 2 * qy * qw),
+		(2 * qy * qz + 2 * qx * qw),
+		(1 - 2 * qx * qx - 2 * qy * qy),
+		0,
+		
+		0,
+		0,
+		0,
+		1);
+}

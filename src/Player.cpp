@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Net.h"
 #include <cmath>
+#include "scenegraph/Modelnode.h"
 
 Player::Player()
 :fallspeed(0)
@@ -28,6 +29,11 @@ Player::Player()
 	model->Load_animation("media/darw_walk.md5anim", "walk");
 	model->Play_animation("walk", true);
 	transform->Attach_node(model);
+	
+/*	Modelnode* oldmodel = new Modelnode;
+	oldmodel->Loadmodel("media/darwinian_textured.tmf");
+	model->Attach_to_bone("Left_hand", oldmodel);
+*/
 }
 
 Player::~Player()
