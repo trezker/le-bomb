@@ -5,6 +5,8 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
+#include <allegro5/allegro5.h>
+#include <allegro5/a5_iio.h>
 
 Animated_modelnode::Animated_modelnode()
 {
@@ -43,9 +45,14 @@ void Animated_modelnode::Load_model(const std::string& filename)
 	for(int i = 0; i<md5file.num_joints; ++i)
 	{
 		bones[md5file.baseSkel[i].name] = i;
-		std::cout<<md5file.baseSkel[i].name<<" = "<<bones[md5file.baseSkel[i].name]<<std::endl;
+//		std::cout<<md5file.baseSkel[i].name<<" = "<<bones[md5file.baseSkel[i].name]<<std::endl;
 	}
-	std::cout<<"Left_hand"<<" = "<<bones["Left_hand"]<<std::endl;
+//	std::cout<<"Left_hand"<<" = "<<bones["Left_hand"]<<std::endl;
+
+	for(int i = 0; i<md5file.num_meshes; ++i)
+	{
+		texture = al_load_bitmap(md5file.meshes[i].shader);
+	}
 }
 
 void Animated_modelnode::Load_animation(const std::string& filename, const std::string &name)

@@ -66,7 +66,7 @@ void Play::Init()
 
 	player = new Player();	
 	player->Set_position(Vector3(15, 0, 10));
-	player->Set_texture(darwinian_texture);
+//	player->Set_texture(darwinian_texture);
 	light->Attach_node(player);
 }
 
