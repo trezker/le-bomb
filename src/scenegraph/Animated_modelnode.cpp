@@ -103,6 +103,7 @@ void Animated_modelnode::Render()
 
 	for(Models::iterator i = models.begin(); i!=models.end(); ++i)
 	{
+//		glTranslatef(0, 0, -1);
 		(*i)->Set_skeleton(skeleton);
 		(*i)->Apply();
 	}

@@ -31,7 +31,7 @@ Player::Player()
 	transform->Attach_node(model);
 
 	Animated_modelnode* amodel = new Animated_modelnode;
-	amodel->Load_model("media/darw.md5mesh");
+	amodel->Load_model("media/darw_skirt.md5mesh");
 	amodel->Load_animation("media/darw_drop.md5anim", "drop");
 	amodel->Load_animation("media/darw_walk.md5anim", "walk");
 	amodel->Play_animation("walk", true);
