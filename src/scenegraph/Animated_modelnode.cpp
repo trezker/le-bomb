@@ -12,7 +12,7 @@ Animated_modelnode::Animated_modelnode()
 {
 	paused = false;
 	animated = 0;
-	skeleton = NULL;
+	allocated_skeleton = NULL;
 }
 
 Animated_modelnode::~Animated_modelnode()
@@ -21,10 +21,10 @@ Animated_modelnode::~Animated_modelnode()
 	
 //	FreeAnim (&md5anim);
 
-	if (animated && skeleton)
+	if (animated && allocated_skeleton)
 	{
-		Destroy_skeleton(skeleton);
-		skeleton = NULL;
+		Destroy_skeleton(allocated_skeleton);
+		allocated_skeleton = NULL;
 	}
 }
 
@@ -41,7 +41,7 @@ void Animated_modelnode::Load_model(const std::string& filename)
 		//Todo: Handle error
 		return;
 	}
-	skeleton = Create_skeleton(md5file.num_joints);
+	allocated_skeleton = Create_skeleton(md5file.num_joints);
 	for(int i = 0; i<md5file.num_joints; ++i)
 	{
 		bones[md5file.baseSkel[i].name] = i;
@@ -101,6 +101,12 @@ void Animated_modelnode::Render()
 
 	glPopMatrix();
 
+	for(Models::iterator i = models.begin(); i!=models.end(); ++i)
+	{
+		(*i)->Set_skeleton(skeleton);
+		(*i)->Apply();
+	}
+
 	for(Bone_attachments::iterator i = bone_attachments.begin(); i!=bone_attachments.end(); ++i)
 	{
 		glPushMatrix();
@@ -158,7 +164,8 @@ void Animated_modelnode::Update(double dt)
 			active_animation->skelFrames[animInfo.next_frame],
 			active_animation->num_joints,
 			animInfo.last_time * active_animation->frameRate,
-			skeleton);
+			allocated_skeleton);
+		skeleton = allocated_skeleton;
 	}
 	else
 	{
@@ -200,6 +207,17 @@ bool Animated_modelnode::Animation_has_ended()
 	return false;
 }
 
+void Animated_modelnode::Add_model(Animated_modelnode* m)
+{
+	models.push_back(m);
+}
+
+void Animated_modelnode::Remove_model(Animated_modelnode* m)
+{
+	Models::iterator i = std::find(models.begin(), models.end(), m);
+	models.erase(i);
+}
+
 void Animated_modelnode::Attach_to_bone(const std::string& bone, Scenenode* node)
 {
 	if(bones.find(bone) == bones.end())
@@ -213,4 +231,9 @@ void Animated_modelnode::Detach_from_bone(const std::string& bone, Scenenode* no
 {
 	Attachments::iterator i = std::find(bone_attachments[bone].begin(), bone_attachments[bone].end(), node);
 	bone_attachments[bone].erase(i);
+}
+
+void Animated_modelnode::Set_skeleton(md5_joint_t *s)
+{
+	skeleton = s;
 }

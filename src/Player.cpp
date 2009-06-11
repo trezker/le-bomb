@@ -29,7 +29,14 @@ Player::Player()
 	model->Load_animation("media/darw_walk.md5anim", "walk");
 	model->Play_animation("walk", true);
 	transform->Attach_node(model);
-	
+
+	Animated_modelnode* amodel = new Animated_modelnode;
+	amodel->Load_model("media/darw.md5mesh");
+	amodel->Load_animation("media/darw_drop.md5anim", "drop");
+	amodel->Load_animation("media/darw_walk.md5anim", "walk");
+	amodel->Play_animation("walk", true);
+	model->Add_model(amodel);
+
 /*	Modelnode* oldmodel = new Modelnode;
 	oldmodel->Loadmodel("media/darwinian_textured.tmf");
 	model->Attach_to_bone("Left_hand", oldmodel);
