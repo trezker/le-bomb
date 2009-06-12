@@ -5,6 +5,7 @@
 
 Player::Player()
 :fallspeed(0)
+,angle(0)
 ,move_forward(false)
 ,move_backward(false)
 ,move_left(false)
@@ -77,55 +78,63 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 		dropping_bomb = false;
 	}
 
-	Vector3 direction(move_left-move_right, 0/*move_up-move_down*/, move_forward-move_backward);
-	direction.Normalize();
-
-	Vector3 right = camera_right;
-	right.y = 0;
-	right.Normalize();
-	Vector3 front = camera_front;
-	front.y = 0;
-	front.Normalize();
-
-	float speed_factor = 10*dt;
-	Vector3 speed;
-	speed += right*direction.x;
-//	speed += Vector3(0, 1, 0)*direction.y;
-	speed += front*direction.z;
-
-	if(speed != Vector3::ZERO)
+	if(net_node && net_node->getRole() ==  eZCom_RoleProxy)
 	{
-		float angle = atan2(speed.x, speed.z)*180/M_PI;
 		transform->Set_rotation(Vector3(0, angle, 0));
-		Vector3 map_normal = heightmap->Get_normal(Get_position().x, Get_position().z);
-		map_normal.y = 0;
-		if(Get_position().y<=heightmap->Get_height(Get_position().x, Get_position().z))
-		{
-			speed += map_normal*1.1;
-		}
-		model->Pause_animation(false);
+		Set_position(position);
 	}
 	else
 	{
-		if(!dropping_bomb)
-			model->Pause_animation(true);
-	}
-	
-	Vector3 newpos = Get_position()+speed*speed_factor;
-	if(heightmap->Contains(newpos.x, newpos.z))
-	{
-		float mapheight = heightmap->Get_height(newpos.x, newpos.z);
-		if(newpos.y>mapheight)
+		Vector3 direction(move_left-move_right, 0/*move_up-move_down*/, move_forward-move_backward);
+		direction.Normalize();
+
+		Vector3 right = camera_right;
+		right.y = 0;
+		right.Normalize();
+		Vector3 front = camera_front;
+		front.y = 0;
+		front.Normalize();
+
+		float speed_factor = 10*dt;
+		Vector3 speed;
+		speed += right*direction.x;
+	//	speed += Vector3(0, 1, 0)*direction.y;
+		speed += front*direction.z;
+
+		if(speed != Vector3::ZERO)
 		{
-			fallspeed -= 20*dt;
-			newpos.y += fallspeed*dt;
+			angle = atan2(speed.x, speed.z)*180/M_PI;
+			transform->Set_rotation(Vector3(0, angle, 0));
+			Vector3 map_normal = heightmap->Get_normal(Get_position().x, Get_position().z);
+			map_normal.y = 0;
+			if(Get_position().y<=heightmap->Get_height(Get_position().x, Get_position().z))
+			{
+				speed += map_normal*1.1;
+			}
+			model->Pause_animation(false);
 		}
-		if(newpos.y<mapheight)
+		else
 		{
-			fallspeed = 0;
-			newpos.y = mapheight;
+			if(!dropping_bomb)
+				model->Pause_animation(true);
 		}
-		Set_position(newpos);
+		
+		Vector3 newpos = Get_position()+speed*speed_factor;
+		if(heightmap->Contains(newpos.x, newpos.z))
+		{
+			float mapheight = heightmap->Get_height(newpos.x, newpos.z);
+			if(newpos.y>mapheight)
+			{
+				fallspeed -= 20*dt;
+				newpos.y += fallspeed*dt;
+			}
+			if(newpos.y<mapheight)
+			{
+				fallspeed = 0;
+				newpos.y = mapheight;
+			}
+			Set_position(newpos);
+		}
 	}
 }
 
@@ -234,6 +243,8 @@ ZCom_Node* Player::Register_net_node(ZCom_Control *control, ZCom_ClassID class_i
 	net_node->beginReplicationSetup(5);
 	net_node->addReplicationFloat(&health, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL);
 	net_node->addReplicationInt(&score, 10, false, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_ALL);
+	
+	net_node->addReplicationFloat(&angle, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_PROXY|ZCOM_REPRULE_OWNER_2_AUTH);
 
 	net_node->addInterpolationFloat(&position.x, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_PROXY|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.x);
 	net_node->addInterpolationFloat(&position.y, 10, ZCOM_REPFLAG_MOSTRECENT, ZCOM_REPRULE_AUTH_2_PROXY|ZCOM_REPRULE_OWNER_2_AUTH, 1, &interpos.y);

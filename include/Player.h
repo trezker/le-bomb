@@ -33,6 +33,7 @@ private:
 	Vector3 position;
 	Vector3 interpos;
 	float fallspeed;
+	float angle;
 
 	Transformnode* transform;
 	Animated_modelnode* model;
