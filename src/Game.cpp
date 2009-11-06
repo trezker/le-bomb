@@ -34,7 +34,7 @@ void Game::Run()
 	al_init();
 	al_install_mouse();
 	al_install_keyboard();
-	al_init_iio_addon();
+	al_init_image_addon();
 	al_init_font_addon();
 
 	ALLEGRO_DISPLAY *display;
@@ -43,14 +43,14 @@ void Game::Run()
  	display = al_create_display(width, height);
  	if(!display)
  	{
- 		printf("Failed to create display\n");
+ 		std::cout<<"Failed to create display"<<std::endl;
  		return;
 	}
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
-	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)al_get_keyboard());
-	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)al_get_mouse());
+	al_register_event_source(event_queue, al_get_keyboard_event_source());
+	al_register_event_source(event_queue, al_get_mouse_event_source());
 
 	if(!Init())
 		return;
@@ -99,7 +99,7 @@ bool Game::Init()
 	zcom = new ZoidCom();
 	if (!zcom || !zcom->Init())
 	{
-		printf("Zoidcom init failed");
+		std::cout<<"Zoidcom init failed"<<std::endl;
 		return false;
 	}
 

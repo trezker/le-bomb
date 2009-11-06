@@ -6,7 +6,7 @@
 #include <cmath>
 #include <algorithm>
 #include <allegro5/allegro5.h>
-#include <allegro5/a5_iio.h>
+#include <allegro5/allegro_image.h>
 
 Animated_modelnode::Animated_modelnode()
 {

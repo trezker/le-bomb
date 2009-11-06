@@ -2,10 +2,10 @@
 #define Game_h
 
 #include <allegro5/allegro5.h>
-#include <allegro5/a5_iio.h>
-#include <allegro5/a5_font.h>
-#include <allegro5/a5_ttf.h>
-#include <allegro5/a5_opengl.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_opengl.h>
 #include "Gamestate.h"
 #include <zoidcom/zoidcom.h>
 #include "Play.h"

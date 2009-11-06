@@ -1,8 +1,8 @@
 #include "Heightmap.h"
 #include <allegro5/allegro5.h>
-#include <allegro5/a5_font.h>
-#include <allegro5/a5_ttf.h>
-#include <allegro5/a5_opengl.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_opengl.h>
 #include <cmath>
 #include <iostream>
 #include "Net.h"

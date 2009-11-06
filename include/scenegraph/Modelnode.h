@@ -4,7 +4,7 @@
 #include "Scenenode.h"
 #include <string>
 #include <allegro5/allegro5.h>
-#include <allegro5/a5_opengl.h>
+#include <allegro5/allegro_opengl.h>
 #include <vector>
 #include "math/Vector3.h"
 

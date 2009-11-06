@@ -1,6 +1,7 @@
 #include "Server.h"
 #include <iostream>
 #include "Net.h"
+#include <cstdio>
 
 Server::Server()
 :heightmap(NULL)

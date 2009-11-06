@@ -101,6 +101,9 @@ void Player::Update(double dt, Vector3 camera_right, Vector3 camera_front, Heigh
 		}
 		if(control == 0)
 		{
+			/* TODO:
+			 * Different approach. Decide direction only when input changes then let the player move straight.
+			 * */
 			Vector3 direction(move_left-move_right, 0/*move_up-move_down*/, move_forward-move_backward);
 			direction.Normalize();
 

@@ -1,6 +1,6 @@
 #include "interface/Renderer.h"
 #include <algorithm>
-#include <allegro5/a5_primitives.h>
+#include <allegro5/allegro_primitives.h>
 
 namespace interface
 {

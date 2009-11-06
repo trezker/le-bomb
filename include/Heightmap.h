@@ -5,7 +5,7 @@
 #include "scenegraph/Scenenode.h"
 #include "math/Vector3.h"
 #include <allegro5/allegro5.h>
-#include <allegro5/a5_iio.h>
+#include <allegro5/allegro_image.h>
 #include <zoidcom/zoidcom.h>
 
 struct Height_point

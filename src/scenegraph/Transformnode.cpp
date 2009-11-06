@@ -1,9 +1,9 @@
 #include "scenegraph/Transformnode.h"
 #include <allegro5/allegro5.h>
-#include <allegro5/a5_iio.h>
-#include <allegro5/a5_font.h>
-#include <allegro5/a5_ttf.h>
-#include <allegro5/a5_opengl.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_opengl.h>
 
 
 void Transformnode::Set_position(Vector3 v)

@@ -6,7 +6,8 @@
 #include "scenegraph/Quadnode.h"
 #include "scenegraph/Modelnode.h"
 #include "Net.h"
-#include <allegro5/a5_primitives.h>
+#include <allegro5/allegro_primitives.h>
+#include <cstdio>
 
 Play::Play()
 :camera(NULL)

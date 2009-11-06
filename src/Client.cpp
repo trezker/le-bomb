@@ -4,6 +4,7 @@
 #include "Net.h"
 #include "Play.h"
 #include "Heightmap.h"
+#include <cstdio>
 
 Client::Client()
 :ready(false)

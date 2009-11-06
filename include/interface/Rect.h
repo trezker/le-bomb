@@ -1,5 +1,5 @@
-#ifndef interface_Rect_h
-#define interface_Rect_h
+#ifndef adagio_Rect_h
+#define adagio_Rect_h
 
 #include "math/Vector2.h"
 

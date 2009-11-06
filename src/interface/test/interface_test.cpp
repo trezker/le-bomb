@@ -1,8 +1,8 @@
 #include <allegro5/allegro5.h>
-#include <allegro5/a5_opengl.h>
-#include <allegro5/a5_iio.h>
-#include <allegro5/a5_font.h>
-#include <allegro5/a5_ttf.h>
+#include <allegro5/allegro_opengl.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <iostream>
 #include "interface/Renderer.h"
 #include "interface/Button.h"
@@ -15,6 +15,7 @@
 #include "interface/Group.h"
 #include "interface/Attribute_group.h"
 #include "interface/Attribute_groups.h"
+#include <cstdio>
 
 interface::Renderer* renderer = NULL;
 interface::Group* root_interface;
@@ -232,7 +233,7 @@ int main()
 	al_init();
 	al_install_mouse();
 	al_install_keyboard();
-	al_init_iio_addon();
+	al_init_image_addon();
 	al_init_font_addon();
 
 	ALLEGRO_DISPLAY *display;
@@ -245,13 +246,15 @@ int main()
  		return 0;
 	}
 	
-	ALLEGRO_EVENT_SOURCE *time_event_source = al_create_user_event_source();
+	ALLEGRO_EVENT_SOURCE time_event_source;
+	al_init_user_event_source(&time_event_source);
+	//ALLEGRO_EVENT_SOURCE *time_event_source = al_create_user_event_source();
 	
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
-	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)al_get_keyboard());
-	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)al_get_mouse());
-	al_register_event_source(event_queue, time_event_source);
+	al_register_event_source(event_queue, al_get_keyboard_event_source());
+	al_register_event_source(event_queue, al_get_mouse_event_source());
+	al_register_event_source(event_queue, &time_event_source);
 
 	if(!Init())
 		return 0;
@@ -271,7 +274,7 @@ int main()
 		interface::UPDATE_EVENT ue;
 		ue.dt = dt;
 		time_event.user.data1 = (intptr_t)(&ue);
-		al_emit_user_event(time_event_source, &time_event, NULL);
+		al_emit_user_event(&time_event_source, &time_event, NULL);
 		
 
 		ALLEGRO_EVENT event;
